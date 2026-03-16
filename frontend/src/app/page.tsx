@@ -132,6 +132,12 @@ export default function Home() {
               <p className="mt-2 text-sm text-white/90">
                 Comunicados, actos, proyectos y actividades con actualizacion periodica.
               </p>
+              <TransitionLink
+                href="/novedades"
+                className="mt-3 inline-block rounded-full border border-white/45 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-white hover:text-brand-dark"
+              >
+                Ver novedades
+              </TransitionLink>
             </div>
           </article>
           <article className="card-lift overflow-hidden rounded-2xl bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]">
@@ -170,6 +176,12 @@ export default function Home() {
               <p className="mt-2 text-sm text-brand-dark/85">
                 Canal directo con la escuela para familias e instituciones de la zona.
               </p>
+              <TransitionLink
+                href="/contacto"
+                className="mt-3 inline-block rounded-full border border-brand-dark/25 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-brand-dark hover:text-white"
+              >
+                Ir a contacto
+              </TransitionLink>
             </div>
           </article>
         </section>
