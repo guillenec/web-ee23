@@ -3,7 +3,6 @@ import {
   collection,
   getDocs,
   limit,
-  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -48,38 +47,34 @@ export const getNovedadesPublicadas = async (
   cantidad = 3,
 ): Promise<Novedad[]> => {
   const ref = collection(db, "novedades");
-  const qFecha = query(ref, where("estado", "==", "publicado"), orderBy("fecha", "desc"), limit(cantidad));
-  const qFechaPublicacion = query(
-    ref,
-    where("estado", "==", "publicado"),
-    orderBy("fechaPublicacion", "desc"),
-    limit(cantidad),
-  );
+  const q = query(ref, where("estado", "==", "publicado"), limit(Math.max(cantidad * 3, 12)));
+  const snapshot = await getDocs(q);
 
-  let snapshot;
+  return snapshot.docs
+    .map((doc) => {
+      const data = doc.data() as NovedadFirestore;
+      const fecha = toIsoDate(data.fecha) || toIsoDate(data.fechaPublicacion);
 
-  try {
-    snapshot = await getDocs(qFecha);
-  } catch {
-    snapshot = await getDocs(qFechaPublicacion);
-  }
+      return {
+        id: doc.id,
+        titulo: data.titulo ?? "Sin titulo",
+        slug: data.slug ?? doc.id,
+        categoria: data.categoria ?? "General",
+        autor: data.autor ?? "Equipo institucional",
+        resumen: data.resumen ?? "",
+        contenido: data.contenido ?? "",
+        imagenPrincipal: data.imagenPrincipal ?? "",
+        galeria: data.galeria ?? [],
+        fecha,
+        estado: data.estado ?? "borrador",
+      };
+    })
+    .sort((a, b) => {
+      if (!a.fecha && !b.fecha) return 0;
+      if (!a.fecha) return 1;
+      if (!b.fecha) return -1;
 
-  return snapshot.docs.map((doc) => {
-    const data = doc.data() as NovedadFirestore;
-    const fecha = toIsoDate(data.fecha) || toIsoDate(data.fechaPublicacion);
-
-    return {
-      id: doc.id,
-      titulo: data.titulo ?? "Sin titulo",
-      slug: data.slug ?? doc.id,
-      categoria: data.categoria ?? "General",
-      autor: data.autor ?? "Equipo institucional",
-      resumen: data.resumen ?? "",
-      contenido: data.contenido ?? "",
-      imagenPrincipal: data.imagenPrincipal ?? "",
-      galeria: data.galeria ?? [],
-      fecha,
-      estado: data.estado ?? "borrador",
-    };
-  });
+      return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
+    })
+    .slice(0, cantidad);
 };

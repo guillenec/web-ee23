@@ -31,6 +31,7 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se habilito dominio de Firebase Storage en `frontend/next.config.ts` para imagenes remotas.
 - Se habilito tambien `res.cloudinary.com` en `frontend/next.config.ts` para soportar `imagenPrincipal` desde Cloudinary.
 - Se documento carga semilla en `frontend/firestore-novedades-seed.md` para crear primer documento publicado.
+- Se ajusto lectura de `novedades` para evitar dependencia de indice compuesto (`estado + fecha`) y ordenar por fecha del lado cliente.
 
 ## Proximos hitos
 
