@@ -1,0 +1,74 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+import { getNovedadesPublicadas, type Novedad } from "@/lib/novedades";
+
+type Props = {
+  cantidad?: number;
+};
+
+export function NovedadesPreview({ cantidad = 3 }: Props) {
+  const [novedades, setNovedades] = useState<Novedad[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const cargar = async () => {
+      try {
+        const data = await getNovedadesPublicadas(cantidad);
+        setNovedades(data);
+      } catch {
+        setError("No se pudieron cargar las novedades por el momento.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void cargar();
+  }, [cantidad]);
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-brand-dark/10 bg-surface p-4 text-sm text-brand-dark/80">
+        Cargando novedades...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-2xl border border-brand-main/30 bg-brand-main/5 p-4 text-sm text-brand-dark">
+        {error}
+      </div>
+    );
+  }
+
+  if (!novedades.length) {
+    return (
+      <div className="rounded-2xl border border-brand-dark/10 bg-surface p-4 text-sm text-brand-dark/80">
+        Aun no hay novedades publicadas.
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {novedades.map((novedad) => (
+        <article
+          key={novedad.id}
+          className="rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
+        >
+          <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Novedad</p>
+          <h3 className="mt-2 text-lg font-extrabold text-brand-dark">{novedad.titulo}</h3>
+          <p className="mt-2 text-sm text-brand-dark/80">{novedad.resumen || "Sin resumen."}</p>
+          {novedad.fechaPublicacion && (
+            <p className="mt-3 text-xs text-brand-dark/60">
+              Publicado: {new Date(novedad.fechaPublicacion).toLocaleDateString("es-AR")}
+            </p>
+          )}
+        </article>
+      ))}
+    </div>
+  );
+}

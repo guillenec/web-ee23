@@ -23,6 +23,7 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se copiaron logos e imagenes institucionales a `frontend/public/assets` para no depender de rutas externas.
 - Se integro una home inicial con estilo institucional, paleta definida y contenido territorial.
 - Se agrego base de integracion Firebase en `frontend/src/lib/firebase.ts` y plantilla `frontend/.env.example`.
+- Se integro lectura de novedades desde Firestore para portada y pagina dedicada en `frontend/src/app/novedades/page.tsx`.
 
 ## Proximos hitos
 

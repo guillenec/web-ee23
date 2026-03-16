@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { NovedadesPreview } from "@/components/novedades-preview";
+
 export default function Home() {
   const localidades = [
     "Ingeniero Jacobacci",
@@ -131,6 +133,24 @@ export default function Home() {
               </p>
             </div>
           </article>
+        </section>
+
+        <section className="space-y-4">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
+                Conexion Firestore
+              </p>
+              <h2 className="text-2xl font-black text-brand-dark">Ultimas novedades publicadas</h2>
+            </div>
+            <a
+              href="/novedades"
+              className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+            >
+              Ver todas
+            </a>
+          </div>
+          <NovedadesPreview cantidad={3} />
         </section>
 
         <section id="alcance" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
