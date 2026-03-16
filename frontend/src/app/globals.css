@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f6f2ee;
+  --surface: #ffffff;
+  --text: #2f2622;
+  --brand-dark: #4b3831;
+  --brand-main: #ca4213;
+  --brand-soft: #f98c45;
+  --neutral: #cbcbcb;
+  --sky: #c5e4e7;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-text: var(--text);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-main: var(--brand-main);
+  --color-brand-soft: var(--brand-soft);
+  --color-neutral: var(--neutral);
+  --color-sky: var(--sky);
+  --font-sans: var(--font-body);
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: var(--font-body), sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), sans-serif;
+}
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: fade-up 0.7s ease forwards;
+}
+
+.fade-up.delay-1 {
+  animation-delay: 0.12s;
+}
+
+.fade-up.delay-2 {
+  animation-delay: 0.24s;
+}
+
+.fade-up.delay-3 {
+  animation-delay: 0.36s;
+}
+
+@keyframes fade-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.float-shape {
+  animation: float-shape 5s ease-in-out infinite;
+}
+
+@keyframes float-shape {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
