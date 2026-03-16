@@ -1,3 +1,4 @@
+import { ContactoForm } from "@/components/contacto-form";
 import { contactoInstitucional, horariosInstitucionales } from "@/lib/contacto";
 
 type Props = {
@@ -40,28 +41,49 @@ export function ContactoSection({
             <p className="mt-1 text-sm text-brand-dark/85">{contactoInstitucional.direccion}</p>
           </div>
 
-          <div className="grid gap-2 text-sm text-brand-dark/85">
-            <p>
-              Telefono: <a href={`tel:${contactoInstitucional.telefonoLink}`}>{contactoInstitucional.telefonoVisible}</a>
-            </p>
-            <p>
-              Email: <a href={`mailto:${contactoInstitucional.email}`}>{contactoInstitucional.email}</a>
-            </p>
-            <p>
-              Facebook: <a href={contactoInstitucional.facebookUrl}>Escuela Especial N 23</a>
-            </p>
+          <div className="grid gap-2 sm:grid-cols-3">
+            <a
+              href={contactoInstitucional.whatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border border-brand-main/35 bg-brand-main/8 px-3 py-2 text-center text-sm font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
+            >
+              WhatsApp
+            </a>
+            <a
+              href={`mailto:${contactoInstitucional.email}`}
+              className="rounded-xl border border-brand-dark/20 bg-white px-3 py-2 text-center text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+            >
+              Email
+            </a>
+            <a
+              href={contactoInstitucional.facebookUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-xl border border-sky/45 bg-sky/45 px-3 py-2 text-center text-sm font-semibold text-brand-dark transition hover:bg-sky/70"
+            >
+              Facebook
+            </a>
           </div>
 
-          <div>
+          <div className="rounded-xl border border-brand-dark/10 bg-white/80 p-3">
             <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Horario</p>
-            <ul className="mt-2 grid gap-1 text-sm text-brand-dark/85">
-              {horariosInstitucionales.map((fila) => (
-                <li key={fila.dia} className="flex items-center justify-between gap-2">
-                  <span className="font-semibold">{fila.dia}</span>
-                  <span>{fila.horario}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="mt-2 text-sm text-brand-dark/85">Lunes a viernes: 08:00-12:30 y 13:00-17:30</p>
+            <p className="text-sm text-brand-dark/85">Sabado y domingo: cerrado</p>
+
+            <details className="mt-2 rounded-lg border border-brand-dark/10 bg-white/90 p-2">
+              <summary className="cursor-pointer text-sm font-semibold text-brand-dark">
+                Ver detalle semanal
+              </summary>
+              <ul className="mt-2 grid gap-1 text-sm text-brand-dark/85">
+                {horariosInstitucionales.map((fila) => (
+                  <li key={fila.dia} className="flex items-center justify-between gap-2">
+                    <span className="font-semibold">{fila.dia}</span>
+                    <span>{fila.horario}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
           </div>
         </article>
 
@@ -74,6 +96,10 @@ export function ContactoSection({
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
+      </div>
+
+      <div className="mt-5">
+        <ContactoForm />
       </div>
     </section>
   );

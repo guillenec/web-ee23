@@ -4,6 +4,8 @@ export const contactoInstitucional = {
   longitud: -69.54628588619906,
   telefonoVisible: "+54 2940 43-3103",
   telefonoLink: "+542940433103",
+  whatsappUrl:
+    "https://wa.me/542940433103?text=Hola%20Escuela%20Especial%20N%2023,%20quisiera%20hacer%20una%20consulta.",
   email: "escuela23jaco@gmail.com",
   facebookUrl: "https://facebook.com/profile.php?id=100066520880018",
   mapsEmbedUrl:
