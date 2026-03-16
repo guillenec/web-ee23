@@ -1,8 +1,8 @@
 import Image from "next/image";
 
 import { NovedadesPreview } from "@/components/novedades-preview";
-import { SiteFooter } from "@/components/site-footer";
 import { TransitionLink } from "@/components/transition-link";
+import { fotosGaleria } from "@/lib/galeria";
 
 export default function Home() {
   const localidades = [
@@ -17,34 +17,8 @@ export default function Home() {
   ];
 
   return (
-    <div className="page-enter min-h-screen bg-[radial-gradient(circle_at_10%_20%,#c5e4e7_0%,#f6f2ee_35%,#f6f2ee_100%)]">
-      <header className="border-b border-brand-dark/10 bg-surface/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/assets/logos/logo1.png"
-              alt="Logo Escuela Especial N 23"
-              width={48}
-              height={48}
-              className="h-12 w-12"
-            />
-            <div>
-              <p className="text-xs font-semibold tracking-[0.18em] text-brand-main uppercase">
-                Escuela Especial N 23
-              </p>
-              <p className="text-sm text-brand-dark/75">Ingeniero Jacobacci - Rio Negro</p>
-            </div>
-          </div>
-          <a
-            href="#contacto"
-            className="rounded-full border border-brand-main px-4 py-2 text-sm font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
-          >
-            Contacto
-          </a>
-        </div>
-      </header>
-
-      <main className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-8 sm:px-8 sm:py-12">
+    <main className="page-enter bg-[radial-gradient(circle_at_10%_20%,#c5e4e7_0%,#f6f2ee_35%,#f6f2ee_100%)]">
+      <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-8 sm:px-8 sm:py-12">
         <section
           id="banner"
           data-reveal
@@ -112,6 +86,12 @@ export default function Home() {
                 Nuestro trabajo combina propuestas pedagogicas adaptadas, grupos reducidos y
                 articulacion permanente con familias e instituciones de Ingeniero Jacobacci y Region Sur.
               </p>
+              <TransitionLink
+                href="/sobre-nosotros"
+                className="inline-flex rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+              >
+                Conocer mas
+              </TransitionLink>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
@@ -166,6 +146,12 @@ export default function Home() {
               <p className="mt-2 text-sm text-brand-dark/85">
                 Registro visual del trabajo pedagogico en escuelas y parajes de la region.
               </p>
+              <TransitionLink
+                href="/galeria"
+                className="mt-3 inline-block rounded-full border border-brand-dark/25 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-brand-dark hover:text-white"
+              >
+                Abrir galeria
+              </TransitionLink>
             </div>
           </article>
           <article
@@ -186,6 +172,45 @@ export default function Home() {
               </p>
             </div>
           </article>
+        </section>
+
+        <section data-reveal className="space-y-4">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
+                Galeria institucional
+              </p>
+              <h2 className="text-2xl font-black text-brand-dark">Imagenes destacadas</h2>
+            </div>
+            <TransitionLink
+              href="/galeria"
+              className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+            >
+              Ver galeria completa
+            </TransitionLink>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {fotosGaleria.slice(0, 3).map((foto) => (
+              <article
+                key={foto.id}
+                className="card-lift overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
+              >
+                <Image
+                  src={foto.src}
+                  alt={foto.titulo}
+                  width={900}
+                  height={700}
+                  className="h-44 w-full object-cover"
+                />
+                <div className="space-y-2 p-4">
+                  <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">{foto.categoria}</p>
+                  <h3 className="text-lg font-extrabold text-brand-dark">{foto.titulo}</h3>
+                  <p className="text-sm text-brand-dark/80">{foto.descripcion}</p>
+                </div>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section data-reveal className="space-y-4">
@@ -218,8 +243,7 @@ export default function Home() {
             </article>
           ))}
         </section>
-      </main>
-      <SiteFooter />
-    </div>
+      </div>
+    </main>
   );
 }

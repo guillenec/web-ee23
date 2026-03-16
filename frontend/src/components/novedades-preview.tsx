@@ -32,8 +32,22 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-brand-dark/10 bg-surface p-4 text-sm text-brand-dark/80">
-        Cargando novedades...
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: Math.min(cantidad, 6) }).map((_, idx) => (
+          <article
+            key={`sk-${idx}`}
+            className="rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
+          >
+            <div className="h-40 animate-pulse rounded-xl bg-brand-dark/10" />
+            <div className="mt-4 h-3 w-24 animate-pulse rounded bg-brand-dark/10" />
+            <div className="mt-3 h-6 w-5/6 animate-pulse rounded bg-brand-dark/10" />
+            <div className="mt-3 space-y-2">
+              <div className="h-3.5 w-full animate-pulse rounded bg-brand-dark/10" />
+              <div className="h-3.5 w-11/12 animate-pulse rounded bg-brand-dark/10" />
+            </div>
+            <div className="mt-4 h-3 w-2/3 animate-pulse rounded bg-brand-dark/10" />
+          </article>
+        ))}
       </div>
     );
   }

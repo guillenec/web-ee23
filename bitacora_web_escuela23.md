@@ -49,6 +49,13 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se incorporan animaciones de entrada y de scroll reveal reutilizables (`page-enter`, `data-reveal`) con observador en `frontend/src/components/scroll-reveal.tsx`.
 - Se agrega footer institucional reutilizable en `frontend/src/components/site-footer.tsx` y se integra en portada, listado y detalle.
 - Se reemplazan assets base de Next/Vercel: favicon por `frontend/src/app/icon.png` y nuevos logos institucionales en `frontend/public/assets/logos`.
+- Se unifica navegacion global en todas las rutas con header fijo reutilizable (`frontend/src/components/site-header.tsx`) y logo clickeable al inicio.
+- Se reestructura `frontend/src/app/layout.tsx` para mantener header/footer persistentes y evitar saltos visuales al navegar.
+- Se agrega seccion de galeria real con categorias y filtros en `frontend/src/app/galeria/page.tsx` usando `frontend/src/lib/galeria.ts`.
+- Se suma pagina completa de `Sobre nosotros` en `frontend/src/app/sobre-nosotros/page.tsx` con mision, vision, valores y enfoque institucional.
+- Se crea panel admin minimo para prevalidar cargas de novedades en `frontend/src/app/admin/novedades/page.tsx` con salida JSON lista para Firebase.
+- Se incorporan esqueletos de carga para listado y detalle de novedades en `frontend/src/app/novedades/loading.tsx` y `frontend/src/app/novedades/[slug]/loading.tsx`.
+- Se mejora experiencia de carga en tarjetas y detalle con placeholders para evitar cortes visuales durante transiciones.
 
 ## Proximos hitos
 

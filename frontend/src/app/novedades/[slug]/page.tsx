@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-import { SiteFooter } from "@/components/site-footer";
 import { TransitionLink } from "@/components/transition-link";
 import { getNovedadPublicadaPorSlug, type Novedad } from "@/lib/novedades";
 
@@ -38,8 +37,8 @@ export default function NovedadDetallePage() {
   }, [slug]);
 
   return (
-    <div className="page-enter min-h-screen bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)]">
-      <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-5 py-10 sm:px-8">
+    <main className="page-enter min-h-[60vh] bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)]">
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-5 py-10 sm:px-8">
         <TransitionLink
           href="/novedades"
           className="w-fit rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
@@ -48,8 +47,16 @@ export default function NovedadDetallePage() {
         </TransitionLink>
 
         {loading ? (
-          <div className="rounded-2xl border border-brand-dark/10 bg-surface p-6 text-sm text-brand-dark/80">
-            Cargando novedad...
+          <div className="rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_26px_rgba(75,56,49,0.10)] sm:p-8">
+            <div className="h-56 animate-pulse rounded-2xl bg-brand-dark/10 sm:h-72" />
+            <div className="mt-6 h-3 w-24 animate-pulse rounded bg-brand-dark/10" />
+            <div className="mt-4 h-8 w-4/5 animate-pulse rounded bg-brand-dark/10" />
+            <div className="mt-3 h-4 w-2/5 animate-pulse rounded bg-brand-dark/10" />
+            <div className="mt-8 space-y-2">
+              <div className="h-4 w-full animate-pulse rounded bg-brand-dark/10" />
+              <div className="h-4 w-full animate-pulse rounded bg-brand-dark/10" />
+              <div className="h-4 w-3/4 animate-pulse rounded bg-brand-dark/10" />
+            </div>
           </div>
         ) : null}
 
@@ -104,9 +111,7 @@ export default function NovedadDetallePage() {
             </div>
           </article>
         ) : null}
-      </main>
-
-      <SiteFooter />
-    </div>
+      </div>
+    </main>
   );
 }
