@@ -57,6 +57,10 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se incorporan esqueletos de carga para listado y detalle de novedades en `frontend/src/app/novedades/loading.tsx` y `frontend/src/app/novedades/[slug]/loading.tsx`.
 - Se mejora experiencia de carga en tarjetas y detalle con placeholders para evitar cortes visuales durante transiciones.
 - Se corrige desborde en `frontend/src/app/admin/novedades/page.tsx`: columnas con `minmax(0, ...)`, contenedores `min-w-0` y bloque JSON con `break-all` + altura maxima scrolleable.
+- Se incorpora seccion de contacto con mapa embebido, direccion exacta y horarios institucionales en portada (`frontend/src/components/contacto-section.tsx`).
+- Se agrega pagina dedicada `frontend/src/app/contacto/page.tsx` y se actualiza boton de header para navegar a esa ruta desde cualquier pagina.
+- Se normaliza informacion de contacto en `frontend/src/lib/contacto.ts` (telefono, email, Facebook, coordenadas y links de Maps).
+- Se actualiza footer (`frontend/src/components/site-footer.tsx`) para reflejar telefono y email institucional vigentes.
 
 ## Proximos hitos
 

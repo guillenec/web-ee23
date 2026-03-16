@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { contactoInstitucional } from "@/lib/contacto";
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-brand-dark/12 bg-brand-dark text-white">
@@ -22,8 +24,13 @@ export function SiteFooter() {
         </div>
 
         <div className="space-y-2 text-sm text-white/85 sm:text-right">
-          <p>R8418 Ingeniero Jacobacci, Rio Negro</p>
-          <p>Telefono: (02940) 432002</p>
+          <p>{contactoInstitucional.direccion}</p>
+          <p>
+            Telefono: <a href={`tel:${contactoInstitucional.telefonoLink}`}>{contactoInstitucional.telefonoVisible}</a>
+          </p>
+          <p>
+            Email: <a href={`mailto:${contactoInstitucional.email}`}>{contactoInstitucional.email}</a>
+          </p>
           <p>Comunidad educativa 2026</p>
         </div>
       </div>

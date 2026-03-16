@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { ContactoSection } from "@/components/contacto-section";
 import { NovedadesPreview } from "@/components/novedades-preview";
 import { TransitionLink } from "@/components/transition-link";
 import { fotosGaleria } from "@/lib/galeria";
@@ -155,7 +156,6 @@ export default function Home() {
             </div>
           </article>
           <article
-            id="contacto"
             className="card-lift overflow-hidden rounded-2xl bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
           >
             <Image
@@ -173,6 +173,8 @@ export default function Home() {
             </div>
           </article>
         </section>
+
+        <ContactoSection id="contacto" />
 
         <section data-reveal className="space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">

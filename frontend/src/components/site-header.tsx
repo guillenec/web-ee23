@@ -14,6 +14,7 @@ const enlaces = [
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const contactoActivo = pathname.startsWith("/contacto");
 
   return (
     <header className="sticky top-0 z-40 border-b border-brand-dark/10 bg-surface/90 backdrop-blur">
@@ -53,8 +54,12 @@ export function SiteHeader() {
             );
           })}
           <TransitionLink
-            href="/#contacto"
-            className="rounded-full border border-brand-main px-4 py-2 text-sm font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
+            href="/contacto"
+            className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+              contactoActivo
+                ? "border-brand-main bg-brand-main text-white"
+                : "border-brand-main text-brand-main hover:bg-brand-main hover:text-white"
+            }`}
           >
             Contacto
           </TransitionLink>
