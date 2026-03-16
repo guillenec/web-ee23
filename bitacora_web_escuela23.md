@@ -64,6 +64,7 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se optimiza bloque de horarios para ocupar menos espacio: resumen visible + detalle semanal desplegable en la seccion de contacto.
 - Se transforman canales de contacto en botones de accion (WhatsApp, Email y Facebook) siguiendo paleta institucional.
 - Se incorpora formulario de contacto directo (`frontend/src/components/contacto-form.tsx`) con validacion basica y salida por `mailto` para integracion futura con envio automatico.
+- Se ajusta composicion desktop del bloque de contacto: formulario con ancho controlado y panel visual lateral con logo institucional para equilibrar la seccion.
 
 ## Proximos hitos
 

@@ -52,7 +52,7 @@ export function ContactoForm() {
   };
 
   return (
-    <article data-reveal className="rounded-2xl border border-brand-dark/10 bg-white/70 p-5">
+    <article data-reveal className="h-full rounded-2xl border border-brand-dark/10 bg-white/70 p-5">
       <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Formulario directo</p>
       <h3 className="mt-1 text-xl font-black text-brand-dark">Escribinos tu consulta</h3>
       <p className="mt-2 text-sm text-brand-dark/80">

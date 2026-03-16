@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { ContactoForm } from "@/components/contacto-form";
 import { contactoInstitucional, horariosInstitucionales } from "@/lib/contacto";
 
@@ -98,8 +100,28 @@ export function ContactoSection({
         </div>
       </div>
 
-      <div className="mt-5">
-        <ContactoForm />
+      <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+        <div className="min-w-0 lg:max-w-3xl">
+          <ContactoForm />
+        </div>
+
+        <article
+          data-reveal
+          className="flex items-center justify-center rounded-2xl border border-brand-dark/10 bg-[linear-gradient(160deg,rgba(197,228,231,0.26),rgba(255,255,255,0.75))] p-6"
+        >
+          <div className="space-y-4 text-center">
+            <Image
+              src="/assets/logos/logo1.png"
+              alt="Logo institucional Escuela Especial N 23"
+              width={460}
+              height={376}
+              className="mx-auto h-auto max-h-[280px] w-full max-w-[360px] object-contain"
+            />
+            <p className="text-sm font-semibold text-brand-dark/75">
+              Comunidad educativa, inclusion y acompanamiento territorial.
+            </p>
+          </div>
+        </article>
       </div>
     </section>
   );
