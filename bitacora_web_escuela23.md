@@ -84,6 +84,8 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se agrega soporte de galeria en panel admin: lista de URLs con alta/baja y persistencia a Firestore en campo `galeria`.
 - Se habilita carga local de imagen principal y galeria hacia Cloudinary (requiere `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` y `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET`).
 - Se incorpora borrador automatico en `localStorage` del navegador para evitar perdida de datos al recargar la pagina.
+- Se crea y valida preset `ee23_unsigned` en Cloudinary (`folder: ee_23/novedades`, modo unsigned) para habilitar subidas directas desde el panel admin.
+- Se confirma prueba funcional en local: subida desde equipo (imagen principal y galeria) + guardado de novedad en Firestore.
 
 ## Proximos hitos
 
