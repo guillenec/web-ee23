@@ -29,6 +29,7 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se actualizo `frontend/src/lib/novedades.ts` para leer `fecha` y mantener compatibilidad con `fechaPublicacion`.
 - Se amplio `frontend/src/components/novedades-preview.tsx` para mostrar imagen principal, categoria y autor.
 - Se habilito dominio de Firebase Storage en `frontend/next.config.ts` para imagenes remotas.
+- Se habilito tambien `res.cloudinary.com` en `frontend/next.config.ts` para soportar `imagenPrincipal` desde Cloudinary.
 - Se documento carga semilla en `frontend/firestore-novedades-seed.md` para crear primer documento publicado.
 
 ## Proximos hitos
