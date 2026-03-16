@@ -72,6 +72,8 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se fortalece SEO tecnico en `frontend/src/app/layout.tsx` (title template, canonical, Open Graph, Twitter, robots e iconos declarados).
 - Se agregan `frontend/src/app/robots.ts` y `frontend/src/app/sitemap.ts` para indexacion consistente en despliegue.
 - Se define `noindex` para rutas admin via `frontend/src/app/admin/layout.tsx` y se documenta `NEXT_PUBLIC_SITE_URL` en `frontend/.env.example`.
+- Se realiza primer deploy productivo en Vercel con URL publica `https://escuela-especial-23.vercel.app/`.
+- Se alinea fallback SEO/canonical/sitemap/robots al dominio productivo actual en `layout.tsx`, `robots.ts`, `sitemap.ts` y `.env.example`.
 
 ## Proximos hitos
 
