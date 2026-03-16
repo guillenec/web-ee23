@@ -1,7 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import { NovedadesPreview } from "@/components/novedades-preview";
+import { SiteFooter } from "@/components/site-footer";
+import { TransitionLink } from "@/components/transition-link";
 
 export default function Home() {
   const localidades = [
@@ -16,12 +17,12 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_10%_20%,#c5e4e7_0%,#f6f2ee_35%,#f6f2ee_100%)]">
+    <div className="page-enter min-h-screen bg-[radial-gradient(circle_at_10%_20%,#c5e4e7_0%,#f6f2ee_35%,#f6f2ee_100%)]">
       <header className="border-b border-brand-dark/10 bg-surface/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
           <div className="flex items-center gap-3">
             <Image
-              src="/assets/logos/logo-escuela.svg"
+              src="/assets/logos/logo1.png"
               alt="Logo Escuela Especial N 23"
               width={48}
               height={48}
@@ -44,7 +45,11 @@ export default function Home() {
       </header>
 
       <main className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-8 sm:px-8 sm:py-12">
-        <section id="banner" className="relative h-[520px]  md:h-[550px] overflow-hidden rounded-3xl bg-brand-dark text-white shadow-[0_24px_50px_rgba(78,56,49,0.28)]">
+        <section
+          id="banner"
+          data-reveal
+          className="relative h-[520px] overflow-hidden rounded-3xl bg-brand-dark text-white shadow-[0_24px_50px_rgba(78,56,49,0.28)] md:h-[550px]"
+        >
           <Image
             src="/assets/images/hero-frente.jpg"
             alt="Frente de la Escuela Especial N 23"
@@ -90,6 +95,7 @@ export default function Home() {
 
         <section
           id="sobre-nosotros"
+          data-reveal
           className="rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8"
         >
           <div className="grid gap-7 lg:grid-cols-[1.3fr_1fr]">
@@ -131,7 +137,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="proximamente" className="grid gap-5 lg:grid-cols-3">
+        <section id="proximamente" data-reveal className="grid gap-5 lg:grid-cols-3">
           <article className="card-lift overflow-hidden rounded-2xl bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]">
             <Image
               src="/assets/images/alumnos-jardin.jpg"
@@ -182,7 +188,7 @@ export default function Home() {
           </article>
         </section>
 
-        <section className="space-y-4">
+        <section data-reveal className="space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
@@ -190,17 +196,17 @@ export default function Home() {
               </p>
               <h2 className="text-2xl font-black text-brand-dark">Ultimas novedades publicadas</h2>
             </div>
-            <Link
+            <TransitionLink
               href="/novedades"
               className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
             >
               Ver todas
-            </Link>
+            </TransitionLink>
           </div>
           <NovedadesPreview cantidad={3} />
         </section>
 
-        <section id="alcance" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <section id="alcance" data-reveal className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {localidades.map((localidad, idx) => (
             <article
               key={localidad}
@@ -213,6 +219,7 @@ export default function Home() {
           ))}
         </section>
       </main>
+      <SiteFooter />
     </div>
   );
 }

@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Lato, Source_Sans_3 } from "next/font/google";
+
+import { ScrollReveal } from "@/components/scroll-reveal";
+
 import "./globals.css";
 
 const lato = Lato({
@@ -18,6 +21,11 @@ export const metadata: Metadata = {
   title: "Escuela Especial N 23",
   description:
     "Sitio institucional de la Escuela Especial N 23 de Ingeniero Jacobacci.",
+  icons: {
+    icon: "/assets/logos/logo1.png",
+    shortcut: "/assets/logos/logo1.png",
+    apple: "/assets/logos/logo1.png",
+  },
 };
 
 export default function RootLayout({
@@ -28,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${lato.variable} ${sourceSans.variable} antialiased`}>
+        <ScrollReveal />
         {children}
       </body>
     </html>

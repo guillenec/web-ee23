@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+import { TransitionLink } from "@/components/transition-link";
 import { getNovedadesPublicadas, type Novedad } from "@/lib/novedades";
 
 type Props = {
@@ -56,9 +57,11 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {novedades.map((novedad) => (
-        <article
+        <TransitionLink
           key={novedad.id}
-          className="rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
+          href={`/novedades/${encodeURIComponent(novedad.slug || novedad.id)}`}
+          className="card-lift block rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
+          data-reveal
         >
           {novedad.imagenPrincipal ? (
             <Image
@@ -67,6 +70,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
               width={800}
               height={500}
               className="mb-4 h-40 w-full rounded-xl object-cover"
+              style={{ viewTransitionName: `novedad-${(novedad.slug || novedad.id).replace(/[^a-zA-Z0-9_-]/g, "-")}` }}
             />
           ) : null}
           <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Novedad</p>
@@ -80,7 +84,8 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
               Publicado: {new Date(novedad.fecha).toLocaleDateString("es-AR")}
             </p>
           )}
-        </article>
+          <p className="mt-4 text-sm font-semibold text-brand-main">Leer nota completa</p>
+        </TransitionLink>
       ))}
     </div>
   );

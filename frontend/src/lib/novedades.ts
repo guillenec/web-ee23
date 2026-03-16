@@ -47,6 +47,24 @@ const toIsoDate = (value: Timestamp | string | undefined): string => {
   return value.toDate().toISOString();
 };
 
+const mapNovedad = (id: string, data: NovedadFirestore): Novedad => {
+  const fecha = toIsoDate(data.fecha) || toIsoDate(data.fechaPublicacion);
+
+  return {
+    id,
+    titulo: data.titulo ?? "Sin titulo",
+    slug: data.slug ?? id,
+    categoria: data.categoria ?? "General",
+    autor: data.autor ?? "Equipo institucional",
+    resumen: data.resumen ?? "",
+    contenido: data.contenido ?? "",
+    imagenPrincipal: data.imagenPrincipal ?? "",
+    galeria: data.galeria ?? [],
+    fecha,
+    estado: data.estado ?? "borrador",
+  };
+};
+
 export const getNovedadesPublicadas = async (
   cantidad = 3,
 ): Promise<Novedad[]> => {
@@ -59,24 +77,7 @@ export const getNovedadesPublicadas = async (
   const snapshot = await getDocs(q);
 
   const novedades = snapshot.docs
-    .map((doc) => {
-      const data = doc.data() as NovedadFirestore;
-      const fecha = toIsoDate(data.fecha) || toIsoDate(data.fechaPublicacion);
-
-      return {
-        id: doc.id,
-        titulo: data.titulo ?? "Sin titulo",
-        slug: data.slug ?? doc.id,
-        categoria: data.categoria ?? "General",
-        autor: data.autor ?? "Equipo institucional",
-        resumen: data.resumen ?? "",
-        contenido: data.contenido ?? "",
-        imagenPrincipal: data.imagenPrincipal ?? "",
-        galeria: data.galeria ?? [],
-        fecha,
-        estado: data.estado ?? "borrador",
-      };
-    })
+    .map((doc) => mapNovedad(doc.id, doc.data() as NovedadFirestore))
     .sort((a, b) => {
       if (!a.fecha && !b.fecha) return 0;
       if (!a.fecha) return 1;
@@ -91,4 +92,19 @@ export const getNovedadesPublicadas = async (
   };
 
   return novedades.slice(0, cantidad);
+};
+
+export const getNovedadPublicadaPorSlug = async (slug: string): Promise<Novedad | null> => {
+  const ref = collection(db, "novedades");
+  const q = query(ref, where("estado", "==", "publicado"), limit(48));
+  const snapshot = await getDocs(q);
+
+  const normalizado = decodeURIComponent(slug).trim().toLowerCase();
+  const match = snapshot.docs
+    .map((doc) => mapNovedad(doc.id, doc.data() as NovedadFirestore))
+    .find((novedad) => {
+      return novedad.slug.trim().toLowerCase() === normalizado || novedad.id.trim().toLowerCase() === normalizado;
+    });
+
+  return match ?? null;
 };

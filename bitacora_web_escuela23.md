@@ -44,6 +44,11 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se revierte el ajuste anterior de `novedades`: se mantiene filtro estricto `estado == "publicado"` en Firestore para respetar reglas de seguridad productivas.
 - Se incorpora bloque `Sobre nosotros` en `frontend/src/app/page.tsx` con descripcion institucional, enfoque pedagogico y ejes de comunidad/accesibilidad.
 - Se toma como referencia publica complementaria la ficha de institucion en `ifts1.com.ar` para enriquecer texto de presentacion.
+- Se implementa apertura de novedad en pantalla completa con nueva ruta `frontend/src/app/novedades/[slug]/page.tsx` y tarjetas clickeables.
+- Se agregan transiciones entre paginas con `View Transition API` via `frontend/src/components/transition-link.tsx` (con fallback si el navegador no soporta).
+- Se incorporan animaciones de entrada y de scroll reveal reutilizables (`page-enter`, `data-reveal`) con observador en `frontend/src/components/scroll-reveal.tsx`.
+- Se agrega footer institucional reutilizable en `frontend/src/components/site-footer.tsx` y se integra en portada, listado y detalle.
+- Se reemplazan assets base de Next/Vercel: favicon por `frontend/src/app/icon.png` y nuevos logos institucionales en `frontend/public/assets/logos`.
 
 ## Proximos hitos
 

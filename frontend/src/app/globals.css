@@ -29,6 +29,19 @@ body {
   font-family: var(--font-body), sans-serif;
 }
 
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 320ms;
+}
+
+::view-transition-old(root) {
+  animation-timing-function: ease-in;
+}
+
+::view-transition-new(root) {
+  animation-timing-function: ease-out;
+}
+
 h1,
 h2,
 h3,
@@ -78,6 +91,32 @@ h4 {
   box-shadow: 0 16px 34px rgba(75, 56, 49, 0.16);
 }
 
+.page-enter {
+  animation: page-enter 520ms ease both;
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .cta-pop {
   animation: cta-pop 3.6s ease-in-out infinite;
 }
@@ -121,8 +160,13 @@ h4 {
   .fade-up,
   .float-shape,
   .hero-pan,
-  .cta-pop {
+  .cta-pop,
+  .page-enter,
+  [data-reveal],
+  [data-reveal].is-visible {
     animation: none !important;
     transform: none !important;
+    transition: none !important;
+    opacity: 1 !important;
   }
 }
