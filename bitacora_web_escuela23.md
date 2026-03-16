@@ -36,13 +36,16 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se reemplazo link de "Ver todas" por `next/link` para navegacion cliente mas fluida.
 - Se rediseno el hero de portada: mayor altura, bloque de contenido con fondo translcido y mejor contraste para titulos y botones.
 - Se incorporaron animaciones nuevas (`hero-pan`, `card-lift`, `cta-pop`) con soporte `prefers-reduced-motion`.
+- Se detecto y corrigio formato invalido en `frontend/.env` (valores con comillas y coma final) que bloqueaba consultas a Firestore.
+- Se verifico lectura de `novedades` desde Firestore con documento publicado real y se normalizo uso de campo `galeria` (sin tilde).
+- Se valido integracion de imagen principal con Cloudinary en el listado de novedades.
 
 ## Proximos hitos
 
-- Crear base frontend (Next.js + Tailwind + TypeScript).
-- Maquetar estructura de paginas publicas y estilos institucionales.
-- Configurar Firebase Auth, Firestore y Storage.
-- Cargar contenido inicial real de la escuela.
+- Definir reglas finales de Firestore para entorno productivo (lectura publica de publicados + escritura admin).
+- Implementar detalle de novedad en ruta `frontend/src/app/novedades/[slug]/page.tsx`.
+- Diseñar flujo de carga de imagenes desde admin a Cloudinary y persistencia en Firestore.
+- Modelar soporte de video por enlace (YouTube) en publicaciones.
 
 ## Riesgos y consideraciones
 

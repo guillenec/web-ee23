@@ -242,7 +242,7 @@ Incluye logos en PNG/SVG y banco de fotos para portada, galeria y secciones inte
 
 ## 13. Proximos pasos inmediatos
 
-1. Finalizar alta de Firestore en modo produccion y ubicacion `southamerica-east1`.
-2. Crear coleccion `novedades` con schema editorial base y primer documento publicado.
-3. Configurar reglas para lectura publica de `estado == "publicado"` y escritura solo admin.
-4. Avanzar con detalle de novedades (`/novedades/[slug]`) y panel admin de carga.
+1. Consolidar reglas de Firestore para produccion con acceso publico solo a `novedades` publicadas.
+2. Implementar detalle de publicacion en `/novedades/[slug]` con contenido completo y galeria opcional.
+3. Definir pipeline de media para admin: carga de imagenes a Cloudinary y guardado de URLs en Firestore.
+4. Incorporar soporte de video por enlace externo (YouTube) dentro del modelo de novedades.
