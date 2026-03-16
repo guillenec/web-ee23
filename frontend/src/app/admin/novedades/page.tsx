@@ -71,8 +71,11 @@ export default function AdminNovedadesPage() {
 
   return (
     <main className="page-enter bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)] px-5 py-10 sm:px-8">
-      <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1.2fr_1fr]">
-        <section data-reveal className="rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
+      <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+        <section
+          data-reveal
+          className="min-w-0 rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)]"
+        >
           <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Panel minimo</p>
           <h1 className="mt-2 text-3xl font-black text-brand-dark">Carga de novedades</h1>
           <p className="mt-2 text-sm text-brand-dark/80">
@@ -172,8 +175,8 @@ export default function AdminNovedadesPage() {
           </form>
         </section>
 
-        <section data-reveal className="space-y-4">
-          <article className="rounded-3xl border border-brand-dark/10 bg-surface p-5 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
+        <section data-reveal className="min-w-0 space-y-4">
+          <article className="min-w-0 rounded-3xl border border-brand-dark/10 bg-surface p-5 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
             <h2 className="text-xl font-black text-brand-dark">Estado de validacion</h2>
             <p className={`mt-2 text-sm ${valido ? "text-emerald-700" : "text-brand-main"}`}>
               {valido
@@ -189,9 +192,9 @@ export default function AdminNovedadesPage() {
             ) : null}
           </article>
 
-          <article className="rounded-3xl border border-brand-dark/10 bg-brand-dark p-5 text-white shadow-[0_10px_24px_rgba(75,56,49,0.18)]">
+          <article className="min-w-0 overflow-hidden rounded-3xl border border-brand-dark/10 bg-brand-dark p-5 text-white shadow-[0_10px_24px_rgba(75,56,49,0.18)]">
             <p className="text-xs font-bold tracking-[0.13em] text-brand-soft uppercase">JSON sugerido</p>
-            <pre className="mt-3 overflow-auto rounded-xl bg-black/20 p-3 text-xs leading-relaxed">
+            <pre className="mt-3 max-h-[520px] overflow-auto rounded-xl bg-black/20 p-3 text-xs leading-relaxed whitespace-pre-wrap break-all">
 {JSON.stringify(payload, null, 2)}
             </pre>
           </article>

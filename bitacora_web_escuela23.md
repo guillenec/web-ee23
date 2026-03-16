@@ -56,6 +56,7 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se crea panel admin minimo para prevalidar cargas de novedades en `frontend/src/app/admin/novedades/page.tsx` con salida JSON lista para Firebase.
 - Se incorporan esqueletos de carga para listado y detalle de novedades en `frontend/src/app/novedades/loading.tsx` y `frontend/src/app/novedades/[slug]/loading.tsx`.
 - Se mejora experiencia de carga en tarjetas y detalle con placeholders para evitar cortes visuales durante transiciones.
+- Se corrige desborde en `frontend/src/app/admin/novedades/page.tsx`: columnas con `minmax(0, ...)`, contenedores `min-w-0` y bloque JSON con `break-all` + altura maxima scrolleable.
 
 ## Proximos hitos
 
