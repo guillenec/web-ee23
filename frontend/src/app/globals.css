@@ -65,6 +65,32 @@ h4 {
   animation: float-shape 5s ease-in-out infinite;
 }
 
+.hero-pan {
+  animation: hero-pan 16s ease-in-out infinite alternate;
+}
+
+.card-lift {
+  transition: transform 260ms ease, box-shadow 260ms ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 34px rgba(75, 56, 49, 0.16);
+}
+
+.cta-pop {
+  animation: cta-pop 3.6s ease-in-out infinite;
+}
+
+@keyframes hero-pan {
+  0% {
+    transform: scale(1.02) translateX(0);
+  }
+  100% {
+    transform: scale(1.08) translateX(12px);
+  }
+}
+
 @keyframes float-shape {
   0%,
   100% {
@@ -72,5 +98,31 @@ h4 {
   }
   50% {
     transform: translateY(-8px);
+  }
+}
+
+@keyframes cta-pop {
+  0%,
+  74%,
+  100% {
+    transform: translateY(0);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  80% {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 22px rgba(202, 66, 19, 0.32);
+  }
+  88% {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .float-shape,
+  .hero-pan,
+  .cta-pop {
+    animation: none !important;
+    transform: none !important;
   }
 }

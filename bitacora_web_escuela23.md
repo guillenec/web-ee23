@@ -34,6 +34,8 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se ajusto lectura de `novedades` para evitar dependencia de indice compuesto (`estado + fecha`) y ordenar por fecha del lado cliente.
 - Se agrego cache en memoria (TTL 60s) para evitar reconsultas consecutivas de novedades entre portada y listado.
 - Se reemplazo link de "Ver todas" por `next/link` para navegacion cliente mas fluida.
+- Se rediseno el hero de portada: mayor altura, bloque de contenido con fondo translcido y mejor contraste para titulos y botones.
+- Se incorporaron animaciones nuevas (`hero-pan`, `card-lift`, `cta-pop`) con soporte `prefers-reduced-motion`.
 
 ## Proximos hitos
 
