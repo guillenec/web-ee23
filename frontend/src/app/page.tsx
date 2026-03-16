@@ -1,8 +1,8 @@
 import Image from "next/image";
 
-import { ContactoSection } from "@/components/contacto-section";
 import { NovedadesPreview } from "@/components/novedades-preview";
 import { TransitionLink } from "@/components/transition-link";
+import { contactoInstitucional } from "@/lib/contacto";
 import { fotosGaleria } from "@/lib/galeria";
 
 export default function Home() {
@@ -174,7 +174,55 @@ export default function Home() {
           </article>
         </section>
 
-        <ContactoSection id="contacto" />
+        <section
+          id="contacto"
+          data-reveal
+          className="rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8"
+        >
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+            <div className="space-y-4">
+              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Contacto</p>
+              <h2 className="text-2xl font-black text-brand-dark sm:text-3xl">Canales directos de la escuela</h2>
+              <p className="text-sm leading-relaxed text-brand-dark/80 sm:text-base">
+                Si necesitas informacion institucional, acompanamiento o coordinar una visita, podes
+                comunicarte con nosotros por WhatsApp, email o Facebook.
+              </p>
+              <p className="text-sm text-brand-dark/75">{contactoInstitucional.direccion}</p>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href={contactoInstitucional.whatsappUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full border border-brand-main/35 bg-brand-main/8 px-4 py-2 text-sm font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
+                >
+                  WhatsApp
+                </a>
+                <a
+                  href={`mailto:${contactoInstitucional.email}`}
+                  className="rounded-full border border-brand-dark/20 bg-white px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                >
+                  Email
+                </a>
+                <TransitionLink
+                  href="/contacto"
+                  className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                >
+                  Conocer mas
+                </TransitionLink>
+              </div>
+            </div>
+
+            <article className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
+              <iframe
+                title="Ubicacion Escuela Especial N 23"
+                src={contactoInstitucional.mapsEmbedUrl}
+                className="h-[280px] w-full"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </article>
+          </div>
+        </section>
 
         <section data-reveal className="space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">

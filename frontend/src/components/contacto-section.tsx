@@ -109,17 +109,17 @@ export function ContactoSection({
           data-reveal
           className="flex items-center justify-center rounded-2xl border border-brand-dark/10 bg-[linear-gradient(160deg,rgba(197,228,231,0.26),rgba(255,255,255,0.75))] p-6"
         >
-          <div className="space-y-4 text-center">
+          <div className="flex h-full w-full flex-col items-center justify-start gap-4">
+            <h2 className="text-sm font-semibold text-brand-dark/75 text-center">
+              Comunidad educativa, inclusion y acompanamiento territorial.
+            </h2>
             <Image
-              src="/assets/logos/logo1.png"
+              src="/assets/images/identidad_visual.png"
               alt="Logo institucional Escuela Especial N 23"
               width={460}
               height={376}
-              className="mx-auto h-auto max-h-[280px] w-full max-w-[360px] object-contain"
+              className="w-auto h-72 md:h-[400px] rounded-lg border border-brand-dark/20 object-cover object-center"
             />
-            <p className="text-sm font-semibold text-brand-dark/75">
-              Comunidad educativa, inclusion y acompanamiento territorial.
-            </p>
           </div>
         </article>
       </div>
