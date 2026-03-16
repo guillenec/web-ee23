@@ -86,6 +86,8 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se incorpora borrador automatico en `localStorage` del navegador para evitar perdida de datos al recargar la pagina.
 - Se crea y valida preset `ee23_unsigned` en Cloudinary (`folder: ee_23/novedades`, modo unsigned) para habilitar subidas directas desde el panel admin.
 - Se confirma prueba funcional en local: subida desde equipo (imagen principal y galeria) + guardado de novedad en Firestore.
+- Se deja preconfigurada integracion IA para etapa siguiente: variables `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` y `OPENROUTER_BASE_URL` agregadas en entorno local y Vercel.
+- Se ejecuta redeploy/rollback en Vercel para consolidar variables de entorno antes de implementar el boton de sugerencias IA en admin.
 
 ## Proximos hitos
 
