@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { NovedadesPreview } from "@/components/novedades-preview";
 
@@ -143,12 +144,12 @@ export default function Home() {
               </p>
               <h2 className="text-2xl font-black text-brand-dark">Ultimas novedades publicadas</h2>
             </div>
-            <a
+            <Link
               href="/novedades"
               className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
             >
               Ver todas
-            </a>
+            </Link>
           </div>
           <NovedadesPreview cantidad={3} />
         </section>

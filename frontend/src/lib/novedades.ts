@@ -37,6 +37,10 @@ type NovedadFirestore = {
   estado?: "borrador" | "publicado";
 };
 
+const NOVEDADES_CACHE_TTL_MS = 60_000;
+
+let novedadesCache: { value: Novedad[]; loadedAt: number } | null = null;
+
 const toIsoDate = (value: Timestamp | string | undefined): string => {
   if (!value) return "";
   if (typeof value === "string") return value;
@@ -46,11 +50,15 @@ const toIsoDate = (value: Timestamp | string | undefined): string => {
 export const getNovedadesPublicadas = async (
   cantidad = 3,
 ): Promise<Novedad[]> => {
+  if (novedadesCache && Date.now() - novedadesCache.loadedAt < NOVEDADES_CACHE_TTL_MS) {
+    return novedadesCache.value.slice(0, cantidad);
+  }
+
   const ref = collection(db, "novedades");
-  const q = query(ref, where("estado", "==", "publicado"), limit(Math.max(cantidad * 3, 12)));
+  const q = query(ref, where("estado", "==", "publicado"), limit(24));
   const snapshot = await getDocs(q);
 
-  return snapshot.docs
+  const novedades = snapshot.docs
     .map((doc) => {
       const data = doc.data() as NovedadFirestore;
       const fecha = toIsoDate(data.fecha) || toIsoDate(data.fechaPublicacion);
@@ -75,6 +83,12 @@ export const getNovedadesPublicadas = async (
       if (!b.fecha) return -1;
 
       return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
-    })
-    .slice(0, cantidad);
+    });
+
+  novedadesCache = {
+    value: novedades,
+    loadedAt: Date.now(),
+  };
+
+  return novedades.slice(0, cantidad);
 };
