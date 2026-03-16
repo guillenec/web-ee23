@@ -19,6 +19,10 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se incorporaron codigos de color finales al plan: `#4B3831`, `#CA4213`, `#F98C45`, `#CBCBCB`, `#C5E4E7`.
 - Se amplio el alcance territorial en el plan para reflejar trabajo en Jacobacci y Region Sur.
 - Se limpiaron imagenes de referencia temporales `image-*.png`.
+- Se creo base `frontend/` con Next.js, Tailwind y TypeScript.
+- Se copiaron logos e imagenes institucionales a `frontend/public/assets` para no depender de rutas externas.
+- Se integro una home inicial con estilo institucional, paleta definida y contenido territorial.
+- Se agrego base de integracion Firebase en `frontend/src/lib/firebase.ts` y plantilla `frontend/.env.example`.
 
 ## Proximos hitos
 
