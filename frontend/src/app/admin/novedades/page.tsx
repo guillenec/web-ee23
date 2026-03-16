@@ -1,7 +1,7 @@
 "use client";
 
 import { Timestamp, doc, setDoc } from "firebase/firestore";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 
 import { db } from "@/lib/firebase";
@@ -14,6 +14,7 @@ type FormData = {
   resumen: string;
   contenido: string;
   imagenPrincipal: string;
+  galeria: string[];
   fecha: string;
   estado: "publicado" | "borrador";
 };
@@ -26,9 +27,14 @@ const inicial: FormData = {
   resumen: "",
   contenido: "",
   imagenPrincipal: "",
+  galeria: [],
   fecha: "",
   estado: "publicado",
 };
+
+const BORRADOR_STORAGE_KEY = "ee23_admin_novedad_borrador_v1";
+const cloudinaryCloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+const cloudinaryUploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 
 export default function AdminNovedadesPage() {
   const [form, setForm] = useState<FormData>(inicial);
@@ -37,6 +43,39 @@ export default function AdminNovedadesPage() {
   const [guardadoOk, setGuardadoOk] = useState<string | null>(null);
   const [guardadoError, setGuardadoError] = useState<string | null>(null);
   const [slugEditadoManual, setSlugEditadoManual] = useState(false);
+  const [galeriaInput, setGaleriaInput] = useState("");
+  const [subiendoPrincipal, setSubiendoPrincipal] = useState(false);
+  const [subiendoGaleria, setSubiendoGaleria] = useState(false);
+
+  useEffect(() => {
+    const raw = window.localStorage.getItem(BORRADOR_STORAGE_KEY);
+    if (!raw) return;
+
+    try {
+      const data = JSON.parse(raw) as {
+        form?: FormData;
+        slugEditadoManual?: boolean;
+      };
+
+      if (data.form) {
+        setForm({
+          ...inicial,
+          ...data.form,
+          galeria: Array.isArray(data.form.galeria) ? data.form.galeria : [],
+        });
+      }
+
+      if (typeof data.slugEditadoManual === "boolean") {
+        setSlugEditadoManual(data.slugEditadoManual);
+      }
+    } catch {
+      window.localStorage.removeItem(BORRADOR_STORAGE_KEY);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(BORRADOR_STORAGE_KEY, JSON.stringify({ form, slugEditadoManual }));
+  }, [form, slugEditadoManual]);
 
   const errores = useMemo(() => {
     const next: Record<string, string> = {};
@@ -68,6 +107,7 @@ export default function AdminNovedadesPage() {
       categoria: form.categoria.trim(),
       autor: form.autor.trim(),
       imagenPrincipal: form.imagenPrincipal.trim(),
+      galeria: form.galeria.filter(Boolean),
       fecha: form.fecha,
     };
   }, [form]);
@@ -99,6 +139,89 @@ export default function AdminNovedadesPage() {
     setSlugEditadoManual(false);
     setGuardadoOk(null);
     setGuardadoError(null);
+    setGaleriaInput("");
+    window.localStorage.removeItem(BORRADOR_STORAGE_KEY);
+  };
+
+  const agregarImagenGaleria = () => {
+    const value = galeriaInput.trim();
+    if (!value) return;
+
+    setForm((prev) => ({
+      ...prev,
+      galeria: Array.from(new Set([...prev.galeria, value])),
+    }));
+    setGaleriaInput("");
+  };
+
+  const quitarImagenGaleria = (url: string) => {
+    setForm((prev) => ({
+      ...prev,
+      galeria: prev.galeria.filter((item) => item !== url),
+    }));
+  };
+
+  const subirArchivoACloudinary = async (file: File): Promise<string> => {
+    if (!cloudinaryCloudName || !cloudinaryUploadPreset) {
+      throw new Error("Faltan variables de Cloudinary");
+    }
+
+    const body = new FormData();
+    body.append("file", file);
+    body.append("upload_preset", cloudinaryUploadPreset);
+
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`, {
+      method: "POST",
+      body,
+    });
+
+    if (!response.ok) {
+      throw new Error("Cloudinary rechazo la carga");
+    }
+
+    const result = (await response.json()) as { secure_url?: string };
+    if (!result.secure_url) {
+      throw new Error("Cloudinary no devolvio URL de imagen");
+    }
+
+    return result.secure_url;
+  };
+
+  const onSubirImagenPrincipal = async (file: File | null) => {
+    if (!file) return;
+
+    try {
+      setSubiendoPrincipal(true);
+      setGuardadoError(null);
+      const url = await subirArchivoACloudinary(file);
+      setForm((prev) => ({ ...prev, imagenPrincipal: url }));
+    } catch {
+      setGuardadoError(
+        "No se pudo subir imagen principal. Revisa Cloudinary y variables NEXT_PUBLIC_CLOUDINARY_*.",
+      );
+    } finally {
+      setSubiendoPrincipal(false);
+    }
+  };
+
+  const onSubirImagenesGaleria = async (files: FileList | null) => {
+    if (!files?.length) return;
+
+    try {
+      setSubiendoGaleria(true);
+      setGuardadoError(null);
+      const urls = await Promise.all(Array.from(files).map((file) => subirArchivoACloudinary(file)));
+      setForm((prev) => ({
+        ...prev,
+        galeria: Array.from(new Set([...prev.galeria, ...urls])),
+      }));
+    } catch {
+      setGuardadoError(
+        "No se pudieron subir imagenes de galeria. Revisa Cloudinary y variables NEXT_PUBLIC_CLOUDINARY_*.",
+      );
+    } finally {
+      setSubiendoGaleria(false);
+    }
   };
 
   const guardarEnFirebase = async () => {
@@ -124,13 +247,14 @@ export default function AdminNovedadesPage() {
         resumen: form.resumen.trim(),
         contenido: form.contenido.trim(),
         imagenPrincipal: form.imagenPrincipal.trim(),
+        galeria: form.galeria.filter(Boolean),
         fecha: fechaDoc,
         estado: form.estado,
-        galeria: [],
         actualizadoEn: Timestamp.now(),
       });
 
       setGuardadoOk(`Novedad guardada en Firebase con ID: ${form.slug.trim()}`);
+      window.localStorage.removeItem(BORRADOR_STORAGE_KEY);
     } catch {
       setGuardadoError("No se pudo guardar en Firebase. Revisa reglas, sesion y variables de entorno.");
     } finally {
@@ -151,14 +275,18 @@ export default function AdminNovedadesPage() {
             Formulario guiado para docentes y equipo institucional. Completa los campos y guarda directo
             en Firebase sin abrir la consola tecnica.
           </p>
+          <p className="mt-2 text-xs text-brand-dark/70">
+            Este borrador se guarda automaticamente en el navegador para no perder datos al recargar.
+          </p>
 
           <div className="mt-4 rounded-xl border border-brand-dark/12 bg-white/70 p-4 text-sm text-brand-dark/80">
             <p className="font-semibold">Pasos sugeridos:</p>
             <ol className="mt-2 space-y-1">
               <li>1) Escribe titulo y revisa slug.</li>
               <li>2) Completa resumen, contenido e imagen principal.</li>
-              <li>3) Elige fecha y estado.</li>
-              <li>4) Presiona Guardar en Firebase.</li>
+              <li>3) Agrega imagenes de galeria (URLs o subida local).</li>
+              <li>4) Elige fecha y estado.</li>
+              <li>5) Presiona Guardar en Firebase.</li>
             </ol>
           </div>
 
@@ -216,12 +344,80 @@ export default function AdminNovedadesPage() {
             </Campo>
 
             <Campo label="Imagen principal (URL)" error={tocado ? errores.imagenPrincipal : ""}>
-              <input
-                value={form.imagenPrincipal}
-                onChange={(e) => actualizar("imagenPrincipal", e.target.value)}
-                className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
-                placeholder="https://res.cloudinary.com/..."
-              />
+              <div className="space-y-2">
+                <input
+                  value={form.imagenPrincipal}
+                  onChange={(e) => actualizar("imagenPrincipal", e.target.value)}
+                  className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                  placeholder="https://res.cloudinary.com/..."
+                />
+                <label className="inline-block cursor-pointer rounded-full border border-brand-dark/20 px-3 py-1.5 text-xs font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white">
+                  {subiendoPrincipal ? "Subiendo..." : "Subir desde equipo"}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    disabled={subiendoPrincipal}
+                    onChange={(e) => {
+                      void onSubirImagenPrincipal(e.target.files?.[0] ?? null);
+                      e.currentTarget.value = "";
+                    }}
+                  />
+                </label>
+              </div>
+            </Campo>
+
+            <Campo label="Galeria de imagenes (opcional)">
+              <div className="space-y-2">
+                <div className="flex flex-wrap gap-2">
+                  <input
+                    value={galeriaInput}
+                    onChange={(e) => setGaleriaInput(e.target.value)}
+                    className="min-w-0 flex-1 rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                    placeholder="Pega URL de imagen y presiona Agregar"
+                  />
+                  <button
+                    type="button"
+                    onClick={agregarImagenGaleria}
+                    className="rounded-full border border-brand-dark/20 px-4 py-2 text-xs font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                  >
+                    Agregar
+                  </button>
+                  <label className="cursor-pointer rounded-full border border-brand-main/35 bg-brand-main/8 px-4 py-2 text-xs font-semibold text-brand-main transition hover:bg-brand-main hover:text-white">
+                    {subiendoGaleria ? "Subiendo..." : "Subir varias"}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      disabled={subiendoGaleria}
+                      onChange={(e) => {
+                        void onSubirImagenesGaleria(e.target.files);
+                        e.currentTarget.value = "";
+                      }}
+                    />
+                  </label>
+                </div>
+
+                {form.galeria.length ? (
+                  <ul className="space-y-2 rounded-xl border border-brand-dark/10 bg-white/70 p-3 text-xs text-brand-dark/75">
+                    {form.galeria.map((url) => (
+                      <li key={url} className="flex items-start justify-between gap-2">
+                        <span className="break-all">{url}</span>
+                        <button
+                          type="button"
+                          onClick={() => quitarImagenGaleria(url)}
+                          className="rounded-full border border-brand-dark/20 px-2 py-0.5 font-semibold transition hover:bg-brand-dark hover:text-white"
+                        >
+                          Quitar
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-xs text-brand-dark/65">Sin imagenes de galeria cargadas aun.</p>
+                )}
+              </div>
             </Campo>
 
             <Campo label="Resumen" error={tocado ? errores.resumen : ""}>

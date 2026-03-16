@@ -14,6 +14,8 @@ En Vercel y local, definir:
 - `NEXT_PUBLIC_FIREBASE_APP_ID`
 - `NEXT_PUBLIC_SITE_URL`
 - `NEXT_PUBLIC_ADMIN_EMAILS` (lista separada por coma)
+- `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`
+- `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` (preset unsigned para cargas desde navegador)
 
 Ejemplo:
 
@@ -58,6 +60,8 @@ service cloud.firestore {
 - Acceso: solo correos incluidos en `NEXT_PUBLIC_ADMIN_EMAILS`
 - Si el correo no esta en whitelist: se bloquea acceso
 - Carga de novedades: formulario guiado con validacion + guardado directo en Firestore
+- Carga de imagenes: URL manual o subida local a Cloudinary (principal y galeria)
+- Persistencia de borrador: `localStorage` para evitar perdida al recargar
 
 ## 5) Proximo paso recomendado
 

@@ -81,6 +81,9 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se evoluciona `frontend/src/app/admin/novedades/page.tsx` a panel mas intuitivo para perfiles no tecnicos: pasos guiados, placeholders y mensajes de estado claros.
 - Se agrega generacion automatica de slug desde el titulo (editable manualmente) para reducir errores de carga.
 - Se implementa guardado directo en Firestore desde el panel admin (`setDoc` con ID=slug), con feedback de exito/error y accion de limpieza del formulario.
+- Se agrega soporte de galeria en panel admin: lista de URLs con alta/baja y persistencia a Firestore en campo `galeria`.
+- Se habilita carga local de imagen principal y galeria hacia Cloudinary (requiere `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` y `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET`).
+- Se incorpora borrador automatico en `localStorage` del navegador para evitar perdida de datos al recargar la pagina.
 
 ## Proximos hitos
 
