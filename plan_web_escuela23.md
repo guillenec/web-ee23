@@ -38,6 +38,20 @@ Crear un sitio institucional claro, accesible y facil de actualizar por el equip
 - Comunidad local.
 - Otras instituciones y organismos educativos.
 
+### Cobertura territorial
+
+La comunicacion institucional debe representar el trabajo en toda la Region Sur, no solo en Jacobacci.
+
+- Ingeniero Jacobacci.
+- Aguada de Guerra.
+- Anecon Grande.
+- Comallo.
+- El Cain.
+- Maquinchao.
+- Mencue.
+- Pilquiniyeu.
+- Otras localidades y parajes de la zona.
+
 ---
 
 ## 4. Alcance de la version 1
@@ -150,28 +164,32 @@ Crear un sitio institucional claro, accesible y facil de actualizar por el equip
 
 ---
 
-## 9. Identidad visual (lineamientos iniciales)
+## 9. Identidad visual (lineamientos confirmados)
 
-### Color
+### Paleta seleccionada
 
-- Color principal: naranja institucional.
-- Secundarios sugeridos: azul petroleo o azul profundo para contraste.
-- Neutros: escala de grises calidos para fondos y textos.
+Se confirma la paleta institucional basada en la referencia elegida (Image 1), con combinacion profesional y calida:
+
+- Marron profundo: `#4B3831`
+- Naranja institucional intenso: `#CA4213`
+- Naranja apoyo: `#F98C45`
+- Gris neutro: `#CBCBCB`
+- Celeste suave: `#C5E4E7`
+
+### Enfoque visual
+
+- Estetica institucional, clara y confiable.
+- Toque colorido y cercano por el perfil de trabajo con infancias y adolescencias.
+- Equilibrio entre sobriedad (estructura) y calidez (acento cromatico).
 
 ### Tipografia sugerida
 
 - Titulos: `Lato` o `Anton` (segun pruebas de legibilidad).
 - Texto corrido: `Open Sans` o `Source Sans 3`.
 
-### Referencias cargadas
+### Referencia de color activa
 
-Se mantienen como insumo visual las imagenes ya incluidas:
-
-- `image.png`
-- `image-1.png`
-- `image-2.png`
-- `image-3.png`
-- `image-4.png`
+- `image.png` (paleta aprobada)
 
 ---
 
