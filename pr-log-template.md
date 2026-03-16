@@ -36,3 +36,4 @@ Ejecutado en `frontend/`:
 - [ ] `npm run test` OK
 - [ ] `npm run build` OK
 - [ ] Documentacion actualizada
+- [ ] `plan_web_escuela23.md` y `bitacora_web_escuela23.md` actualizados

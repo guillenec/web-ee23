@@ -24,6 +24,12 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se integro una home inicial con estilo institucional, paleta definida y contenido territorial.
 - Se agrego base de integracion Firebase en `frontend/src/lib/firebase.ts` y plantilla `frontend/.env.example`.
 - Se integro lectura de novedades desde Firestore para portada y pagina dedicada en `frontend/src/app/novedades/page.tsx`.
+- Se confirmo creacion de Firestore en `Standard`, modo produccion y ubicacion `southamerica-east1`.
+- Se alineo schema de `novedades` a campos editoriales: `titulo`, `fecha`, `resumen`, `contenido`, `imagenPrincipal`, `galeria`, `autor`, `categoria`, `estado`, `slug`.
+- Se actualizo `frontend/src/lib/novedades.ts` para leer `fecha` y mantener compatibilidad con `fechaPublicacion`.
+- Se amplio `frontend/src/components/novedades-preview.tsx` para mostrar imagen principal, categoria y autor.
+- Se habilito dominio de Firebase Storage en `frontend/next.config.ts` para imagenes remotas.
+- Se documento carga semilla en `frontend/firestore-novedades-seed.md` para crear primer documento publicado.
 
 ## Proximos hitos
 

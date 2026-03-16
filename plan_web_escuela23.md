@@ -134,14 +134,15 @@ La comunicacion institucional debe representar el trabajo en toda la Region Sur,
 ### Novedad
 
 - titulo
+- fecha
 - resumen
 - contenido
-- imagenDestacada
+- imagenPrincipal
 - galeriaOpcional
 - autor
-- fechaPublicacion
+- categoria
 - estado (`borrador` | `publicado`)
-- tags opcionales
+- slug
 
 ### Imagen de galeria
 
@@ -241,7 +242,7 @@ Incluye logos en PNG/SVG y banco de fotos para portada, galeria y secciones inte
 
 ## 13. Proximos pasos inmediatos
 
-1. Elegir stack final de frontend (si se confirma Next.js + Tailwind + TS).
-2. Armar estructura inicial del repo frontend.
-3. Definir contenido institucional base que ira en la V1.
-4. Configurar Firebase (lo hacemos juntos en la siguiente etapa, paso a paso).
+1. Finalizar alta de Firestore en modo produccion y ubicacion `southamerica-east1`.
+2. Crear coleccion `novedades` con schema editorial base y primer documento publicado.
+3. Configurar reglas para lectura publica de `estado == "publicado"` y escritura solo admin.
+4. Avanzar con detalle de novedades (`/novedades/[slug]`) y panel admin de carga.
