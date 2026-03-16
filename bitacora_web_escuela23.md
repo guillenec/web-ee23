@@ -39,6 +39,8 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se detecto y corrigio formato invalido en `frontend/.env` (valores con comillas y coma final) que bloqueaba consultas a Firestore.
 - Se verifico lectura de `novedades` desde Firestore con documento publicado real y se normalizo uso de campo `galeria` (sin tilde).
 - Se valido integracion de imagen principal con Cloudinary en el listado de novedades.
+- Se ajusto `frontend/src/lib/novedades.ts` para evitar ocultar documentos sin `estado` en Firebase Console: ahora se trae lote amplio y se filtra en cliente (`borrador` fuera, resto publicado).
+- Se agregaron fallbacks editoriales en portada/listado: si faltan `titulo` o `resumen`, se derivan desde `contenido` para que cada alta manual se vea reflejada.
 
 ## Proximos hitos
 

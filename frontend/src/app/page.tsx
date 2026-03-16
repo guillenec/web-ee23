@@ -44,45 +44,45 @@ export default function Home() {
       </header>
 
       <main className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-8 sm:px-8 sm:py-12">
-        <section className="relative overflow-hidden rounded-3xl bg-brand-dark text-white shadow-[0_24px_50px_rgba(75,56,49,0.28)]">
+        <section id="banner" className="relative h-[520px]  md:h-[550px] overflow-hidden rounded-3xl bg-brand-dark text-white shadow-[0_24px_50px_rgba(78,56,49,0.28)]">
           <Image
             src="/assets/images/hero-frente.jpg"
             alt="Frente de la Escuela Especial N 23"
             width={1600}
             height={900}
-            className="hero-pan h-[540px] w-full object-cover opacity-40 sm:h-[600px]"
+            className="hero-pan  w-full h-full object-cover opacity-90"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/80 to-brand-main/55" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_22%,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0)_58%)]" />
           <div className="float-shape absolute -top-16 -right-10 h-44 w-44 rounded-full bg-brand-soft/55 blur-2xl" />
           <div className="float-shape absolute -bottom-16 left-8 h-40 w-40 rounded-full bg-sky/30 blur-2xl" />
-          <div className="absolute inset-0 flex items-end p-6 sm:p-10 lg:p-12">
-            <div className="w-full max-w-4xl rounded-2xl border border-white/20 bg-[rgba(0,0,0,0.18)] p-5 backdrop-blur-[1.5px] sm:p-7">
+          <div className="caja1 absolute inset-0  p-2 sm:p-10 lg:p-12 w-auto h-auto flex justify-start items-center">
+            <div className="caja2 w-full max-w-4xl rounded-2xl border border-white/20 bg-[rgba(0,0,0,0.18)] p-5 backdrop-blur-[1.5px] sm:p-7">
               <p className="fade-up inline-block rounded-full border border-white/35 px-3 py-1 text-xs tracking-widest uppercase">
                 Web institucional en construccion
               </p>
-              <h1 className="fade-up delay-1 mt-4 max-w-3xl text-3xl leading-tight font-black sm:text-5xl">
+              <h1 className="fade-up delay-1 mt-4 max-w-3xl text-3xl leading-tight font-black md:text-5xl">
                 Inclusion, acompanamiento y trabajo territorial en toda la Region Sur.
               </h1>
-              <p className="fade-up delay-2 mt-5 max-w-2xl text-base text-white/90 sm:text-lg">
+              <p className="fade-up delay-2 mt-5 max-w-2xl text-base text-white/90 md:text-lg">
                 Este sitio va a acercar informacion clara para familias, docentes e instituciones,
                 visibilizando propuestas de la Escuela Especial N 23 desde primera infancia hasta nivel
                 secundario.
               </p>
               <div className="fade-up delay-3 mt-7 flex flex-wrap gap-3">
-              <a
-                href="#alcance"
-                className="cta-pop rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft"
-              >
-                Ver alcance territorial
-              </a>
-              <a
-                href="#proximamente"
-                className="rounded-full border border-white/50 bg-white/8 px-5 py-2 text-sm font-semibold transition hover:bg-white hover:text-brand-dark"
-              >
-                Proximas secciones
-              </a>
+                <a
+                  href="#alcance"
+                  className="cta-pop rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft"
+                >
+                  Ver alcance territorial
+                </a>
+                <a
+                  href="#proximamente"
+                  className="rounded-full border border-white/50 bg-white/8 px-5 py-2 text-sm font-semibold transition hover:bg-white hover:text-brand-dark"
+                >
+                  Proximas secciones
+                </a>
               </div>
             </div>
           </div>
@@ -119,10 +119,10 @@ export default function Home() {
               </p>
             </div>
           </article>
-            <article
-              id="contacto"
-              className="card-lift overflow-hidden rounded-2xl bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
-            >
+          <article
+            id="contacto"
+            className="card-lift overflow-hidden rounded-2xl bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
+          >
             <Image
               src="/assets/images/acto-tradicion.jpg"
               alt="Acto escolar de tradicion"

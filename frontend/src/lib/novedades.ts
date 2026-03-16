@@ -4,7 +4,6 @@ import {
   getDocs,
   limit,
   query,
-  where,
 } from "firebase/firestore";
 
 import { db } from "@/lib/firebase";
@@ -47,6 +46,14 @@ const toIsoDate = (value: Timestamp | string | undefined): string => {
   return value.toDate().toISOString();
 };
 
+const textoPlano = (value: string | undefined): string =>
+  (value ?? "").replace(/\s+/g, " ").trim();
+
+const estadoNormalizado = (value: string | undefined): "borrador" | "publicado" => {
+  if ((value ?? "").toLowerCase().trim() === "borrador") return "borrador";
+  return "publicado";
+};
+
 export const getNovedadesPublicadas = async (
   cantidad = 3,
 ): Promise<Novedad[]> => {
@@ -55,28 +62,40 @@ export const getNovedadesPublicadas = async (
   }
 
   const ref = collection(db, "novedades");
-  const q = query(ref, where("estado", "==", "publicado"), limit(24));
+  const q = query(ref, limit(48));
   const snapshot = await getDocs(q);
 
   const novedades = snapshot.docs
     .map((doc) => {
       const data = doc.data() as NovedadFirestore;
+      const contenidoPlano = textoPlano(data.contenido);
+      const estado = estadoNormalizado(data.estado);
       const fecha = toIsoDate(data.fecha) || toIsoDate(data.fechaPublicacion);
+      const resumenBase = textoPlano(data.resumen);
+      const resumen =
+        resumenBase ||
+        (contenidoPlano
+          ? contenidoPlano.length > 170
+            ? `${contenidoPlano.slice(0, 170)}...`
+            : contenidoPlano
+          : "");
+      const titulo = textoPlano(data.titulo) || (contenidoPlano ? `${contenidoPlano.slice(0, 58)}...` : "Sin titulo");
 
       return {
         id: doc.id,
-        titulo: data.titulo ?? "Sin titulo",
+        titulo,
         slug: data.slug ?? doc.id,
         categoria: data.categoria ?? "General",
         autor: data.autor ?? "Equipo institucional",
-        resumen: data.resumen ?? "",
+        resumen,
         contenido: data.contenido ?? "",
         imagenPrincipal: data.imagenPrincipal ?? "",
         galeria: data.galeria ?? [],
         fecha,
-        estado: data.estado ?? "borrador",
+        estado,
       };
     })
+    .filter((novedad) => novedad.estado === "publicado")
     .sort((a, b) => {
       if (!a.fecha && !b.fecha) return 0;
       if (!a.fecha) return 1;
