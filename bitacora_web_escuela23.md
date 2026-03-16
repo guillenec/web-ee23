@@ -68,6 +68,10 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se simplifica la portada: se reemplaza el bloque completo de contacto por una version resumida con CTA a `/contacto`, manteniendo mapa y accesos rapidos.
 - Se implementa menu hamburguesa en mobile para `frontend/src/components/site-header.tsx`, evitando deformaciones y manteniendo navegacion completa en pantallas pequenas.
 - Se homogeneiza la fila de cards en portada (`Novedades`, `Galeria institucional`, `Contacto y acompanamiento`) agregando CTA en las tres para mantener formato visual consistente.
+- Se ajusta branding en pestana del navegador con `frontend/src/app/favicon.ico` generado desde logo institucional.
+- Se fortalece SEO tecnico en `frontend/src/app/layout.tsx` (title template, canonical, Open Graph, Twitter, robots e iconos declarados).
+- Se agregan `frontend/src/app/robots.ts` y `frontend/src/app/sitemap.ts` para indexacion consistente en despliegue.
+- Se define `noindex` para rutas admin via `frontend/src/app/admin/layout.tsx` y se documenta `NEXT_PUBLIC_SITE_URL` en `frontend/.env.example`.
 
 ## Proximos hitos
 
