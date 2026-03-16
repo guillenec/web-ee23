@@ -41,6 +41,9 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se valido integracion de imagen principal con Cloudinary en el listado de novedades.
 - Se ajusto `frontend/src/lib/novedades.ts` para evitar ocultar documentos sin `estado` en Firebase Console: ahora se trae lote amplio y se filtra en cliente (`borrador` fuera, resto publicado).
 - Se agregaron fallbacks editoriales en portada/listado: si faltan `titulo` o `resumen`, se derivan desde `contenido` para que cada alta manual se vea reflejada.
+- Se revierte el ajuste anterior de `novedades`: se mantiene filtro estricto `estado == "publicado"` en Firestore para respetar reglas de seguridad productivas.
+- Se incorpora bloque `Sobre nosotros` en `frontend/src/app/page.tsx` con descripcion institucional, enfoque pedagogico y ejes de comunidad/accesibilidad.
+- Se toma como referencia publica complementaria la ficha de institucion en `ifts1.com.ar` para enriquecer texto de presentacion.
 
 ## Proximos hitos
 

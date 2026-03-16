@@ -88,6 +88,49 @@ export default function Home() {
           </div>
         </section>
 
+        <section
+          id="sobre-nosotros"
+          className="rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8"
+        >
+          <div className="grid gap-7 lg:grid-cols-[1.3fr_1fr]">
+            <div className="space-y-4">
+              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Sobre nosotros</p>
+              <h2 className="text-2xl font-black text-brand-dark sm:text-3xl">
+                Educacion especial publica, cercana y territorial
+              </h2>
+              <p className="text-sm leading-relaxed text-brand-dark/80 sm:text-base">
+                La Escuela Especial N 23 acompana trayectorias de ninas, ninos y adolescentes con
+                apoyos especificos, priorizando inclusion, autonomia y participacion en la comunidad.
+              </p>
+              <p className="text-sm leading-relaxed text-brand-dark/80 sm:text-base">
+                Nuestro trabajo combina propuestas pedagogicas adaptadas, grupos reducidos y
+                articulacion permanente con familias e instituciones de Ingeniero Jacobacci y Region Sur.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              <article className="rounded-2xl border border-brand-dark/12 bg-white/70 p-4">
+                <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Enfoque</p>
+                <p className="mt-2 text-sm text-brand-dark/80">
+                  Acompanamiento personalizado y contenidos adaptados a cada estudiante.
+                </p>
+              </article>
+              <article className="rounded-2xl border border-brand-dark/12 bg-white/70 p-4">
+                <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Comunidad</p>
+                <p className="mt-2 text-sm text-brand-dark/80">
+                  Trabajo conjunto con familias, equipos y redes locales para sostener cada proceso.
+                </p>
+              </article>
+              <article className="rounded-2xl border border-brand-dark/12 bg-white/70 p-4 sm:col-span-2 lg:col-span-1">
+                <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Accesibilidad</p>
+                <p className="mt-2 text-sm text-brand-dark/80">
+                  Entorno institucional accesible y propuestas que fortalecen autonomia para la vida diaria.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
         <section id="proximamente" className="grid gap-5 lg:grid-cols-3">
           <article className="card-lift overflow-hidden rounded-2xl bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]">
             <Image
