@@ -57,6 +57,7 @@ service cloud.firestore {
 - Login: Google popup
 - Acceso: solo correos incluidos en `NEXT_PUBLIC_ADMIN_EMAILS`
 - Si el correo no esta en whitelist: se bloquea acceso
+- Carga de novedades: formulario guiado con validacion + guardado directo en Firestore
 
 ## 5) Proximo paso recomendado
 

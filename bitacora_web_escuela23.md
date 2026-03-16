@@ -78,6 +78,9 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se integra el guard en `frontend/src/app/admin/layout.tsx` para proteger rutas administrativas.
 - Se agrega helper de permisos por email en `frontend/src/lib/admin-auth.ts` y variable `NEXT_PUBLIC_ADMIN_EMAILS` en `frontend/.env.example`.
 - Se documenta configuracion de Auth + reglas Firestore para admin en `frontend/firebase-admin-setup.md`.
+- Se evoluciona `frontend/src/app/admin/novedades/page.tsx` a panel mas intuitivo para perfiles no tecnicos: pasos guiados, placeholders y mensajes de estado claros.
+- Se agrega generacion automatica de slug desde el titulo (editable manualmente) para reducir errores de carga.
+- Se implementa guardado directo en Firestore desde el panel admin (`setDoc` con ID=slug), con feedback de exito/error y accion de limpieza del formulario.
 
 ## Proximos hitos
 

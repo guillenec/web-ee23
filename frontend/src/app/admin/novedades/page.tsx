@@ -1,7 +1,10 @@
 "use client";
 
+import { Timestamp, doc, setDoc } from "firebase/firestore";
 import { useMemo, useState } from "react";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
+
+import { db } from "@/lib/firebase";
 
 type FormData = {
   titulo: string;
@@ -30,6 +33,10 @@ const inicial: FormData = {
 export default function AdminNovedadesPage() {
   const [form, setForm] = useState<FormData>(inicial);
   const [tocado, setTocado] = useState(false);
+  const [guardando, setGuardando] = useState(false);
+  const [guardadoOk, setGuardadoOk] = useState<string | null>(null);
+  const [guardadoError, setGuardadoError] = useState<string | null>(null);
+  const [slugEditadoManual, setSlugEditadoManual] = useState(false);
 
   const errores = useMemo(() => {
     const next: Record<string, string> = {};
@@ -69,6 +76,68 @@ export default function AdminNovedadesPage() {
     setForm((prev) => ({ ...prev, [campo]: valor }));
   };
 
+  const actualizarTitulo = (valor: string) => {
+    setForm((prev) => {
+      const next: FormData = { ...prev, titulo: valor };
+
+      if (!slugEditadoManual) {
+        next.slug = slugDesdeTexto(valor);
+      }
+
+      return next;
+    });
+  };
+
+  const actualizarSlug = (valor: string) => {
+    setSlugEditadoManual(true);
+    actualizar("slug", slugDesdeTexto(valor));
+  };
+
+  const limpiarFormulario = () => {
+    setForm(inicial);
+    setTocado(false);
+    setSlugEditadoManual(false);
+    setGuardadoOk(null);
+    setGuardadoError(null);
+  };
+
+  const guardarEnFirebase = async () => {
+    setTocado(true);
+    setGuardadoOk(null);
+    setGuardadoError(null);
+
+    if (!valido) {
+      setGuardadoError("Completa los campos obligatorios antes de guardar.");
+      return;
+    }
+
+    try {
+      setGuardando(true);
+
+      const fechaDoc = Timestamp.fromDate(new Date(`${form.fecha}T12:00:00`));
+
+      await setDoc(doc(db, "novedades", form.slug.trim()), {
+        titulo: form.titulo.trim(),
+        slug: form.slug.trim(),
+        categoria: form.categoria.trim(),
+        autor: form.autor.trim(),
+        resumen: form.resumen.trim(),
+        contenido: form.contenido.trim(),
+        imagenPrincipal: form.imagenPrincipal.trim(),
+        fecha: fechaDoc,
+        estado: form.estado,
+        galeria: [],
+        actualizadoEn: Timestamp.now(),
+      });
+
+      setGuardadoOk(`Novedad guardada en Firebase con ID: ${form.slug.trim()}`);
+    } catch {
+      setGuardadoError("No se pudo guardar en Firebase. Revisa reglas, sesion y variables de entorno.");
+    } finally {
+      setGuardando(false);
+    }
+  };
+
   return (
     <main className="page-enter bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)] px-5 py-10 sm:px-8">
       <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
@@ -79,8 +148,19 @@ export default function AdminNovedadesPage() {
           <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Panel minimo</p>
           <h1 className="mt-2 text-3xl font-black text-brand-dark">Carga de novedades</h1>
           <p className="mt-2 text-sm text-brand-dark/80">
-            Este formulario valida datos editoriales para evitar errores al cargar en Firebase Console.
+            Formulario guiado para docentes y equipo institucional. Completa los campos y guarda directo
+            en Firebase sin abrir la consola tecnica.
           </p>
+
+          <div className="mt-4 rounded-xl border border-brand-dark/12 bg-white/70 p-4 text-sm text-brand-dark/80">
+            <p className="font-semibold">Pasos sugeridos:</p>
+            <ol className="mt-2 space-y-1">
+              <li>1) Escribe titulo y revisa slug.</li>
+              <li>2) Completa resumen, contenido e imagen principal.</li>
+              <li>3) Elige fecha y estado.</li>
+              <li>4) Presiona Guardar en Firebase.</li>
+            </ol>
+          </div>
 
           <form
             className="mt-6 space-y-4"
@@ -92,16 +172,18 @@ export default function AdminNovedadesPage() {
             <Campo label="Titulo" error={tocado ? errores.titulo : ""}>
               <input
                 value={form.titulo}
-                onChange={(e) => actualizar("titulo", e.target.value)}
+                onChange={(e) => actualizarTitulo(e.target.value)}
                 className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                placeholder="Ej: Jornada institucional de inicio 2026"
               />
             </Campo>
 
             <Campo label="Slug (ej: acto-25-de-mayo-2026)" error={tocado ? errores.slug : ""}>
               <input
                 value={form.slug}
-                onChange={(e) => actualizar("slug", e.target.value)}
+                onChange={(e) => actualizarSlug(e.target.value)}
                 className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                placeholder="se-genera-automatico-desde-el-titulo"
               />
             </Campo>
 
@@ -111,6 +193,7 @@ export default function AdminNovedadesPage() {
                   value={form.categoria}
                   onChange={(e) => actualizar("categoria", e.target.value)}
                   className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                  placeholder="Institucional"
                 />
               </Campo>
               <Campo label="Autor">
@@ -118,6 +201,7 @@ export default function AdminNovedadesPage() {
                   value={form.autor}
                   onChange={(e) => actualizar("autor", e.target.value)}
                   className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                  placeholder="Equipo directivo"
                 />
               </Campo>
             </div>
@@ -136,6 +220,7 @@ export default function AdminNovedadesPage() {
                 value={form.imagenPrincipal}
                 onChange={(e) => actualizar("imagenPrincipal", e.target.value)}
                 className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                placeholder="https://res.cloudinary.com/..."
               />
             </Campo>
 
@@ -144,6 +229,7 @@ export default function AdminNovedadesPage() {
                 value={form.resumen}
                 onChange={(e) => actualizar("resumen", e.target.value)}
                 className="min-h-20 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                placeholder="Resumen breve para mostrar en cards de novedades"
               />
             </Campo>
 
@@ -152,6 +238,7 @@ export default function AdminNovedadesPage() {
                 value={form.contenido}
                 onChange={(e) => actualizar("contenido", e.target.value)}
                 className="min-h-36 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                placeholder="Texto completo de la novedad"
               />
             </Campo>
 
@@ -166,12 +253,29 @@ export default function AdminNovedadesPage() {
               </select>
             </Campo>
 
-            <button
-              type="submit"
-              className="rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft"
-            >
-              Validar novedad
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="submit"
+                className="rounded-full border border-brand-dark/20 px-5 py-2 text-sm font-bold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+              >
+                Validar novedad
+              </button>
+              <button
+                type="button"
+                onClick={guardarEnFirebase}
+                disabled={guardando}
+                className="rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft disabled:cursor-not-allowed disabled:opacity-65"
+              >
+                {guardando ? "Guardando..." : "Guardar en Firebase"}
+              </button>
+              <button
+                type="button"
+                onClick={limpiarFormulario}
+                className="rounded-full border border-brand-dark/20 px-5 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+              >
+                Limpiar
+              </button>
+            </div>
           </form>
         </section>
 
@@ -190,6 +294,8 @@ export default function AdminNovedadesPage() {
                 ))}
               </ul>
             ) : null}
+            {guardadoOk ? <p className="mt-3 text-sm text-emerald-700">{guardadoOk}</p> : null}
+            {guardadoError ? <p className="mt-3 text-sm text-brand-main">{guardadoError}</p> : null}
           </article>
 
           <article className="min-w-0 overflow-hidden rounded-3xl border border-brand-dark/10 bg-brand-dark p-5 text-white shadow-[0_10px_24px_rgba(75,56,49,0.18)]">
@@ -202,6 +308,17 @@ export default function AdminNovedadesPage() {
       </div>
     </main>
   );
+}
+
+function slugDesdeTexto(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 }
 
 function Campo({
