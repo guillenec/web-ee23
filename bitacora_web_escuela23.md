@@ -89,6 +89,30 @@ Proyecto inicial para construir la web institucional de la Escuela Especial N 23
 - Se deja preconfigurada integracion IA para etapa siguiente: variables `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` y `OPENROUTER_BASE_URL` agregadas en entorno local y Vercel.
 - Se ejecuta redeploy/rollback en Vercel para consolidar variables de entorno antes de implementar el boton de sugerencias IA en admin.
 
+### 2026-03-17
+
+- Se crea dashboard admin inicial en `frontend/src/app/admin/page.tsx` con accesos directos a modulos de contenidos.
+- Se agrega navegacion interna de panel en `frontend/src/components/admin-dashboard-nav.tsx` y se integra en `frontend/src/app/admin/layout.tsx`.
+- Se evoluciona `frontend/src/app/admin/novedades/page.tsx` a CRUD completo: crear, editar, actualizar slug y eliminar publicaciones.
+- Se incorpora listado de novedades en admin con acciones de edicion/eliminacion y recarga desde Firestore.
+- Se centraliza carga de imagenes a Cloudinary en `frontend/src/lib/cloudinary.ts` para reutilizar en modulos admin.
+- Se crea `frontend/src/app/admin/galeria/page.tsx` con gestion completa de galeria: alta, edicion, visibilidad y eliminacion.
+- Se habilita lectura publica de galeria desde Firestore en `frontend/src/lib/galeria.ts` y fallback local en `frontend/src/app/galeria/page.tsx`.
+- Se ajusta acceso principal de navegacion para admin hacia `frontend/src/components/site-header.tsx` con destino `/admin`.
+- Se normaliza compatibilidad de campos de galeria (`src`, `urlImagen` y `usImagen`) y categorias en mayusculas/minusculas para tolerar cargas manuales desde Firebase Console.
+- Se elimina fallback hardcodeado de galeria publica para mostrar solo datos reales de Firestore (con estado vacio cuando aun no hay imagenes publicadas).
+- Se incorpora sistema de notificaciones visuales con `sonner` en `frontend/src/components/app-toaster.tsx` y eventos de exito/error en modulos admin.
+- Se agrega bloque de pasos guiados en `frontend/src/app/admin/galeria/page.tsx` para facilitar uso por perfiles no tecnicos.
+- Se ajusta UX de notificaciones admin: los toasts ya no se disparan al cargar listas al navegar entre modulos; se mantienen para acciones explicitas (guardar, editar, eliminar, subir).
+- Se elimina bloque de pasos sugeridos en formulario de galeria por feedback de uso para mejorar limpieza visual.
+- Se implementa visor ampliado en `frontend/src/app/galeria/page.tsx`: clic en imagen abre modal fullscreen con transicion, cierre por boton/fondo y tecla `Esc`.
+- Se completa accion rapida de estado en CRUD de novedades (`publicado` <-> `borrador`) desde listado admin en `frontend/src/app/admin/novedades/page.tsx`.
+- Se habilita borrado rapido en cards publicas para administradores logueados: icono de tacho en `/novedades` (`frontend/src/components/novedades-preview.tsx`) y `/galeria` (`frontend/src/app/galeria/page.tsx`) con confirmacion previa y eliminacion en Firestore.
+- Se revierte accion rapida de cambio de estado en listado admin de novedades por feedback operativo, priorizando flujo simple de edicion/eliminacion.
+- Se suma edicion rapida en cards publicas para administradores: icono de lapiz en `/novedades` y `/galeria` con modal de actualizacion y guardado directo en Firestore.
+- Se valida flujo operativo de borrado/edicion desde cards publicas para admins y se confirma eliminacion de documentos en Firestore.
+- Se documenta preparacion para siguiente etapa de limpieza de medios: variables server `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` y `CLOUDINARY_API_SECRET` para borrar assets al eliminar contenido.
+
 ## Proximos hitos
 
 - Definir reglas finales de Firestore para entorno productivo (lectura publica de publicados + escritura admin).

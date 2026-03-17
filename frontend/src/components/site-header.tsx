@@ -10,7 +10,7 @@ const enlaces = [
   { href: "/novedades", label: "Novedades" },
   { href: "/galeria", label: "Galeria" },
   { href: "/sobre-nosotros", label: "Sobre nosotros" },
-  { href: "/admin/novedades", label: "Admin" },
+  { href: "/admin", label: "Admin" },
 ];
 
 export function SiteHeader() {

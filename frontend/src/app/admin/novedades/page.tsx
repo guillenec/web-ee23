@@ -1,12 +1,27 @@
 "use client";
 
-import { Timestamp, doc, setDoc } from "firebase/firestore";
+import { Timestamp, collection, deleteDoc, doc, getDocs, limit, query, setDoc } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
-import type { Dispatch, ReactNode, SetStateAction } from "react";
+import { toast } from "sonner";
 
+import { uploadImageToCloudinary } from "@/lib/cloudinary";
 import { db } from "@/lib/firebase";
 
 type FormData = {
+  titulo: string;
+  slug: string;
+  categoria: string;
+  autor: string;
+  resumen: string;
+  contenido: string;
+  imagenPrincipal: string;
+  galeria: string[];
+  fecha: string;
+  estado: "publicado" | "borrador";
+};
+
+type NovedadAdmin = {
+  id: string;
   titulo: string;
   slug: string;
   categoria: string;
@@ -32,9 +47,7 @@ const inicial: FormData = {
   estado: "publicado",
 };
 
-const BORRADOR_STORAGE_KEY = "ee23_admin_novedad_borrador_v1";
-const cloudinaryCloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-const cloudinaryUploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+const BORRADOR_STORAGE_KEY = "ee23_admin_novedad_borrador_v2";
 
 export default function AdminNovedadesPage() {
   const [form, setForm] = useState<FormData>(inicial);
@@ -46,6 +59,9 @@ export default function AdminNovedadesPage() {
   const [galeriaInput, setGaleriaInput] = useState("");
   const [subiendoPrincipal, setSubiendoPrincipal] = useState(false);
   const [subiendoGaleria, setSubiendoGaleria] = useState(false);
+  const [novedades, setNovedades] = useState<NovedadAdmin[]>([]);
+  const [cargandoNovedades, setCargandoNovedades] = useState(true);
+  const [editandoId, setEditandoId] = useState<string | null>(null);
 
   useEffect(() => {
     const raw = window.localStorage.getItem(BORRADOR_STORAGE_KEY);
@@ -112,6 +128,60 @@ export default function AdminNovedadesPage() {
     };
   }, [form]);
 
+  const cargarNovedades = async () => {
+    try {
+      setCargandoNovedades(true);
+      const ref = collection(db, "novedades");
+      const snapshot = await getDocs(query(ref, limit(200)));
+
+      const next = snapshot.docs
+        .map((item) => {
+          const data = item.data() as {
+            titulo?: string;
+            slug?: string;
+            categoria?: string;
+            autor?: string;
+            resumen?: string;
+            contenido?: string;
+            imagenPrincipal?: string;
+            galeria?: string[];
+            fecha?: Timestamp | string;
+            estado?: "publicado" | "borrador";
+          };
+
+          return {
+            id: item.id,
+            titulo: data.titulo ?? "Sin titulo",
+            slug: data.slug ?? item.id,
+            categoria: data.categoria ?? "General",
+            autor: data.autor ?? "Equipo institucional",
+            resumen: data.resumen ?? "",
+            contenido: data.contenido ?? "",
+            imagenPrincipal: data.imagenPrincipal ?? "",
+            galeria: data.galeria ?? [],
+            fecha: toIsoDate(data.fecha),
+            estado: data.estado === "borrador" ? "borrador" : "publicado",
+          } satisfies NovedadAdmin;
+        })
+        .sort((a, b) => {
+          if (!a.fecha && !b.fecha) return 0;
+          if (!a.fecha) return 1;
+          if (!b.fecha) return -1;
+          return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
+        });
+
+      setNovedades(next);
+    } catch {
+      setGuardadoError("No se pudo cargar el listado de novedades desde Firebase.");
+    } finally {
+      setCargandoNovedades(false);
+    }
+  };
+
+  useEffect(() => {
+    void cargarNovedades();
+  }, []);
+
   const actualizar = (campo: keyof FormData, valor: string) => {
     setForm((prev) => ({ ...prev, [campo]: valor }));
   };
@@ -135,12 +205,54 @@ export default function AdminNovedadesPage() {
 
   const limpiarFormulario = () => {
     setForm(inicial);
+    setEditandoId(null);
     setTocado(false);
     setSlugEditadoManual(false);
     setGuardadoOk(null);
     setGuardadoError(null);
     setGaleriaInput("");
     window.localStorage.removeItem(BORRADOR_STORAGE_KEY);
+  };
+
+  const editarNovedad = (novedad: NovedadAdmin) => {
+    setEditandoId(novedad.id);
+    setForm({
+      titulo: novedad.titulo,
+      slug: novedad.slug,
+      categoria: novedad.categoria,
+      autor: novedad.autor,
+      resumen: novedad.resumen,
+      contenido: novedad.contenido,
+      imagenPrincipal: novedad.imagenPrincipal,
+      galeria: novedad.galeria,
+      fecha: toDateInput(novedad.fecha),
+      estado: novedad.estado,
+    });
+    setSlugEditadoManual(true);
+    setGuardadoError(null);
+    setGuardadoOk(`Editando novedad: ${novedad.titulo}`);
+    toast.info("Modo edicion activado");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const eliminarNovedad = async (id: string) => {
+    const confirmar = window.confirm("Se eliminara esta novedad. Esta accion no se puede deshacer.");
+    if (!confirmar) return;
+
+    try {
+      setGuardadoError(null);
+      setGuardadoOk(null);
+      await deleteDoc(doc(db, "novedades", id));
+      if (editandoId === id) {
+        limpiarFormulario();
+      }
+      setGuardadoOk("Novedad eliminada correctamente.");
+      toast.success("Novedad eliminada con exito");
+      await cargarNovedades();
+    } catch {
+      setGuardadoError("No se pudo eliminar la novedad.");
+      toast.error("No se pudo eliminar la novedad");
+    }
   };
 
   const agregarImagenGaleria = () => {
@@ -161,44 +273,18 @@ export default function AdminNovedadesPage() {
     }));
   };
 
-  const subirArchivoACloudinary = async (file: File): Promise<string> => {
-    if (!cloudinaryCloudName || !cloudinaryUploadPreset) {
-      throw new Error("Faltan variables de Cloudinary");
-    }
-
-    const body = new FormData();
-    body.append("file", file);
-    body.append("upload_preset", cloudinaryUploadPreset);
-
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`, {
-      method: "POST",
-      body,
-    });
-
-    if (!response.ok) {
-      throw new Error("Cloudinary rechazo la carga");
-    }
-
-    const result = (await response.json()) as { secure_url?: string };
-    if (!result.secure_url) {
-      throw new Error("Cloudinary no devolvio URL de imagen");
-    }
-
-    return result.secure_url;
-  };
-
   const onSubirImagenPrincipal = async (file: File | null) => {
     if (!file) return;
 
     try {
       setSubiendoPrincipal(true);
       setGuardadoError(null);
-      const url = await subirArchivoACloudinary(file);
+      const url = await uploadImageToCloudinary(file);
       setForm((prev) => ({ ...prev, imagenPrincipal: url }));
+      toast.success("Imagen principal subida");
     } catch {
-      setGuardadoError(
-        "No se pudo subir imagen principal. Revisa Cloudinary y variables NEXT_PUBLIC_CLOUDINARY_*.",
-      );
+      setGuardadoError("No se pudo subir imagen principal. Revisa variables NEXT_PUBLIC_CLOUDINARY_*.");
+      toast.error("Error al subir imagen principal");
     } finally {
       setSubiendoPrincipal(false);
     }
@@ -210,15 +296,15 @@ export default function AdminNovedadesPage() {
     try {
       setSubiendoGaleria(true);
       setGuardadoError(null);
-      const urls = await Promise.all(Array.from(files).map((file) => subirArchivoACloudinary(file)));
+      const urls = await Promise.all(Array.from(files).map((file) => uploadImageToCloudinary(file)));
       setForm((prev) => ({
         ...prev,
         galeria: Array.from(new Set([...prev.galeria, ...urls])),
       }));
+      toast.success("Imagenes de galeria subidas");
     } catch {
-      setGuardadoError(
-        "No se pudieron subir imagenes de galeria. Revisa Cloudinary y variables NEXT_PUBLIC_CLOUDINARY_*.",
-      );
+      setGuardadoError("No se pudieron subir imagenes de galeria. Revisa variables NEXT_PUBLIC_CLOUDINARY_*.");
+      toast.error("Error al subir imagenes de galeria");
     } finally {
       setSubiendoGaleria(false);
     }
@@ -231,32 +317,40 @@ export default function AdminNovedadesPage() {
 
     if (!valido) {
       setGuardadoError("Completa los campos obligatorios antes de guardar.");
+      toast.warning("Faltan campos obligatorios");
       return;
     }
 
     try {
       setGuardando(true);
+      const slugFinal = form.slug.trim();
 
-      const fechaDoc = Timestamp.fromDate(new Date(`${form.fecha}T12:00:00`));
-
-      await setDoc(doc(db, "novedades", form.slug.trim()), {
+      await setDoc(doc(db, "novedades", slugFinal), {
         titulo: form.titulo.trim(),
-        slug: form.slug.trim(),
+        slug: slugFinal,
         categoria: form.categoria.trim(),
         autor: form.autor.trim(),
         resumen: form.resumen.trim(),
         contenido: form.contenido.trim(),
         imagenPrincipal: form.imagenPrincipal.trim(),
         galeria: form.galeria.filter(Boolean),
-        fecha: fechaDoc,
+        fecha: Timestamp.fromDate(new Date(`${form.fecha}T12:00:00`)),
         estado: form.estado,
         actualizadoEn: Timestamp.now(),
       });
 
-      setGuardadoOk(`Novedad guardada en Firebase con ID: ${form.slug.trim()}`);
+      if (editandoId && editandoId !== slugFinal) {
+        await deleteDoc(doc(db, "novedades", editandoId));
+      }
+
+      setGuardadoOk(editandoId ? "Novedad actualizada correctamente." : `Novedad guardada con ID: ${slugFinal}`);
+      toast.success(editandoId ? "Novedad actualizada" : "Novedad creada con exito");
       window.localStorage.removeItem(BORRADOR_STORAGE_KEY);
+      setEditandoId(slugFinal);
+      await cargarNovedades();
     } catch {
-      setGuardadoError("No se pudo guardar en Firebase. Revisa reglas, sesion y variables de entorno.");
+      setGuardadoError("No se pudo guardar en Firebase. Revisa reglas y sesion de admin.");
+      toast.error("No se pudo guardar la novedad");
     } finally {
       setGuardando(false);
     }
@@ -264,31 +358,16 @@ export default function AdminNovedadesPage() {
 
   return (
     <main className="page-enter bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)] px-5 py-10 sm:px-8">
-      <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-        <section
-          data-reveal
-          className="min-w-0 rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)]"
-        >
-          <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Panel minimo</p>
-          <h1 className="mt-2 text-3xl font-black text-brand-dark">Carga de novedades</h1>
+      <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+        <section className="min-w-0 rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
+          <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Modulo de novedades</p>
+          <h1 className="mt-2 text-3xl font-black text-brand-dark">Crear y actualizar publicaciones</h1>
           <p className="mt-2 text-sm text-brand-dark/80">
-            Formulario guiado para docentes y equipo institucional. Completa los campos y guarda directo
-            en Firebase sin abrir la consola tecnica.
+            Puedes crear, editar y eliminar novedades sin usar la consola tecnica.
           </p>
-          <p className="mt-2 text-xs text-brand-dark/70">
-            Este borrador se guarda automaticamente en el navegador para no perder datos al recargar.
-          </p>
-
-          <div className="mt-4 rounded-xl border border-brand-dark/12 bg-white/70 p-4 text-sm text-brand-dark/80">
-            <p className="font-semibold">Pasos sugeridos:</p>
-            <ol className="mt-2 space-y-1">
-              <li>1) Escribe titulo y revisa slug.</li>
-              <li>2) Completa resumen, contenido e imagen principal.</li>
-              <li>3) Agrega imagenes de galeria (URLs o subida local).</li>
-              <li>4) Elige fecha y estado.</li>
-              <li>5) Presiona Guardar en Firebase.</li>
-            </ol>
-          </div>
+          {editandoId ? (
+            <p className="mt-2 text-xs font-semibold text-brand-main">Modo edicion activo: {editandoId}</p>
+          ) : null}
 
           <form
             className="mt-6 space-y-4"
@@ -306,7 +385,7 @@ export default function AdminNovedadesPage() {
               />
             </Campo>
 
-            <Campo label="Slug (ej: acto-25-de-mayo-2026)" error={tocado ? errores.slug : ""}>
+            <Campo label="Slug" error={tocado ? errores.slug : ""}>
               <input
                 value={form.slug}
                 onChange={(e) => actualizarSlug(e.target.value)}
@@ -321,7 +400,6 @@ export default function AdminNovedadesPage() {
                   value={form.categoria}
                   onChange={(e) => actualizar("categoria", e.target.value)}
                   className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
-                  placeholder="Institucional"
                 />
               </Campo>
               <Campo label="Autor">
@@ -329,7 +407,6 @@ export default function AdminNovedadesPage() {
                   value={form.autor}
                   onChange={(e) => actualizar("autor", e.target.value)}
                   className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
-                  placeholder="Equipo directivo"
                 />
               </Campo>
             </div>
@@ -367,14 +444,14 @@ export default function AdminNovedadesPage() {
               </div>
             </Campo>
 
-            <Campo label="Galeria de imagenes (opcional)">
+            <Campo label="Galeria interna de la novedad">
               <div className="space-y-2">
                 <div className="flex flex-wrap gap-2">
                   <input
                     value={galeriaInput}
                     onChange={(e) => setGaleriaInput(e.target.value)}
                     className="min-w-0 flex-1 rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
-                    placeholder="Pega URL de imagen y presiona Agregar"
+                    placeholder="Pega URL y presiona Agregar"
                   />
                   <button
                     type="button"
@@ -425,7 +502,6 @@ export default function AdminNovedadesPage() {
                 value={form.resumen}
                 onChange={(e) => actualizar("resumen", e.target.value)}
                 className="min-h-20 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
-                placeholder="Resumen breve para mostrar en cards de novedades"
               />
             </Campo>
 
@@ -434,14 +510,13 @@ export default function AdminNovedadesPage() {
                 value={form.contenido}
                 onChange={(e) => actualizar("contenido", e.target.value)}
                 className="min-h-36 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
-                placeholder="Texto completo de la novedad"
               />
             </Campo>
 
             <Campo label="Estado">
               <select
                 value={form.estado}
-                onChange={(e) => atualizarEstado(e.target.value, setForm)}
+                onChange={(e) => setForm((prev) => ({ ...prev, estado: e.target.value === "borrador" ? "borrador" : "publicado" }))}
                 className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
               >
                 <option value="publicado">publicado</option>
@@ -454,7 +529,7 @@ export default function AdminNovedadesPage() {
                 type="submit"
                 className="rounded-full border border-brand-dark/20 px-5 py-2 text-sm font-bold text-brand-dark transition hover:bg-brand-dark hover:text-white"
               >
-                Validar novedad
+                Validar
               </button>
               <button
                 type="button"
@@ -462,26 +537,24 @@ export default function AdminNovedadesPage() {
                 disabled={guardando}
                 className="rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft disabled:cursor-not-allowed disabled:opacity-65"
               >
-                {guardando ? "Guardando..." : "Guardar en Firebase"}
+                {guardando ? "Guardando..." : editandoId ? "Actualizar en Firebase" : "Guardar en Firebase"}
               </button>
               <button
                 type="button"
                 onClick={limpiarFormulario}
                 className="rounded-full border border-brand-dark/20 px-5 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
               >
-                Limpiar
+                Nuevo
               </button>
             </div>
           </form>
         </section>
 
-        <section data-reveal className="min-w-0 space-y-4">
-          <article className="min-w-0 rounded-3xl border border-brand-dark/10 bg-surface p-5 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
+        <section className="min-w-0 space-y-4">
+          <article className="rounded-3xl border border-brand-dark/10 bg-surface p-5 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
             <h2 className="text-xl font-black text-brand-dark">Estado de validacion</h2>
             <p className={`mt-2 text-sm ${valido ? "text-emerald-700" : "text-brand-main"}`}>
-              {valido
-                ? "Formulario listo para cargar en Firebase."
-                : "Completa los campos obligatorios para evitar fallas en el front."}
+              {valido ? "Formulario listo para guardar." : "Completa los campos obligatorios."}
             </p>
             {!valido && tocado ? (
               <ul className="mt-3 space-y-1 text-sm text-brand-dark/80">
@@ -494,9 +567,46 @@ export default function AdminNovedadesPage() {
             {guardadoError ? <p className="mt-3 text-sm text-brand-main">{guardadoError}</p> : null}
           </article>
 
-          <article className="min-w-0 overflow-hidden rounded-3xl border border-brand-dark/10 bg-brand-dark p-5 text-white shadow-[0_10px_24px_rgba(75,56,49,0.18)]">
+          <article className="rounded-3xl border border-brand-dark/10 bg-surface p-5 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
+            <h2 className="text-xl font-black text-brand-dark">Novedades cargadas</h2>
+            {cargandoNovedades ? <p className="mt-2 text-sm text-brand-dark/75">Cargando listado...</p> : null}
+            {!cargandoNovedades && !novedades.length ? (
+              <p className="mt-2 text-sm text-brand-dark/75">No hay novedades en Firebase.</p>
+            ) : null}
+
+            <div className="mt-4 space-y-3">
+              {novedades.map((novedad) => (
+                <article key={novedad.id} className="rounded-2xl border border-brand-dark/10 bg-white p-3">
+                  <p className="text-sm font-bold text-brand-dark">{novedad.titulo}</p>
+                  <p className="text-xs text-brand-dark/70">
+                    {novedad.slug} - {novedad.estado}
+                  </p>
+                  <p className="mt-1 text-xs text-brand-dark/75">{novedad.resumen || "Sin resumen"}</p>
+
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => editarNovedad(novedad)}
+                      className="rounded-full border border-brand-dark/20 px-3 py-1 text-xs font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void eliminarNovedad(novedad.id)}
+                      className="rounded-full border border-red-400/60 px-3 py-1 text-xs font-semibold text-red-700 transition hover:bg-red-600 hover:text-white"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </article>
+
+          <article className="overflow-hidden rounded-3xl border border-brand-dark/10 bg-brand-dark p-5 text-white shadow-[0_10px_24px_rgba(75,56,49,0.18)]">
             <p className="text-xs font-bold tracking-[0.13em] text-brand-soft uppercase">JSON sugerido</p>
-            <pre className="mt-3 max-h-[520px] overflow-auto rounded-xl bg-black/20 p-3 text-xs leading-relaxed whitespace-pre-wrap break-all">
+            <pre className="mt-3 max-h-[380px] overflow-auto rounded-xl bg-black/20 p-3 text-xs leading-relaxed whitespace-pre-wrap break-all">
 {JSON.stringify(payload, null, 2)}
             </pre>
           </article>
@@ -517,6 +627,18 @@ function slugDesdeTexto(value: string): string {
     .replace(/-+/g, "-");
 }
 
+function toIsoDate(value: Timestamp | string | undefined): string {
+  if (!value) return "";
+  if (typeof value === "string") return value;
+  return value.toDate().toISOString();
+}
+
+function toDateInput(value: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toISOString().split("T")[0] ?? "";
+}
+
 function Campo({
   label,
   error,
@@ -524,7 +646,7 @@ function Campo({
 }: {
   label: string;
   error?: string;
-  children: ReactNode;
+  children: React.ReactNode;
 }) {
   return (
     <label className="block space-y-1">
@@ -533,8 +655,4 @@ function Campo({
       {error ? <span className="text-xs text-brand-main">{error}</span> : null}
     </label>
   );
-}
-
-function atualizarEstado(value: string, setForm: Dispatch<SetStateAction<FormData>>) {
-  setForm((prev) => ({ ...prev, estado: value === "borrador" ? "borrador" : "publicado" }));
 }

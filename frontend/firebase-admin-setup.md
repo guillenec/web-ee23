@@ -16,6 +16,9 @@ En Vercel y local, definir:
 - `NEXT_PUBLIC_ADMIN_EMAILS` (lista separada por coma)
 - `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`
 - `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` (preset unsigned para cargas desde navegador)
+- `CLOUDINARY_CLOUD_NAME` (solo server)
+- `CLOUDINARY_API_KEY` (solo server)
+- `CLOUDINARY_API_SECRET` (solo server)
 
 Ejemplo:
 
@@ -65,4 +68,4 @@ service cloud.firestore {
 
 ## 5) Proximo paso recomendado
 
-Mover la escritura a una API Route segura (server-side) y validar schema en servidor antes de guardar.
+Implementar API Routes seguras (server-side) para eliminar assets en Cloudinary al borrar novedades/galeria y evitar contenido huerfano.

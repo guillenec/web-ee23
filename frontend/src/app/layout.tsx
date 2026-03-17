@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Lato, Source_Sans_3 } from "next/font/google";
 
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { AppToaster } from "@/components/app-toaster";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
@@ -87,6 +88,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${lato.variable} ${sourceSans.variable} antialiased`}>
         <ScrollReveal />
+        <AppToaster />
         <div className="flex min-h-screen flex-col">
           <SiteHeader />
           <div className="flex-1">{children}</div>

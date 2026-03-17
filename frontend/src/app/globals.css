@@ -121,6 +121,14 @@ h4 {
   animation: cta-pop 3.6s ease-in-out infinite;
 }
 
+.lightbox-fade {
+  animation: lightbox-fade 220ms ease;
+}
+
+.lightbox-zoom {
+  animation: lightbox-zoom 260ms ease;
+}
+
 @keyframes hero-pan {
   0% {
     transform: scale(1.02) translateX(0);
@@ -156,11 +164,33 @@ h4 {
   }
 }
 
+@keyframes lightbox-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightbox-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fade-up,
   .float-shape,
   .hero-pan,
   .cta-pop,
+  .lightbox-fade,
+  .lightbox-zoom,
   .page-enter,
   [data-reveal],
   [data-reveal].is-visible {
