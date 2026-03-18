@@ -1,9 +1,9 @@
 import Image from "next/image";
 
+import { GaleriaPreview } from "@/components/galeria-preview";
 import { NovedadesPreview } from "@/components/novedades-preview";
 import { TransitionLink } from "@/components/transition-link";
 import { contactoInstitucional } from "@/lib/contacto";
-import { fotosGaleria } from "@/lib/galeria";
 
 export default function Home() {
   const localidades = [
@@ -252,27 +252,7 @@ export default function Home() {
             </TransitionLink>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-3">
-            {fotosGaleria.slice(0, 3).map((foto) => (
-              <article
-                key={foto.id}
-                className="card-lift overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
-              >
-                <Image
-                  src={foto.src}
-                  alt={foto.titulo}
-                  width={900}
-                  height={700}
-                  className="h-44 w-full object-cover"
-                />
-                <div className="space-y-2 p-4">
-                  <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">{foto.categoria}</p>
-                  <h3 className="text-lg font-extrabold text-brand-dark">{foto.titulo}</h3>
-                  <p className="text-sm text-brand-dark/80">{foto.descripcion}</p>
-                </div>
-              </article>
-            ))}
-          </div>
+          <GaleriaPreview cantidad={3} />
         </section>
 
         <section data-reveal className="space-y-4">

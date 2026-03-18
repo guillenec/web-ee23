@@ -7,7 +7,9 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { TransitionLink } from "@/components/transition-link";
+import { postAdminAction } from "@/lib/admin-api";
 import { esEmailAdmin } from "@/lib/admin-auth";
+import { extractCloudinaryPublicId } from "@/lib/cloudinary-utils";
 import { auth, db } from "@/lib/firebase";
 import { getNovedadesPublicadas, type Novedad } from "@/lib/novedades";
 
@@ -24,6 +26,9 @@ type NovedadEditForm = {
   resumen: string;
   contenido: string;
   imagenPrincipal: string;
+  imagenPrincipalPublicId: string;
+  galeria: string[];
+  galeriaPublicIds: string[];
   fecha: string;
 };
 
@@ -65,7 +70,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
 
     try {
       setEliminandoId(novedad.id);
-      await deleteDoc(doc(db, "novedades", novedad.id));
+      await postAdminAction("/api/admin/delete-novedad", { id: novedad.id });
       setNovedades((prev) => prev.filter((item) => item.id !== novedad.id));
       toast.success("Novedad eliminada con exito");
     } catch {
@@ -85,6 +90,9 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
       resumen: novedad.resumen,
       contenido: novedad.contenido,
       imagenPrincipal: novedad.imagenPrincipal,
+      imagenPrincipalPublicId: novedad.imagenPrincipalPublicId ?? extractCloudinaryPublicId(novedad.imagenPrincipal) ?? "",
+      galeria: novedad.galeria,
+      galeriaPublicIds: novedad.galeriaPublicIds ?? novedad.galeria.map((item) => extractCloudinaryPublicId(item) ?? ""),
       fecha: toDateInput(novedad.fecha),
     });
   };
@@ -108,7 +116,10 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
         resumen: editando.resumen.trim(),
         contenido: editando.contenido.trim(),
         imagenPrincipal: editando.imagenPrincipal.trim(),
-        galeria: [],
+        imagenPrincipalPublicId:
+          editando.imagenPrincipalPublicId || extractCloudinaryPublicId(editando.imagenPrincipal) || "",
+        galeria: editando.galeria,
+        galeriaPublicIds: editando.galeriaPublicIds,
         fecha: editando.fecha
           ? Timestamp.fromDate(new Date(`${editando.fecha}T12:00:00`))
           : Timestamp.now(),
@@ -133,6 +144,10 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 resumen: editando.resumen.trim(),
                 contenido: editando.contenido.trim(),
                 imagenPrincipal: editando.imagenPrincipal.trim(),
+                imagenPrincipalPublicId:
+                  editando.imagenPrincipalPublicId || extractCloudinaryPublicId(editando.imagenPrincipal) || "",
+                galeria: editando.galeria,
+                galeriaPublicIds: editando.galeriaPublicIds,
                 fecha: editando.fecha ? new Date(`${editando.fecha}T12:00:00`).toISOString() : item.fecha,
                 estado: "publicado",
               }
@@ -239,7 +254,9 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 style={{ viewTransitionName: `novedad-${(novedad.slug || novedad.id).replace(/[^a-zA-Z0-9_-]/g, "-")}` }}
               />
             ) : null}
-            <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Novedad</p>
+            <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
+              {novedad.categoria || "Novedad"}
+            </p>
             <h3 className="mt-2 text-lg font-extrabold text-brand-dark">{novedad.titulo}</h3>
             <p className="mt-2 text-sm text-brand-dark/80">{novedad.resumen || "Sin resumen."}</p>
             <p className="mt-3 text-xs font-semibold text-brand-dark/70">
@@ -268,7 +285,23 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
               <input value={editando.categoria} onChange={(e) => setEditando((p) => (p ? { ...p, categoria: e.target.value } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="Categoria" />
               <input value={editando.autor} onChange={(e) => setEditando((p) => (p ? { ...p, autor: e.target.value } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="Autor" />
               <input type="date" value={editando.fecha} onChange={(e) => setEditando((p) => (p ? { ...p, fecha: e.target.value } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" />
-              <input value={editando.imagenPrincipal} onChange={(e) => setEditando((p) => (p ? { ...p, imagenPrincipal: e.target.value } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="Imagen URL" />
+              <input
+                value={editando.imagenPrincipal}
+                onChange={(e) =>
+                  setEditando((p) =>
+                    p
+                      ? {
+                          ...p,
+                          imagenPrincipal: e.target.value,
+                          imagenPrincipalPublicId:
+                            extractCloudinaryPublicId(e.target.value) ?? p.imagenPrincipalPublicId,
+                        }
+                      : p,
+                  )
+                }
+                className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                placeholder="Imagen URL"
+              />
             </div>
             <textarea value={editando.resumen} onChange={(e) => setEditando((p) => (p ? { ...p, resumen: e.target.value } : p))} className="mt-3 min-h-20 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="Resumen" />
             <textarea value={editando.contenido} onChange={(e) => setEditando((p) => (p ? { ...p, contenido: e.target.value } : p))} className="mt-3 min-h-28 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="Contenido" />

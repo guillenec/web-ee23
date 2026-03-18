@@ -18,9 +18,11 @@ export type Novedad = {
   resumen: string;
   contenido: string;
   imagenPrincipal: string;
+  imagenPrincipalPublicId?: string;
   galeria: string[];
+  galeriaPublicIds?: string[];
   fecha: string;
-  estado: "borrador" | "publicado";
+  estado: "pendiente" | "publicado";
 };
 
 type NovedadFirestore = {
@@ -31,10 +33,12 @@ type NovedadFirestore = {
   resumen?: string;
   contenido?: string;
   imagenPrincipal?: string;
+  imagenPrincipalPublicId?: string;
   galeria?: string[];
+  galeriaPublicIds?: string[];
   fecha?: Timestamp | string;
   fechaPublicacion?: Timestamp | string;
-  estado?: "borrador" | "publicado";
+  estado?: "pendiente" | "publicado" | "borrador";
 };
 
 const NOVEDADES_CACHE_TTL_MS = 60_000;
@@ -59,9 +63,11 @@ const mapNovedad = (id: string, data: NovedadFirestore): Novedad => {
     resumen: data.resumen ?? "",
     contenido: data.contenido ?? "",
     imagenPrincipal: data.imagenPrincipal ?? "",
+    imagenPrincipalPublicId: data.imagenPrincipalPublicId,
     galeria: data.galeria ?? [],
+    galeriaPublicIds: data.galeriaPublicIds ?? [],
     fecha,
-    estado: data.estado ?? "borrador",
+    estado: data.estado === "publicado" ? "publicado" : "pendiente",
   };
 };
 

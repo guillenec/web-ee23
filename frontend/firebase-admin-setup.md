@@ -19,6 +19,12 @@ En Vercel y local, definir:
 - `CLOUDINARY_CLOUD_NAME` (solo server)
 - `CLOUDINARY_API_KEY` (solo server)
 - `CLOUDINARY_API_SECRET` (solo server)
+- `FIREBASE_ADMIN_PROJECT_ID` (solo server)
+- `FIREBASE_ADMIN_CLIENT_EMAIL` (solo server)
+- `FIREBASE_ADMIN_PRIVATE_KEY` (solo server; mantener saltos de linea como `\n`)
+- `OPENROUTER_API_KEY` (solo server)
+- `OPENROUTER_MODEL` (solo server)
+- `OPENROUTER_BASE_URL` (opcional; por defecto `https://openrouter.ai/api/v1`)
 
 Ejemplo:
 
@@ -52,6 +58,11 @@ service cloud.firestore {
       allow read: if resource.data.estado == "publicado";
       allow create, update, delete: if isAdmin();
     }
+
+    match /galeria/{docId} {
+      allow read: if resource.data.visible == true;
+      allow create, update, delete: if isAdmin();
+    }
   }
 }
 ```
@@ -68,4 +79,19 @@ service cloud.firestore {
 
 ## 5) Proximo paso recomendado
 
-Implementar API Routes seguras (server-side) para eliminar assets en Cloudinary al borrar novedades/galeria y evitar contenido huerfano.
+Implementado: API Routes seguras (server-side) para eliminar assets en Cloudinary al borrar novedades/galeria y evitar contenido huerfano.
+
+Rutas:
+
+- `POST /api/admin/delete-novedad`
+- `POST /api/admin/delete-galeria-item`
+- `POST /api/admin/ai-novedad-suggest`
+- `POST /api/admin/ai-galeria-suggest`
+
+Notas:
+
+- Requieren `Authorization: Bearer <Firebase ID Token>`.
+- Validan whitelist admin por email (`NEXT_PUBLIC_ADMIN_EMAILS` o `ADMIN_EMAILS`).
+- Borran assets en Cloudinary y luego eliminan documento en Firestore.
+- Para nuevas cargas se guarda metadata de media (`publicId`) para borrado exacto.
+- Para verificar token en servidor se inicializa Firebase Admin con variables `FIREBASE_ADMIN_*`.

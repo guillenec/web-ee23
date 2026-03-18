@@ -14,6 +14,7 @@ export default function NovedadDetallePage() {
   const [novedad, setNovedad] = useState<Novedad | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [imagenActiva, setImagenActiva] = useState<string | null>(null);
 
   useEffect(() => {
     const cargar = async () => {
@@ -35,6 +36,24 @@ export default function NovedadDetallePage() {
 
     void cargar();
   }, [slug]);
+
+  useEffect(() => {
+    if (!imagenActiva) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setImagenActiva(null);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [imagenActiva]);
+
+  const imagenesGaleria = useMemo(() => {
+    if (!novedad) return [];
+    return (novedad.galeria ?? []).map((item) => item.trim()).filter(Boolean);
+  }, [novedad]);
 
   return (
     <main className="page-enter min-h-[60vh] bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)]">
@@ -109,9 +128,60 @@ export default function NovedadDetallePage() {
                 <p>Sin contenido ampliado para esta novedad.</p>
               )}
             </div>
+
+            {imagenesGaleria.length ? (
+              <section className="mt-8 space-y-3">
+                <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Galeria de la novedad</p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {imagenesGaleria.map((imagen, idx) => (
+                    <button
+                      key={`${imagen}-${idx}`}
+                      type="button"
+                      onClick={() => setImagenActiva(imagen)}
+                      className="overflow-hidden rounded-xl border border-brand-dark/10"
+                      aria-label={`Ampliar imagen ${idx + 1}`}
+                    >
+                      <Image
+                        src={imagen}
+                        alt={`${novedad.titulo} - imagen ${idx + 1}`}
+                        width={900}
+                        height={700}
+                        className="h-44 w-full object-cover transition hover:scale-[1.02]"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </section>
+            ) : null}
           </article>
         ) : null}
       </div>
+
+      {imagenActiva ? (
+        <div
+          className="lightbox-fade fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4 py-8 backdrop-blur-[2px]"
+          onClick={() => setImagenActiva(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Imagen ampliada"
+        >
+          <div
+            className="lightbox-zoom relative w-full max-w-5xl overflow-hidden rounded-2xl border border-white/15 bg-black/40 shadow-[0_24px_50px_rgba(0,0,0,0.45)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setImagenActiva(null)}
+              className="absolute top-3 right-3 z-10 rounded-full bg-black/55 px-3 py-1 text-xs font-bold text-white transition hover:bg-black/75"
+            >
+              Cerrar
+            </button>
+            <div className="relative h-[62vh] min-h-[280px] w-full">
+              <Image src={imagenActiva} alt="Imagen de novedad" fill className="object-contain" />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }

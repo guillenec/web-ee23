@@ -2,15 +2,17 @@
 
 import Image from "next/image";
 import { onAuthStateChanged } from "firebase/auth";
-import { Timestamp, deleteDoc, doc, setDoc } from "firebase/firestore";
+import { Timestamp, doc, setDoc } from "firebase/firestore";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { postAdminAction } from "@/lib/admin-api";
 import { esEmailAdmin } from "@/lib/admin-auth";
+import { extractCloudinaryPublicId } from "@/lib/cloudinary-utils";
 import { auth, db } from "@/lib/firebase";
-import { getFotosGaleriaPublicas, type FotoGaleria } from "@/lib/galeria";
+import { categoriasGaleria, getFotosGaleriaPublicas, type FotoGaleria } from "@/lib/galeria";
 
-const filtros = ["Todas", "Aulas", "Territorio", "Actos"] as const;
+const filtros = ["Todas", ...categoriasGaleria] as const;
 type Filtro = (typeof filtros)[number];
 
 type FotoEditForm = {
@@ -19,6 +21,7 @@ type FotoEditForm = {
   categoria: FotoGaleria["categoria"];
   descripcion: string;
   src: string;
+  publicId: string;
   fecha: string;
   visible: boolean;
 };
@@ -78,7 +81,7 @@ export default function GaleriaPage() {
 
     try {
       setEliminandoId(foto.id);
-      await deleteDoc(doc(db, "galeria", foto.id));
+      await postAdminAction("/api/admin/delete-galeria-item", { id: foto.id });
       setFotosBase((prev) => prev.filter((item) => item.id !== foto.id));
       if (fotoActiva?.id === foto.id) {
         setFotoActiva(null);
@@ -98,6 +101,7 @@ export default function GaleriaPage() {
       categoria: foto.categoria,
       descripcion: foto.descripcion,
       src: foto.src,
+      publicId: foto.publicId ?? extractCloudinaryPublicId(foto.src) ?? "",
       fecha: toDateInput(foto.fecha),
       visible: foto.visible,
     });
@@ -120,6 +124,7 @@ export default function GaleriaPage() {
           descripcion: editandoFoto.descripcion.trim(),
           src: editandoFoto.src.trim(),
           urlImagen: editandoFoto.src.trim(),
+          publicId: editandoFoto.publicId || extractCloudinaryPublicId(editandoFoto.src) || "",
           fecha: editandoFoto.fecha
             ? Timestamp.fromDate(new Date(`${editandoFoto.fecha}T12:00:00`))
             : Timestamp.now(),
@@ -138,6 +143,7 @@ export default function GaleriaPage() {
                 categoria: editandoFoto.categoria,
                 descripcion: editandoFoto.descripcion.trim(),
                 src: editandoFoto.src.trim(),
+                publicId: editandoFoto.publicId || extractCloudinaryPublicId(editandoFoto.src) || "",
                 fecha: editandoFoto.fecha ? new Date(`${editandoFoto.fecha}T12:00:00`).toISOString() : item.fecha,
                 visible: editandoFoto.visible,
               }
@@ -280,11 +286,6 @@ export default function GaleriaPage() {
             <div className="relative h-[62vh] min-h-[280px] w-full">
               <Image src={fotoActiva.src} alt={fotoActiva.titulo} fill className="object-contain" />
             </div>
-            <div className="bg-black/50 p-4 text-white">
-              <p className="text-xs font-bold tracking-[0.13em] text-brand-soft uppercase">{fotoActiva.categoria}</p>
-              <p className="mt-1 text-lg font-black">{fotoActiva.titulo}</p>
-              {fotoActiva.descripcion ? <p className="mt-1 text-sm text-white/85">{fotoActiva.descripcion}</p> : null}
-            </div>
           </div>
         </div>
       ) : null}
@@ -299,12 +300,29 @@ export default function GaleriaPage() {
             <div className="mt-4 grid gap-3">
               <input value={editandoFoto.titulo} onChange={(e) => setEditandoFoto((p) => (p ? { ...p, titulo: e.target.value } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="Titulo" />
               <select value={editandoFoto.categoria} onChange={(e) => setEditandoFoto((p) => (p ? { ...p, categoria: e.target.value as FotoGaleria["categoria"] } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm">
-                <option value="Aulas">Aulas</option>
-                <option value="Territorio">Territorio</option>
-                <option value="Actos">Actos</option>
+                {categoriasGaleria.map((categoria) => (
+                  <option key={categoria} value={categoria}>
+                    {categoria}
+                  </option>
+                ))}
               </select>
               <input type="date" value={editandoFoto.fecha} onChange={(e) => setEditandoFoto((p) => (p ? { ...p, fecha: e.target.value } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" />
-              <input value={editandoFoto.src} onChange={(e) => setEditandoFoto((p) => (p ? { ...p, src: e.target.value } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="URL de imagen" />
+              <input
+                value={editandoFoto.src}
+                onChange={(e) =>
+                  setEditandoFoto((p) =>
+                    p
+                      ? {
+                          ...p,
+                          src: e.target.value,
+                          publicId: extractCloudinaryPublicId(e.target.value) ?? p.publicId,
+                        }
+                      : p,
+                  )
+                }
+                className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                placeholder="URL de imagen"
+              />
               <textarea value={editandoFoto.descripcion} onChange={(e) => setEditandoFoto((p) => (p ? { ...p, descripcion: e.target.value } : p))} className="min-h-24 rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="Descripcion" />
               <label className="flex items-center gap-2 text-sm text-brand-dark">
                 <input type="checkbox" checked={editandoFoto.visible} onChange={(e) => setEditandoFoto((p) => (p ? { ...p, visible: e.target.checked } : p))} />

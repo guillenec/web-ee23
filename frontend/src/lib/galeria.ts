@@ -2,7 +2,14 @@ import { Timestamp, collection, getDocs, limit, query, where } from "firebase/fi
 
 import { db } from "@/lib/firebase";
 
-export const categoriasGaleria = ["Aulas", "Territorio", "Actos"] as const;
+export const categoriasGaleria = [
+  "Aulas",
+  "Territorio",
+  "Actos",
+  "Talleres",
+  "Familias",
+  "Salidas",
+] as const;
 export type CategoriaGaleria = (typeof categoriasGaleria)[number];
 
 export type FotoGaleria = {
@@ -13,6 +20,7 @@ export type FotoGaleria = {
   src: string;
   fecha: string;
   visible: boolean;
+  publicId?: string;
 };
 
 type FotoGaleriaFirestore = {
@@ -22,6 +30,7 @@ type FotoGaleriaFirestore = {
   src?: string;
   urlImagen?: string;
   usImagen?: string;
+  publicId?: string;
   fecha?: Timestamp | string;
   visible?: boolean;
 };
@@ -76,6 +85,9 @@ function toCategoria(value: string | undefined): CategoriaGaleria {
   if (normalizado === "aulas") return "Aulas";
   if (normalizado === "territorio") return "Territorio";
   if (normalizado === "actos") return "Actos";
+  if (normalizado === "talleres") return "Talleres";
+  if (normalizado === "familias") return "Familias";
+  if (normalizado === "salidas") return "Salidas";
   return "Territorio";
 }
 
@@ -88,6 +100,7 @@ function mapFotoGaleria(id: string, data: FotoGaleriaFirestore): FotoGaleria {
     src: data.src ?? data.urlImagen ?? data.usImagen ?? "",
     fecha: toIsoDate(data.fecha),
     visible: data.visible ?? true,
+    publicId: data.publicId,
   };
 }
 
