@@ -2,16 +2,23 @@ import { TransitionLink } from "@/components/transition-link";
 
 const cards = [
   {
-    href: "/admin/novedades",
+    href: "/admin/novedades/crear",
     titulo: "Gestionar novedades",
-    descripcion: "Crear, editar, publicar o eliminar noticias institucionales.",
-    cta: "Abrir modulo",
+    descripcion: "Crear publicaciones nuevas y revisar pendientes/publicadas en paneles separados.",
+    cta: "Crear novedad",
+    accesos: [
+      { href: "/admin/novedades/crear", label: "Crear novedad" },
+      { href: "/admin/novedades/ver", label: "Ver novedades" },
+    ],
   },
   {
     href: "/admin/galeria",
     titulo: "Gestionar galeria",
     descripcion: "Subir imagenes, editar datos y ocultar o eliminar fotos publicas.",
     cta: "Ir a galeria",
+    accesos: [
+      { href: "/admin/galeria", label: "Abrir galeria" },
+    ],
   },
 ];
 
@@ -42,6 +49,17 @@ export default function AdminDashboardPage() {
               >
                 {card.cta}
               </TransitionLink>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {card.accesos.map((atajo) => (
+                  <TransitionLink
+                    key={atajo.href}
+                    href={atajo.href}
+                    className="inline-flex rounded-full border border-brand-dark/20 bg-white px-3 py-1.5 text-xs font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                  >
+                    {atajo.label}
+                  </TransitionLink>
+                ))}
+              </div>
             </article>
           ))}
         </section>
