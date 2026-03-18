@@ -56,7 +56,7 @@ export default function NovedadDetallePage() {
   }, [novedad]);
 
   return (
-    <main className="page-enter min-h-[60vh] bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)]">
+    <main className="page-enter min-h-[60vh] bg-app">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-5 py-10 sm:px-8">
         <TransitionLink
           href="/novedades"

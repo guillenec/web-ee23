@@ -318,7 +318,7 @@ export default function AdminGaleriaPage() {
   };
 
   return (
-    <main className="page-enter bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)] px-5 py-10 sm:px-8">
+    <main className="page-enter bg-app px-5 py-10 sm:px-8">
       <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
         <section className="rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
           <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Modulo de galeria</p>

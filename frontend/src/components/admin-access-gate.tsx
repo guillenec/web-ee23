@@ -59,7 +59,7 @@ export function AdminAccessGate({ children }: Props) {
 
   if (estado === "cargando") {
     return (
-      <main className="min-h-[60vh] bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)] px-5 py-10 sm:px-8">
+      <main className="min-h-[60vh] bg-app px-5 py-10 sm:px-8">
         <div className="mx-auto max-w-3xl rounded-3xl border border-brand-dark/10 bg-surface p-6 text-sm text-brand-dark/80">
           Verificando acceso de administrador...
         </div>
@@ -135,7 +135,7 @@ function AccesoBase({
   const admins = getAdminEmails();
 
   return (
-    <main className="min-h-[60vh] bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)] px-5 py-10 sm:px-8">
+    <main className="min-h-[60vh] bg-app px-5 py-10 sm:px-8">
       <div className="mx-auto max-w-3xl rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
         <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Panel administrador</p>
         <h1 className="mt-2 text-3xl font-black text-brand-dark">{titulo}</h1>

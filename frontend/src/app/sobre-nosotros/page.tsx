@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function SobreNosotrosPage() {
   return (
-    <main className="page-enter bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)] px-5 py-10 sm:px-8">
+    <main className="page-enter bg-app px-5 py-10 sm:px-8">
       <div className="mx-auto max-w-6xl space-y-8">
         <section data-reveal className="grid gap-6 rounded-3xl border border-brand-dark/10 bg-surface p-6 sm:grid-cols-2 sm:p-8">
           <div className="space-y-4">

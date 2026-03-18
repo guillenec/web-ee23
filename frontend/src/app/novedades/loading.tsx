@@ -1,6 +1,6 @@
 export default function LoadingNovedadesPage() {
   return (
-    <main className="min-h-[60vh] bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)] px-5 py-10 sm:px-8">
+    <main className="min-h-[60vh] bg-app px-5 py-10 sm:px-8">
       <div className="mx-auto max-w-6xl space-y-6">
         <div className="h-7 w-80 animate-pulse rounded bg-brand-dark/10" />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

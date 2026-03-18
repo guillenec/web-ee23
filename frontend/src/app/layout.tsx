@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Lato, Source_Sans_3 } from "next/font/google";
+import Script from "next/script";
 
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { AppToaster } from "@/components/app-toaster";
@@ -85,8 +86,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body className={`${lato.variable} ${sourceSans.variable} antialiased`}>
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`(function(){try{var key='ee23_theme';var s=localStorage.getItem(key);var t=(s==='dark'||s==='light')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;}catch(e){}})();`}
+        </Script>
         <ScrollReveal />
         <AppToaster />
         <div className="flex min-h-screen flex-col">

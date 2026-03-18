@@ -161,7 +161,7 @@ export default function GaleriaPage() {
   };
 
   return (
-    <main className="page-enter bg-[radial-gradient(circle_at_0%_0%,#c5e4e7_0%,#f6f2ee_45%,#f6f2ee_100%)] px-5 py-10 sm:px-8">
+    <main className="page-enter bg-app px-5 py-10 sm:px-8">
       <div className="mx-auto max-w-6xl space-y-7">
         <section data-reveal className="rounded-3xl border border-brand-dark/10 bg-surface p-6 sm:p-8">
           <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Galeria institucional</p>
