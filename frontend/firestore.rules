@@ -1,0 +1,43 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function emailLower() {
+      return signedIn() && request.auth.token.email is string
+        ? lower(request.auth.token.email)
+        : "";
+    }
+
+    function isAdmin() {
+      return emailLower() in [
+        "guillermoneculqueo@gmail.com",
+        "escuelaespecial023@gmail.com"
+      ];
+    }
+
+    function isPublished() {
+      return resource.data.estado == "publicado";
+    }
+
+    function isVisible() {
+      return resource.data.visible == true;
+    }
+
+    match /novedades/{docId} {
+      allow read: if isPublished() || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /galeria/{docId} {
+      allow read: if isVisible() || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

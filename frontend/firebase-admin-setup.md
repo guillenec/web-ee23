@@ -29,7 +29,7 @@ En Vercel y local, definir:
 Ejemplo:
 
 ```env
-NEXT_PUBLIC_ADMIN_EMAILS=escuela23jaco@gmail.com,direccion.ee23@gmail.com
+NEXT_PUBLIC_ADMIN_EMAILS=guillermoneculqueo@gmail.com,escuelaespecial023@gmail.com
 ```
 
 ## 2) Habilitar login Google en Firebase Auth
@@ -38,34 +38,28 @@ NEXT_PUBLIC_ADMIN_EMAILS=escuela23jaco@gmail.com,direccion.ee23@gmail.com
 2. Habilitar `Google`.
 3. Agregar dominio de Vercel en `Authorized domains`.
 
-## 3) Reglas Firestore sugeridas (lectura publica + escritura admin)
+## 3) Reglas Firestore productivas (lectura publica + escritura admin)
 
-Base de referencia (ajustar lista de correos):
+Las reglas activas de referencia quedaron en `frontend/firestore.rules`.
 
-```txt
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    function isAdmin() {
-      return request.auth != null
-        && request.auth.token.email != null
-        && request.auth.token.email in [
-          'escuela23jaco@gmail.com'
-        ];
-    }
+Cobertura:
 
-    match /novedades/{docId} {
-      allow read: if resource.data.estado == "publicado";
-      allow create, update, delete: if isAdmin();
-    }
+- `novedades`: lectura publica solo si `estado == "publicado"`.
+- `galeria`: lectura publica solo si `visible == true`.
+- Los admins autenticados pueden leer todos los documentos (incluye `pendiente` y ocultos).
+- Escritura (`create/update/delete`) solo para admins autenticados por email.
+- Denegacion explicita para cualquier otro documento/ruta.
 
-    match /galeria/{docId} {
-      allow read: if resource.data.visible == true;
-      allow create, update, delete: if isAdmin();
-    }
-  }
-}
-```
+Admins incluidos en el archivo de reglas:
+
+- `guillermoneculqueo@gmail.com`
+- `escuelaespecial023@gmail.com`
+
+Aplicacion manual en Firebase Console:
+
+1. Firebase Console -> Firestore Database -> Rules.
+2. Copiar el contenido de `frontend/firestore.rules`.
+3. Publicar reglas.
 
 ## 4) Estado actual del panel
 
@@ -76,6 +70,14 @@ service cloud.firestore {
 - Carga de novedades: formulario guiado con validacion + guardado directo en Firestore
 - Carga de imagenes: URL manual o subida local a Cloudinary (principal y galeria)
 - Persistencia de borrador: `localStorage` para evitar perdida al recargar
+
+### Troubleshooting rapido: no se listan pendientes/publicadas
+
+Si en `/admin/novedades/ver` aparece error de carga, revisar estos puntos:
+
+1. En Firestore Rules, `match /novedades/{docId}` debe incluir `allow read: if isPublished() || isAdmin();`
+2. Confirmar que el correo logueado en Google coincide exacto con alguno de `NEXT_PUBLIC_ADMIN_EMAILS`.
+3. Cerrar sesion y volver a iniciar para refrescar `request.auth.token.email`.
 
 ## 5) Proximo paso recomendado
 
