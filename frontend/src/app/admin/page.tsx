@@ -1,3 +1,5 @@
+import { ArrowRight, Images, Newspaper } from "lucide-react";
+
 import { TransitionLink } from "@/components/transition-link";
 
 const cards = [
@@ -8,6 +10,7 @@ const cards = [
     cta: "Crear novedad",
     etiqueta: "Contenido editorial",
     color: "from-brand-main/20 via-brand-soft/10 to-transparent",
+    icon: Newspaper,
     accesos: [
       { href: "/admin/novedades/crear", label: "Crear novedad" },
       { href: "/admin/novedades/ver", label: "Ver novedades" },
@@ -20,6 +23,7 @@ const cards = [
     cta: "Ir a galeria",
     etiqueta: "Memoria visual",
     color: "from-sky/40 via-brand-soft/5 to-transparent",
+    icon: Images,
     accesos: [
       { href: "/admin/galeria", label: "Abrir galeria" },
     ],
@@ -65,15 +69,17 @@ export default function AdminDashboardPage() {
               data-reveal
               className="relative overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
             >
+              <card.icon className="absolute top-4 right-4 h-5 w-5 text-brand-main/70" />
               <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${card.color}`} />
               <p className="relative text-[11px] font-bold tracking-[0.13em] text-brand-main uppercase">{card.etiqueta}</p>
-              <h2 className="text-xl font-black text-brand-dark">{card.titulo}</h2>
+              <h2 className="relative text-xl font-black text-brand-dark">{card.titulo}</h2>
               <p className="relative mt-2 text-sm text-brand-dark/80">{card.descripcion}</p>
               <TransitionLink
                 href={card.href}
                 className="relative mt-4 inline-flex rounded-full bg-brand-main px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-soft"
               >
                 {card.cta}
+                <ArrowRight className="ml-2 h-4 w-4" />
               </TransitionLink>
               <div className="relative mt-3 flex flex-wrap gap-2">
                 {card.accesos.map((atajo) => (

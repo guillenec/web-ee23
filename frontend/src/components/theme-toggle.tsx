@@ -1,5 +1,6 @@
 "use client";
 
+import { MoonStar, SunMedium } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type Theme = "light" | "dark";
@@ -35,11 +36,11 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     <button
       type="button"
       onClick={toggle}
-      className={`rounded-full border border-brand-dark/20 bg-surface px-3 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white disabled:opacity-60 ${className}`}
+      className={`fixed right-4 bottom-4 z-[70] inline-flex h-12 w-12 items-center justify-center rounded-full border border-brand-dark/20 bg-surface/95 text-brand-dark shadow-[0_10px_24px_rgba(0,0,0,0.18)] backdrop-blur transition hover:-translate-y-0.5 hover:bg-brand-dark hover:text-white sm:right-6 sm:bottom-6 ${className}`}
       aria-label={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
       title={theme === "dark" ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
     >
-      {theme === "dark" ? "Claro" : "Oscuro"}
+      {theme === "dark" ? <SunMedium className="h-5 w-5" /> : <MoonStar className="h-5 w-5" />}
     </button>
   );
 }

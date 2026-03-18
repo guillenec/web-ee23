@@ -1,16 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { TransitionLink } from "@/components/transition-link";
-
-const ThemeToggle = dynamic(
-  () => import("@/components/theme-toggle").then((mod) => mod.ThemeToggle),
-  { ssr: false },
-);
 
 const enlaces = [
   { href: "/novedades", label: "Novedades" },
@@ -43,21 +37,17 @@ export function SiteHeader() {
           </div>
         </TransitionLink>
 
-        <div className="flex items-center gap-2 md:hidden">
-          <ThemeToggle />
-          <button
-            type="button"
-            onClick={() => setMenuAbierto((prev) => !prev)}
-            className="rounded-full border border-brand-dark/20 px-3 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
-            aria-expanded={menuAbierto}
-            aria-label="Abrir menú principal"
-          >
-            Menú
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => setMenuAbierto((prev) => !prev)}
+          className="rounded-full border border-brand-dark/20 px-3 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white md:hidden"
+          aria-expanded={menuAbierto}
+          aria-label="Abrir menú principal"
+        >
+          Menú
+        </button>
 
         <nav className="hidden items-center gap-2 md:flex">
-          <ThemeToggle className="mr-1" />
           {enlaces.map((enlace) => {
             const activa = pathname.startsWith(enlace.href);
 
