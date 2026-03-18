@@ -18,7 +18,7 @@ export default function Home() {
   ];
 
   return (
-    <main className="page-enter bg-[radial-gradient(circle_at_10%_20%,#c5e4e7_0%,#f6f2ee_35%,#f6f2ee_100%)]">
+    <main className="page-enter bg-app">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-8 sm:px-8 sm:py-12">
         <section
           id="banner"
