@@ -1,12 +1,11 @@
 "use client";
 
-import { Timestamp, collection, doc, getDocs, limit, query, setDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import { postAdminAction } from "@/lib/admin-api";
-import { auth, db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 
 type NovedadAdmin = {
   id: string;
@@ -39,54 +38,12 @@ export default function AdminNovedadesVerPage() {
       setCargando(true);
       setErrorCarga(null);
 
-      const ref = collection(db, "novedades");
-      const snapshot = await getDocs(query(ref, limit(250)));
-
-      const next = snapshot.docs
-        .map((item) => {
-          const data = item.data() as {
-            titulo?: string;
-            slug?: string;
-            categoria?: string;
-            autor?: string;
-            resumen?: string;
-            contenido?: string;
-            imagenPrincipal?: string;
-            imagenPrincipalPublicId?: string;
-            galeria?: string[];
-            galeriaPublicIds?: string[];
-            fecha?: Timestamp | string;
-            estado?: "publicado" | "pendiente" | "borrador";
-          };
-
-          return {
-            id: item.id,
-            titulo: data.titulo ?? "Sin titulo",
-            slug: data.slug ?? item.id,
-            categoria: data.categoria ?? "General",
-            autor: data.autor ?? "Equipo institucional",
-            resumen: data.resumen ?? "",
-            contenido: data.contenido ?? "",
-            imagenPrincipal: data.imagenPrincipal ?? "",
-            imagenPrincipalPublicId: data.imagenPrincipalPublicId ?? "",
-            galeria: data.galeria ?? [],
-            galeriaPublicIds: data.galeriaPublicIds ?? [],
-            fecha: toIsoDate(data.fecha),
-            estado: data.estado === "publicado" ? "publicado" : "pendiente",
-          } satisfies NovedadAdmin;
-        })
-        .sort((a, b) => {
-          if (!a.fecha && !b.fecha) return 0;
-          if (!a.fecha) return 1;
-          if (!b.fecha) return -1;
-          return new Date(b.fecha).getTime() - new Date(a.fecha).getTime();
-        });
-
+      const result = await getAdminJson<{ items?: NovedadAdmin[] }>("/api/admin/list-novedades");
+      const next = Array.isArray(result.items) ? result.items : [];
       setNovedades(next);
-    } catch {
-      setErrorCarga(
-        "No se pudo cargar el listado. Verifica reglas Firestore para permitir read a isAdmin() y confirma sesion Google activa.",
-      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "No se pudo cargar el listado";
+      setErrorCarga(message);
     } finally {
       setCargando(false);
     }
@@ -94,7 +51,10 @@ export default function AdminNovedadesVerPage() {
 
   useEffect(() => {
     const off = onAuthStateChanged(auth, (user) => {
-      if (!user) return;
+      if (!user) {
+        setCargando(false);
+        return;
+      }
       void cargarNovedades();
     });
 
@@ -104,14 +64,7 @@ export default function AdminNovedadesVerPage() {
   const cambiarEstado = async (id: string, estado: "pendiente" | "publicado") => {
     try {
       setActualizandoId(id);
-      await setDoc(
-        doc(db, "novedades", id),
-        {
-          estado,
-          actualizadoEn: Timestamp.now(),
-        },
-        { merge: true },
-      );
+      await postAdminAction("/api/admin/update-novedad-estado", { id, estado });
       toast.success(estado === "publicado" ? "Novedad publicada" : "Novedad pasada a pendiente");
       await cargarNovedades();
     } catch {
@@ -266,8 +219,26 @@ function NovedadCard({
   );
 }
 
-function toIsoDate(value: Timestamp | string | undefined): string {
-  if (!value) return "";
-  if (typeof value === "string") return value;
-  return value.toDate().toISOString();
+async function getAdminJson<T>(path: string): Promise<T> {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("Debes iniciar sesion como admin.");
+  }
+
+  const idToken = await user.getIdToken();
+  const response = await fetch(path, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+    },
+    cache: "no-store",
+  });
+
+  const data = (await response.json()) as T & { error?: string };
+
+  if (!response.ok) {
+    throw new Error(data.error ?? "No se pudo completar la accion");
+  }
+
+  return data;
 }

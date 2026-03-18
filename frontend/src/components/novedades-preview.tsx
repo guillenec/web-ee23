@@ -30,6 +30,7 @@ type NovedadEditForm = {
   galeria: string[];
   galeriaPublicIds: string[];
   fecha: string;
+  estado: "publicado" | "pendiente";
 };
 
 export function NovedadesPreview({ cantidad = 3 }: Props) {
@@ -94,6 +95,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
       galeria: novedad.galeria,
       galeriaPublicIds: novedad.galeriaPublicIds ?? novedad.galeria.map((item) => extractCloudinaryPublicId(item) ?? ""),
       fecha: toDateInput(novedad.fecha),
+      estado: novedad.estado,
     });
   };
 
@@ -123,7 +125,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
         fecha: editando.fecha
           ? Timestamp.fromDate(new Date(`${editando.fecha}T12:00:00`))
           : Timestamp.now(),
-        estado: "publicado",
+        estado: editando.estado,
         actualizadoEn: Timestamp.now(),
       });
 
@@ -131,8 +133,12 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
         await deleteDoc(doc(db, "novedades", editando.idOriginal));
       }
 
-      setNovedades((prev) =>
-        prev.map((item) =>
+      setNovedades((prev) => {
+        if (editando.estado !== "publicado") {
+          return prev.filter((item) => item.id !== editando.idOriginal);
+        }
+
+        return prev.map((item) =>
           item.id === editando.idOriginal
             ? {
                 ...item,
@@ -149,11 +155,11 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 galeria: editando.galeria,
                 galeriaPublicIds: editando.galeriaPublicIds,
                 fecha: editando.fecha ? new Date(`${editando.fecha}T12:00:00`).toISOString() : item.fecha,
-                estado: "publicado",
+                estado: editando.estado,
               }
             : item,
-        ),
-      );
+        );
+      });
 
       setEditando(null);
       toast.success("Novedad actualizada con exito");
@@ -204,7 +210,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {novedades.map((novedad) => (
+      {novedades.map((novedad, idx) => (
         <article
           key={novedad.id}
           className="card-lift relative rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
@@ -250,6 +256,8 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 alt={novedad.titulo}
                 width={800}
                 height={500}
+                priority={idx === 0}
+                loading={idx === 0 ? "eager" : "lazy"}
                 className="mb-4 h-40 w-full rounded-xl object-cover"
                 style={{ viewTransitionName: `novedad-${(novedad.slug || novedad.id).replace(/[^a-zA-Z0-9_-]/g, "-")}` }}
               />
@@ -285,6 +293,20 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
               <input value={editando.categoria} onChange={(e) => setEditando((p) => (p ? { ...p, categoria: e.target.value } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="Categoria" />
               <input value={editando.autor} onChange={(e) => setEditando((p) => (p ? { ...p, autor: e.target.value } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="Autor" />
               <input type="date" value={editando.fecha} onChange={(e) => setEditando((p) => (p ? { ...p, fecha: e.target.value } : p))} className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" />
+              <select
+                value={editando.estado}
+                onChange={(e) =>
+                  setEditando((p) => (p ? { ...p, estado: e.target.value === "publicado" ? "publicado" : "pendiente" } : p))
+                }
+                className={`rounded-xl border px-3 py-2 text-sm font-semibold ${
+                  editando.estado === "publicado"
+                    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                    : "border-amber-300 bg-amber-50 text-amber-800"
+                }`}
+              >
+                <option value="publicado">Publicado</option>
+                <option value="pendiente">Pendiente</option>
+              </select>
               <input
                 value={editando.imagenPrincipal}
                 onChange={(e) =>
