@@ -1,7 +1,7 @@
 "use client";
 
 import { MoonStar, SunMedium } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 
 type Theme = "light" | "dark";
 
@@ -18,16 +18,32 @@ function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
 }
 
-export function ThemeToggle({ className = "" }: { className?: string }) {
-  const [theme, setTheme] = useState<Theme>(() => resolveInitialTheme());
+function subscribeTheme() {
+  return () => {};
+}
 
-  useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+function getClientThemeSnapshot(): Theme {
+  const current = document.documentElement.dataset.theme;
+  if (current === "light" || current === "dark") return current;
+  return resolveInitialTheme();
+}
+
+function getServerThemeSnapshot(): Theme {
+  return "light";
+}
+
+export function ThemeToggle({ className = "" }: { className?: string }) {
+  const snapshotTheme = useSyncExternalStore(
+    subscribeTheme,
+    getClientThemeSnapshot,
+    getServerThemeSnapshot,
+  );
+  const [overrideTheme, setOverrideTheme] = useState<Theme | null>(null);
+  const theme = overrideTheme ?? snapshotTheme;
 
   const toggle = () => {
     const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
+    setOverrideTheme(next);
     applyTheme(next);
     window.localStorage.setItem(STORAGE_KEY, next);
   };
