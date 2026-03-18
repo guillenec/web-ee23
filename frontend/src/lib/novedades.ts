@@ -84,6 +84,7 @@ export const getNovedadesPublicadas = async (
 
   const novedades = snapshot.docs
     .map((doc) => mapNovedad(doc.id, doc.data() as NovedadFirestore))
+    .filter((item) => item.estado === "publicado")
     .sort((a, b) => {
       if (!a.fecha && !b.fecha) return 0;
       if (!a.fecha) return 1;
@@ -108,6 +109,7 @@ export const getNovedadPublicadaPorSlug = async (slug: string): Promise<Novedad 
   const normalizado = decodeURIComponent(slug).trim().toLowerCase();
   const match = snapshot.docs
     .map((doc) => mapNovedad(doc.id, doc.data() as NovedadFirestore))
+    .filter((item) => item.estado === "publicado")
     .find((novedad) => {
       return novedad.slug.trim().toLowerCase() === normalizado || novedad.id.trim().toLowerCase() === normalizado;
     });

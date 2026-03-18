@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 export function ScrollReveal() {
   useEffect(() => {
+    let started = false;
     const observed = new WeakSet<Element>();
 
     const observer = new IntersectionObserver(
@@ -31,18 +32,29 @@ export function ScrollReveal() {
       });
     };
 
-    observeAll();
-
     const mutationObserver = new MutationObserver(() => {
+      if (!started) return;
       observeAll();
     });
 
-    mutationObserver.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
+    const start = () => {
+      if (started) return;
+      started = true;
+      observeAll();
+      mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+    };
+
+    if (document.readyState === "complete") {
+      start();
+    } else {
+      window.addEventListener("load", start, { once: true });
+    }
 
     return () => {
+      window.removeEventListener("load", start);
       mutationObserver.disconnect();
       observer.disconnect();
     };
