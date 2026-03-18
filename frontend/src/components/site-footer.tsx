@@ -9,7 +9,7 @@ export function SiteFooter() {
         <div className="space-y-3">
           <div className="flex items-center gap-3">
             <Image
-              src="/assets/logos/logo1.png"
+              src="/assets/logos/logo1.svg"
               alt="Escuela Especial N 23"
               width={42}
               height={42}

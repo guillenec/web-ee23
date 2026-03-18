@@ -23,7 +23,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 sm:px-8">
         <TransitionLink href="/" className="flex items-center gap-3">
           <Image
-            src="/assets/logos/logo1.png"
+            src="/assets/logos/logo1.svg"
             alt="Logo Escuela Especial N 23"
             width={44}
             height={44}
