@@ -25,6 +25,7 @@ Variables de entorno de referencia en `./.env.example`.
 Setup completo de admin, Firebase, Cloudinary e IA en:
 
 - `./firebase-admin-setup.md`
+- `./firestore.rules`
 
 ## Verificacion
 

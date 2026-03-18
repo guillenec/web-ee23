@@ -40,13 +40,13 @@ export default function Home() {
           <div className="caja1 absolute inset-0  p-2 sm:p-10 lg:p-12 w-auto h-auto flex justify-start items-center">
             <div className="caja2 w-full max-w-4xl rounded-2xl border border-white/20 bg-[rgba(0,0,0,0.18)] p-5 backdrop-blur-[1.5px] sm:p-7">
               <p className="fade-up inline-block rounded-full border border-white/35 px-3 py-1 text-xs tracking-widest uppercase">
-                Web institucional en construccion
+                Web institucional en construcción
               </p>
               <h1 className="fade-up delay-1 mt-4 max-w-3xl text-3xl leading-tight font-black md:text-5xl">
-                Inclusion, acompanamiento y trabajo territorial en toda la Region Sur.
+                Inclusión, acompañamiento y trabajo territorial en toda la Región Sur.
               </h1>
               <p className="fade-up delay-2 mt-5 max-w-2xl text-base text-white/90 md:text-lg">
-                Este sitio va a acercar informacion clara para familias, docentes e instituciones,
+                Este sitio va a acercar información clara para familias, docentes e instituciones,
                 visibilizando propuestas de la Escuela Especial N 23 desde primera infancia hasta nivel
                 secundario.
               </p>
@@ -61,7 +61,7 @@ export default function Home() {
                   href="#proximamente"
                   className="rounded-full border border-white/50 bg-white/8 px-5 py-2 text-sm font-semibold transition hover:bg-white hover:text-brand-dark"
                 >
-                  Proximas secciones
+                  Próximas secciones
                 </a>
               </div>
             </div>
@@ -77,21 +77,21 @@ export default function Home() {
             <div className="space-y-4">
               <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Sobre nosotros</p>
               <h2 className="text-2xl font-black text-brand-dark sm:text-3xl">
-                Educacion especial publica, cercana y territorial
+                Educación especial pública, cercana y territorial
               </h2>
               <p className="text-sm leading-relaxed text-brand-dark/80 sm:text-base">
-                La Escuela Especial N 23 acompana trayectorias de ninas, ninos y adolescentes con
-                apoyos especificos, priorizando inclusion, autonomia y participacion en la comunidad.
+                La Escuela Especial N 23 acompaña trayectorias de niñas, niños y adolescentes con
+                apoyos específicos, priorizando inclusión, autonomía y participación en la comunidad.
               </p>
               <p className="text-sm leading-relaxed text-brand-dark/80 sm:text-base">
-                Nuestro trabajo combina propuestas pedagogicas adaptadas, grupos reducidos y
-                articulacion permanente con familias e instituciones de Ingeniero Jacobacci y Region Sur.
+                Nuestro trabajo combina propuestas pedagógicas adaptadas, grupos reducidos y
+                articulación permanente con familias e instituciones de Ingeniero Jacobacci y Región Sur.
               </p>
               <TransitionLink
                 href="/sobre-nosotros"
                 className="inline-flex rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
               >
-                Conocer mas
+                Conocer más
               </TransitionLink>
             </div>
 
@@ -99,7 +99,7 @@ export default function Home() {
               <article className="rounded-2xl border border-brand-dark/12 bg-white/70 p-4">
                 <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Enfoque</p>
                 <p className="mt-2 text-sm text-brand-dark/80">
-                  Acompanamiento personalizado y contenidos adaptados a cada estudiante.
+                  Acompañamiento personalizado y contenidos adaptados a cada estudiante.
                 </p>
               </article>
               <article className="rounded-2xl border border-brand-dark/12 bg-white/70 p-4">
@@ -111,7 +111,7 @@ export default function Home() {
               <article className="rounded-2xl border border-brand-dark/12 bg-white/70 p-4 sm:col-span-2 lg:col-span-1">
                 <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Accesibilidad</p>
                 <p className="mt-2 text-sm text-brand-dark/80">
-                  Entorno institucional accesible y propuestas que fortalecen autonomia para la vida diaria.
+                  Entorno institucional accesible y propuestas que fortalecen autonomía para la vida diaria.
                 </p>
               </article>
             </div>
@@ -130,7 +130,7 @@ export default function Home() {
             <div className="bg-brand-main p-5 text-white">
               <h3 className="text-xl font-black">Novedades</h3>
               <p className="mt-2 text-sm text-white/90">
-                Comunicados, actos, proyectos y actividades con actualizacion periodica.
+                Comunicados, actos, proyectos y actividades con actualización periódica.
               </p>
               <TransitionLink
                 href="/novedades"
@@ -143,21 +143,21 @@ export default function Home() {
           <article className="card-lift overflow-hidden rounded-2xl bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]">
             <Image
               src="/assets/images/educacion-vial.jpg"
-              alt="Jornada de educacion vial"
+              alt="Jornada de educación vial"
               width={800}
               height={600}
               className="h-44 w-full object-cover"
             />
             <div className="bg-sky p-5 text-brand-dark">
-              <h3 className="text-xl font-black">Galeria institucional</h3>
+              <h3 className="text-xl font-black">Galería institucional</h3>
               <p className="mt-2 text-sm text-brand-dark/85">
-                Registro visual del trabajo pedagogico en escuelas y parajes de la region.
+                Registro visual del trabajo pedagógico en escuelas y parajes de la región.
               </p>
               <TransitionLink
                 href="/galeria"
                 className="mt-3 inline-block rounded-full border border-brand-dark/25 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-brand-dark hover:text-white"
               >
-                Abrir galeria
+                Abrir galería
               </TransitionLink>
             </div>
           </article>
@@ -166,13 +166,13 @@ export default function Home() {
           >
             <Image
               src="/assets/images/acto-tradicion.jpg"
-              alt="Acto escolar de tradicion"
+              alt="Acto escolar de tradición"
               width={800}
               height={600}
               className="h-44 w-full object-cover"
             />
             <div className="bg-neutral p-5 text-brand-dark">
-              <h3 className="text-xl font-black">Contacto y acompanamiento</h3>
+              <h3 className="text-xl font-black">Contacto y acompañamiento</h3>
               <p className="mt-2 text-sm text-brand-dark/85">
                 Canal directo con la escuela para familias e instituciones de la zona.
               </p>
@@ -196,7 +196,7 @@ export default function Home() {
               <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Contacto</p>
               <h2 className="text-2xl font-black text-brand-dark sm:text-3xl">Canales directos de la escuela</h2>
               <p className="text-sm leading-relaxed text-brand-dark/80 sm:text-base">
-                Si necesitas informacion institucional, acompanamiento o coordinar una visita, podes
+                Si necesitás información institucional, acompañamiento o coordinar una visita, podés
                 comunicarte con nosotros por WhatsApp, email o Facebook.
               </p>
               <p className="text-sm text-brand-dark/75">{contactoInstitucional.direccion}</p>
@@ -219,14 +219,14 @@ export default function Home() {
                   href="/contacto"
                   className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
                 >
-                  Conocer mas
+                  Conocer más
                 </TransitionLink>
               </div>
             </div>
 
             <article className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
               <iframe
-                title="Ubicacion Escuela Especial N 23"
+                title="Ubicación Escuela Especial N 23"
                 src={contactoInstitucional.mapsEmbedUrl}
                 className="h-[280px] w-full"
                 loading="lazy"
@@ -239,16 +239,16 @@ export default function Home() {
         <section data-reveal className="space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
-                Galeria institucional
-              </p>
-              <h2 className="text-2xl font-black text-brand-dark">Imagenes destacadas</h2>
+                <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
+                  Galería institucional
+                </p>
+              <h2 className="text-2xl font-black text-brand-dark">Imágenes destacadas</h2>
             </div>
             <TransitionLink
               href="/galeria"
               className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
             >
-              Ver galeria completa
+              Ver galería completa
             </TransitionLink>
           </div>
 
@@ -258,10 +258,10 @@ export default function Home() {
         <section data-reveal className="space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
-              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
-                Conexion Firestore
-              </p>
-              <h2 className="text-2xl font-black text-brand-dark">Ultimas novedades publicadas</h2>
+                <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
+                  Conexión Firestore
+                </p>
+              <h2 className="text-2xl font-black text-brand-dark">Últimas novedades publicadas</h2>
             </div>
             <TransitionLink
               href="/novedades"
@@ -280,7 +280,7 @@ export default function Home() {
               className="fade-up rounded-2xl border border-brand-dark/10 bg-surface p-4 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
               style={{ animationDelay: `${0.08 * idx}s` }}
             >
-              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Region Sur</p>
+              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Región Sur</p>
               <h2 className="mt-2 text-lg font-extrabold text-brand-dark">{localidad}</h2>
             </article>
           ))}

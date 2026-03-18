@@ -11,9 +11,9 @@ export default function SobreNosotrosPage() {
               Escuela Especial N 23 de Ingeniero Jacobacci
             </h1>
             <p className="text-sm leading-relaxed text-brand-dark/80 sm:text-base">
-              Somos una institucion publica de modalidad especial que acompana trayectorias educativas de
-              ninas, ninos y adolescentes con apoyos especificos, con una mirada de inclusion, autonomia y
-              participacion comunitaria.
+              Somos una institución pública de modalidad especial que acompaña trayectorias educativas de
+              niñas, niños y adolescentes con apoyos específicos, con una mirada de inclusión, autonomía y
+              participación comunitaria.
             </p>
           </div>
           <Image
@@ -27,24 +27,24 @@ export default function SobreNosotrosPage() {
 
         <section className="grid gap-5 md:grid-cols-3">
           <article data-reveal className="rounded-2xl border border-brand-dark/10 bg-surface p-5">
-            <h2 className="text-lg font-extrabold text-brand-dark">Mision</h2>
+            <h2 className="text-lg font-extrabold text-brand-dark">Misión</h2>
             <p className="mt-2 text-sm leading-relaxed text-brand-dark/80">
-              Garantizar el derecho a aprender con propuestas pedagogicas adaptadas y acompanamiento
+              Garantizar el derecho a aprender con propuestas pedagógicas adaptadas y acompañamiento
               personalizado para cada estudiante.
             </p>
           </article>
           <article data-reveal className="rounded-2xl border border-brand-dark/10 bg-surface p-5">
-            <h2 className="text-lg font-extrabold text-brand-dark">Vision</h2>
+            <h2 className="text-lg font-extrabold text-brand-dark">Visión</h2>
             <p className="mt-2 text-sm leading-relaxed text-brand-dark/80">
               Construir una escuela abierta a la comunidad, con puentes hacia otros espacios educativos,
-              sociales y de formacion para la vida adulta.
+              sociales y de formación para la vida adulta.
             </p>
           </article>
           <article data-reveal className="rounded-2xl border border-brand-dark/10 bg-surface p-5">
             <h2 className="text-lg font-extrabold text-brand-dark">Valores</h2>
             <p className="mt-2 text-sm leading-relaxed text-brand-dark/80">
               Respeto por la diversidad, trabajo en equipo, escucha activa de las familias y compromiso con
-              la inclusion educativa real.
+              la inclusión educativa real.
             </p>
           </article>
         </section>
@@ -53,16 +53,16 @@ export default function SobreNosotrosPage() {
           <h2 className="text-2xl font-black text-brand-dark">Nuestro enfoque de trabajo</h2>
           <ul className="mt-4 grid gap-3 text-sm text-brand-dark/85 sm:grid-cols-2">
             <li className="rounded-xl border border-brand-dark/10 bg-white/70 p-3">
-              Grupos reducidos y estrategias de ensenanza diferenciadas.
+              Grupos reducidos y estrategias de enseñanza diferenciadas.
             </li>
             <li className="rounded-xl border border-brand-dark/10 bg-white/70 p-3">
-              Articulacion permanente con familias y equipos de apoyo.
+              Articulación permanente con familias y equipos de apoyo.
             </li>
             <li className="rounded-xl border border-brand-dark/10 bg-white/70 p-3">
-              Propuestas para autonomia, comunicacion y participacion comunitaria.
+              Propuestas para autonomía, comunicación y participación comunitaria.
             </li>
             <li className="rounded-xl border border-brand-dark/10 bg-white/70 p-3">
-              Trabajo territorial en Jacobacci y localidades de Region Sur.
+              Trabajo territorial en Jacobacci y localidades de Región Sur.
             </li>
           </ul>
         </section>

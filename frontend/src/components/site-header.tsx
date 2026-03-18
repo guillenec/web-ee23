@@ -8,7 +8,7 @@ import { TransitionLink } from "@/components/transition-link";
 
 const enlaces = [
   { href: "/novedades", label: "Novedades" },
-  { href: "/galeria", label: "Galeria" },
+  { href: "/galeria", label: "Galería" },
   { href: "/sobre-nosotros", label: "Sobre nosotros" },
   { href: "/admin", label: "Admin" },
 ];
@@ -33,7 +33,7 @@ export function SiteHeader() {
             <p className="text-xs font-semibold tracking-[0.18em] text-brand-main uppercase">
               Escuela Especial N 23
             </p>
-            <p className="text-sm text-brand-dark/75">Ingeniero Jacobacci - Rio Negro</p>
+            <p className="text-sm text-brand-dark/75">Ingeniero Jacobacci - Río Negro</p>
           </div>
         </TransitionLink>
 
@@ -42,9 +42,9 @@ export function SiteHeader() {
           onClick={() => setMenuAbierto((prev) => !prev)}
           className="rounded-full border border-brand-dark/20 px-3 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white md:hidden"
           aria-expanded={menuAbierto}
-          aria-label="Abrir menu principal"
+          aria-label="Abrir menú principal"
         >
-          Menu
+          Menú
         </button>
 
         <nav className="hidden items-center gap-2 md:flex">

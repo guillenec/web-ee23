@@ -1,5 +1,5 @@
 export const contactoInstitucional = {
-  direccion: "Julio A. Roca 371, Ingeniero Jacobacci, Rio Negro, Argentina, 8418",
+  direccion: "Julio A. Roca 371, Ingeniero Jacobacci, Río Negro, Argentina, 8418",
   latitud: -41.33064454933825,
   longitud: -69.54628588619906,
   telefonoVisible: "+54 2940 43-3103",
@@ -17,9 +17,9 @@ export const contactoInstitucional = {
 export const horariosInstitucionales = [
   { dia: "Lunes", horario: "08:00-12:30 / 13:00-17:30" },
   { dia: "Martes", horario: "08:00-12:30 / 13:00-17:30" },
-  { dia: "Miercoles", horario: "08:00-12:30 / 13:00-17:30" },
+  { dia: "Miércoles", horario: "08:00-12:30 / 13:00-17:30" },
   { dia: "Jueves", horario: "08:00-12:30 / 13:00-17:30" },
   { dia: "Viernes", horario: "08:00-12:30 / 13:00-17:30" },
-  { dia: "Sabado", horario: "Cerrado" },
+  { dia: "Sábado", horario: "Cerrado" },
   { dia: "Domingo", horario: "Cerrado" },
 ];

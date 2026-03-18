@@ -39,7 +39,7 @@ export function ContactoSection({
       <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_1.1fr]">
         <article className="space-y-4 rounded-2xl border border-brand-dark/10 bg-white/70 p-5">
           <div>
-            <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Direccion</p>
+            <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Dirección</p>
             <p className="mt-1 text-sm text-brand-dark/85">{contactoInstitucional.direccion}</p>
           </div>
 
@@ -71,7 +71,7 @@ export function ContactoSection({
           <div className="rounded-xl border border-brand-dark/10 bg-white/80 p-3">
             <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Horario</p>
             <p className="mt-2 text-sm text-brand-dark/85">Lunes a viernes: 08:00-12:30 y 13:00-17:30</p>
-            <p className="text-sm text-brand-dark/85">Sabado y domingo: cerrado</p>
+            <p className="text-sm text-brand-dark/85">Sábado y domingo: cerrado</p>
 
             <details className="mt-2 rounded-lg border border-brand-dark/10 bg-white/90 p-2">
               <summary className="cursor-pointer text-sm font-semibold text-brand-dark">
@@ -91,7 +91,7 @@ export function ContactoSection({
 
         <div className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
           <iframe
-            title="Ubicacion Escuela Especial N 23"
+            title="Ubicación Escuela Especial N 23"
             src={contactoInstitucional.mapsEmbedUrl}
             className="h-[360px] w-full"
             loading="lazy"
@@ -111,7 +111,7 @@ export function ContactoSection({
         >
           <div className="flex h-full w-full flex-col items-center justify-start gap-4">
             <h2 className="text-sm font-semibold text-brand-dark/75 text-center">
-              Comunidad educativa, inclusion y acompanamiento territorial.
+              Comunidad educativa, inclusión y acompañamiento territorial.
             </h2>
             <Image
               src="/assets/images/identidad_visual.png"

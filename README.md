@@ -26,6 +26,7 @@ Referencia completa en:
 
 - `frontend/.env.example`
 - `frontend/firebase-admin-setup.md`
+- `frontend/firestore.rules`
 
 ## Desarrollo local
 

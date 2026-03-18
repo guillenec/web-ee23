@@ -29,13 +29,13 @@ export const metadata: Metadata = {
     template: "%s | Escuela Especial N 23",
   },
   description:
-    "Sitio institucional de la Escuela Especial N 23 de Ingeniero Jacobacci: novedades, galeria, contacto y acompanamiento territorial en Region Sur.",
+    "Sitio institucional de la Escuela Especial N 23 de Ingeniero Jacobacci: novedades, galería, contacto y acompañamiento territorial en Región Sur.",
   keywords: [
     "Escuela Especial N 23",
     "Ingeniero Jacobacci",
-    "educacion especial",
-    "Rio Negro",
-    "Region Sur",
+    "educación especial",
+    "Río Negro",
+    "Región Sur",
     "novedades escolares",
   ],
   alternates: {
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Escuela Especial N 23 | Ingeniero Jacobacci",
     description:
-      "Informacion institucional, novedades y canales de contacto de la Escuela Especial N 23.",
+      "Información institucional, novedades y canales de contacto de la Escuela Especial N 23.",
     url: siteUrl,
     siteName: "Escuela Especial N 23",
     locale: "es_AR",
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Escuela Especial N 23 | Ingeniero Jacobacci",
     description:
-      "Informacion institucional, novedades y canales de contacto de la Escuela Especial N 23.",
+      "Información institucional, novedades y canales de contacto de la Escuela Especial N 23.",
     images: ["/assets/images/hero-frente.jpg"],
   },
   robots: {

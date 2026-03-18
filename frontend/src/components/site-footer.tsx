@@ -18,15 +18,15 @@ export function SiteFooter() {
             <p className="text-sm font-semibold tracking-[0.12em] uppercase">Escuela Especial N 23</p>
           </div>
           <p className="max-w-md text-sm text-white/80">
-            Institucion publica de educacion especial en Ingeniero Jacobacci con acompanamiento
-            territorial en Region Sur.
+            Institución pública de educación especial en Ingeniero Jacobacci con acompañamiento
+            territorial en Región Sur.
           </p>
         </div>
 
         <div className="space-y-2 text-sm text-white/85 sm:text-right">
           <p>{contactoInstitucional.direccion}</p>
           <p>
-            Telefono: <a href={`tel:${contactoInstitucional.telefonoLink}`}>{contactoInstitucional.telefonoVisible}</a>
+            Teléfono: <a href={`tel:${contactoInstitucional.telefonoLink}`}>{contactoInstitucional.telefonoVisible}</a>
           </p>
           <p>
             Email: <a href={`mailto:${contactoInstitucional.email}`}>{contactoInstitucional.email}</a>
