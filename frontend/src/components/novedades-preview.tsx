@@ -213,8 +213,9 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
       {novedades.map((novedad, idx) => (
         <article
           key={novedad.id}
-          className="card-lift relative rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
+          className="card-lift fade-up relative rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
           data-reveal
+          style={{ animationDelay: `${0.08 * idx}s` }}
         >
           {esAdmin ? (
             <>

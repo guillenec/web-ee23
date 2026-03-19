@@ -273,17 +273,28 @@ export default function Home() {
           <NovedadesPreview cantidad={3} />
         </section>
 
-        <section id="alcance" data-reveal className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {localidades.map((localidad, idx) => (
-            <article
-              key={localidad}
-              className="fade-up rounded-2xl border border-brand-dark/10 bg-surface p-4 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
-              style={{ animationDelay: `${0.08 * idx}s` }}
-            >
-              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Región Sur</p>
-              <h2 className="mt-2 text-lg font-extrabold text-brand-dark">{localidad}</h2>
-            </article>
-          ))}
+        <section id="alcance" data-reveal className="space-y-5">
+          <div className="rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_10px_24px_rgba(75,56,49,0.07)] sm:p-7">
+            <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Alcance territorial</p>
+            <h2 className="mt-2 text-2xl font-black text-brand-dark sm:text-3xl">Región Sur y localidades acompañadas</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-brand-dark/80 sm:text-base">
+              La escuela sostiene propuestas pedagógicas y comunitarias en Jacobacci y parajes de la región,
+              en articulación con familias e instituciones locales.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {localidades.map((localidad, idx) => (
+              <article
+                key={localidad}
+                className="fade-up rounded-2xl border border-brand-dark/12 bg-surface p-4 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
+                style={{ animationDelay: `${0.08 * idx}s` }}
+              >
+                <p className="text-[11px] font-bold tracking-[0.13em] text-brand-main uppercase">Localidad</p>
+                <h3 className="mt-2 text-lg font-extrabold text-brand-dark">{localidad}</h3>
+              </article>
+            ))}
+          </div>
         </section>
       </div>
     </main>

@@ -11,9 +11,9 @@ export function SiteFooter() {
             <Image
               src="/assets/logos/logo1.svg"
               alt="Escuela Especial N 23"
-              width={42}
-              height={42}
-              className="h-10 w-10"
+              width={160}
+              height={72}
+              className="h-8 w-[72px] object-contain sm:h-9 sm:w-[82px]"
             />
             <p className="text-sm font-semibold tracking-[0.12em] uppercase">Escuela Especial N 23</p>
           </div>

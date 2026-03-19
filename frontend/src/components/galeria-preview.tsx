@@ -57,10 +57,12 @@ export function GaleriaPreview({ cantidad = 3 }: Props) {
 
   return (
     <div className="grid gap-5 md:grid-cols-3">
-      {fotos.map((foto) => (
+      {fotos.map((foto, idx) => (
         <article
           key={foto.id}
-          className="card-lift overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
+          data-reveal
+          className="card-lift fade-up overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
+          style={{ animationDelay: `${0.08 * idx}s` }}
         >
           <Image src={foto.src} alt={foto.titulo} width={900} height={700} className="h-44 w-full object-cover" />
           <div className="space-y-2 p-4">
