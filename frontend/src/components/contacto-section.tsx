@@ -114,11 +114,12 @@ export function ContactoSection({
               Comunidad educativa, inclusión y acompañamiento territorial.
             </h2>
             <Image
-              src="/assets/images/identidad_visual.png"
+              src="/assets/images/identidad%20visual_ni%C3%B1os.png"
               alt="Logo institucional Escuela Especial N 23"
               width={460}
               height={376}
-              className="w-auto h-72 md:h-[400px] rounded-lg border border-brand-dark/20 object-cover object-center"
+              loading="eager"
+              className="h-72 w-auto rounded-lg border border-brand-dark/20 object-contain object-center md:h-[400px]"
             />
           </div>
         </article>

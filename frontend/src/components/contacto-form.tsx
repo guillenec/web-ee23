@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
+import { toast } from "sonner";
 
-import { contactoInstitucional } from "@/lib/contacto";
 
 type ContactoData = {
   nombre: string;
@@ -22,6 +22,7 @@ const inicial: ContactoData = {
 export function ContactoForm() {
   const [form, setForm] = useState<ContactoData>(inicial);
   const [tocado, setTocado] = useState(false);
+  const [enviando, setEnviando] = useState(false);
 
   const errores = useMemo(() => {
     const next: Partial<Record<keyof ContactoData, string>> = {};
@@ -39,16 +40,19 @@ export function ContactoForm() {
 
   const valido = Object.keys(errores).length === 0;
 
-  const enviarPorEmail = () => {
-    const cuerpo = [
-      `Nombre: ${form.nombre.trim()}`,
-      `Email: ${form.email.trim()}`,
-      "",
-      form.mensaje.trim(),
-    ].join("\n");
+  const enviarFormulario = async () => {
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
 
-    const mailto = `mailto:${contactoInstitucional.email}?subject=${encodeURIComponent(form.asunto.trim())}&body=${encodeURIComponent(cuerpo)}`;
-    window.location.href = mailto;
+    const result = (await response.json()) as { error?: string };
+    if (!response.ok) {
+      throw new Error(result.error ?? "No se pudo enviar tu mensaje.");
+    }
   };
 
   return (
@@ -56,8 +60,7 @@ export function ContactoForm() {
       <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Formulario directo</p>
       <h3 className="mt-1 text-xl font-black text-brand-dark">Escribinos tu consulta</h3>
       <p className="mt-2 text-sm text-brand-dark/80">
-        Por ahora este formulario abre tu cliente de correo con el mensaje listo. En el siguiente paso lo
-        conectamos al mail institucional de forma automatica.
+        Completá tus datos y el mensaje se envía directo al correo del equipo institucional.
       </p>
 
       <form
@@ -66,7 +69,20 @@ export function ContactoForm() {
           event.preventDefault();
           setTocado(true);
           if (!valido) return;
-          enviarPorEmail();
+          setEnviando(true);
+          void enviarFormulario()
+            .then(() => {
+              toast.success("Mensaje enviado con éxito.");
+              setForm(inicial);
+              setTocado(false);
+            })
+            .catch((error: unknown) => {
+              const message = error instanceof Error ? error.message : "No se pudo enviar tu consulta.";
+              toast.error(message);
+            })
+            .finally(() => {
+              setEnviando(false);
+            });
         }}
       >
         <div className="grid gap-3 sm:grid-cols-2">
@@ -105,9 +121,10 @@ export function ContactoForm() {
 
         <button
           type="submit"
+          disabled={enviando}
           className="w-fit rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft"
         >
-          Preparar email
+          {enviando ? "Enviando..." : "Enviar consulta"}
         </button>
       </form>
     </article>
