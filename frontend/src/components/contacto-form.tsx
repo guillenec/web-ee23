@@ -23,6 +23,7 @@ export function ContactoForm() {
   const [form, setForm] = useState<ContactoData>(inicial);
   const [tocado, setTocado] = useState(false);
   const [enviando, setEnviando] = useState(false);
+  const [envioExitoso, setEnvioExitoso] = useState(false);
 
   const errores = useMemo(() => {
     const next: Partial<Record<keyof ContactoData, string>> = {};
@@ -72,9 +73,10 @@ export function ContactoForm() {
           setEnviando(true);
           void enviarFormulario()
             .then(() => {
-              toast.success("Mensaje enviado con éxito.");
+              toast.success("Mensaje enviado. Te responderemos a la brevedad.");
               setForm(inicial);
               setTocado(false);
+              setEnvioExitoso(true);
             })
             .catch((error: unknown) => {
               const message = error instanceof Error ? error.message : "No se pudo enviar tu consulta.";
@@ -89,7 +91,10 @@ export function ContactoForm() {
           <Campo label="Nombre" error={tocado ? errores.nombre : undefined}>
             <input
               value={form.nombre}
-              onChange={(e) => setForm((prev) => ({ ...prev, nombre: e.target.value }))}
+              onChange={(e) => {
+                setEnvioExitoso(false);
+                setForm((prev) => ({ ...prev, nombre: e.target.value }));
+              }}
               className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
             />
           </Campo>
@@ -97,7 +102,10 @@ export function ContactoForm() {
             <input
               type="email"
               value={form.email}
-              onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+              onChange={(e) => {
+                setEnvioExitoso(false);
+                setForm((prev) => ({ ...prev, email: e.target.value }));
+              }}
               className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
             />
           </Campo>
@@ -106,7 +114,10 @@ export function ContactoForm() {
         <Campo label="Asunto" error={tocado ? errores.asunto : undefined}>
           <input
             value={form.asunto}
-            onChange={(e) => setForm((prev) => ({ ...prev, asunto: e.target.value }))}
+            onChange={(e) => {
+              setEnvioExitoso(false);
+              setForm((prev) => ({ ...prev, asunto: e.target.value }));
+            }}
             className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
           />
         </Campo>
@@ -114,10 +125,19 @@ export function ContactoForm() {
         <Campo label="Mensaje" error={tocado ? errores.mensaje : undefined}>
           <textarea
             value={form.mensaje}
-            onChange={(e) => setForm((prev) => ({ ...prev, mensaje: e.target.value }))}
+            onChange={(e) => {
+              setEnvioExitoso(false);
+              setForm((prev) => ({ ...prev, mensaje: e.target.value }));
+            }}
             className="min-h-32 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
           />
         </Campo>
+
+        {envioExitoso ? (
+          <p className="rounded-xl border border-emerald-600/25 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+            Gracias por comunicarte. Recibimos tu consulta y te vamos a responder pronto.
+          </p>
+        ) : null}
 
         <button
           type="submit"

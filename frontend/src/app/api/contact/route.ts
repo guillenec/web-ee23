@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     const body = (await request.json()) as ContactoPayload;
     const nombre = body.nombre?.trim() ?? "";
     const email = body.email?.trim() ?? "";
-    const asunto = body.asunto?.trim() ?? "Consulta institucional";
+    const asunto = (body.asunto?.trim() || "Consulta institucional").replace(/\s+/g, " ");
     const mensaje = body.mensaje?.trim() ?? "";
 
     if (!nombre || !email || !mensaje) {
@@ -28,6 +28,25 @@ export async function POST(request: Request) {
 
     const origin = request.headers.get("origin") ?? undefined;
     const referer = request.headers.get("referer") ?? undefined;
+    const source = referer ?? origin ?? "No informado";
+    const fechaLocal = new Date().toLocaleString("es-AR", {
+      timeZone: "America/Argentina/Buenos_Aires",
+    });
+
+    const mensajeInstitucional = [
+      "Nueva consulta desde el sitio institucional de la Escuela Especial N 23.",
+      "",
+      `Nombre: ${nombre}`,
+      `Email de respuesta: ${email}`,
+      `Asunto: ${asunto}`,
+      "",
+      "Mensaje:",
+      mensaje,
+      "",
+      "---",
+      `Origen: ${source}`,
+      `Fecha: ${fechaLocal}`,
+    ].join("\n");
 
     const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(DESTINO_CONTACTO)}`, {
       method: "POST",
@@ -40,8 +59,10 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         name: nombre,
         email,
-        subject: `[Web EE23] ${asunto}`,
-        message: mensaje,
+        subject: `[EE23 Contacto] ${asunto}`,
+        message: mensajeInstitucional,
+        _subject: `[EE23 Contacto] ${asunto}`,
+        _template: "table",
         _captcha: "false",
       }),
       cache: "no-store",
