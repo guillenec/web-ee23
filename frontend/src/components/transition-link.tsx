@@ -7,13 +7,14 @@ import type { AnchorHTMLAttributes, MouseEvent, ReactNode } from "react";
 type Props = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   href: string;
   children: ReactNode;
+  useViewTransition?: boolean;
 };
 
 type DocumentWithTransition = Document & {
   startViewTransition?: (callback: () => void) => void;
 };
 
-export function TransitionLink({ href, className, children, ...rest }: Props) {
+export function TransitionLink({ href, className, children, useViewTransition = false, ...rest }: Props) {
   const router = useRouter();
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
@@ -32,7 +33,7 @@ export function TransitionLink({ href, className, children, ...rest }: Props) {
 
     const doc = document as DocumentWithTransition;
 
-    if (doc.startViewTransition) {
+    if (useViewTransition && doc.startViewTransition) {
       doc.startViewTransition(() => {
         router.push(href);
       });

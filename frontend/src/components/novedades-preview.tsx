@@ -250,7 +250,11 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
             </>
           ) : null}
 
-          <TransitionLink href={`/novedades/${encodeURIComponent(novedad.slug || novedad.id)}`} className="block">
+          <TransitionLink
+            href={`/novedades/${encodeURIComponent(novedad.slug || novedad.id)}`}
+            className="block"
+            useViewTransition
+          >
             {novedad.imagenPrincipal ? (
               <Image
                 src={novedad.imagenPrincipal}
