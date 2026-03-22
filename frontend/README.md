@@ -40,3 +40,8 @@ Setup completo de admin, Firebase, Cloudinary e IA en:
 npm run lint
 npm run build
 ```
+
+## Navegacion
+
+- `TransitionLink` solo usa View Transition API cuando se pasa `useViewTransition`.
+- En el estado actual, esa transicion se aplica al flujo de card de novedad hacia su detalle.
