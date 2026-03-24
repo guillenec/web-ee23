@@ -12,6 +12,7 @@ import { esEmailAdmin } from "@/lib/admin-auth";
 import { extractCloudinaryPublicId } from "@/lib/cloudinary-utils";
 import { auth, db } from "@/lib/firebase";
 import { getNovedadesPublicadas, type Novedad } from "@/lib/novedades";
+import { extractYouTubeVideoId } from "@/lib/youtube";
 
 type Props = {
   cantidad?: number;
@@ -26,6 +27,8 @@ type NovedadEditForm = {
   resumen: string;
   contenido: string;
   imagenPrincipal: string;
+  videoUrl: string;
+  youtubeVideoId: string;
   imagenPrincipalPublicId: string;
   galeria: string[];
   galeriaPublicIds: string[];
@@ -74,6 +77,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
       await postAdminAction("/api/admin/delete-novedad", { id: novedad.id });
       setNovedades((prev) => prev.filter((item) => item.id !== novedad.id));
       toast.success("Novedad eliminada con exito");
+      toast.info("Si tenia video en YouTube, borralo manualmente en YouTube Studio.");
     } catch {
       toast.error("No se pudo eliminar la novedad");
     } finally {
@@ -91,6 +95,8 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
       resumen: novedad.resumen,
       contenido: novedad.contenido,
       imagenPrincipal: novedad.imagenPrincipal,
+      videoUrl: novedad.videoUrl ?? "",
+      youtubeVideoId: novedad.youtubeVideoId ?? extractYouTubeVideoId(novedad.videoUrl ?? "") ?? "",
       imagenPrincipalPublicId: novedad.imagenPrincipalPublicId ?? extractCloudinaryPublicId(novedad.imagenPrincipal) ?? "",
       galeria: novedad.galeria,
       galeriaPublicIds: novedad.galeriaPublicIds ?? novedad.galeria.map((item) => extractCloudinaryPublicId(item) ?? ""),
@@ -118,6 +124,8 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
         resumen: editando.resumen.trim(),
         contenido: editando.contenido.trim(),
         imagenPrincipal: editando.imagenPrincipal.trim(),
+        videoUrl: editando.videoUrl.trim(),
+        youtubeVideoId: editando.youtubeVideoId.trim() || extractYouTubeVideoId(editando.videoUrl.trim()) || "",
         imagenPrincipalPublicId:
           editando.imagenPrincipalPublicId || extractCloudinaryPublicId(editando.imagenPrincipal) || "",
         galeria: editando.galeria,
@@ -150,6 +158,8 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 resumen: editando.resumen.trim(),
                 contenido: editando.contenido.trim(),
                 imagenPrincipal: editando.imagenPrincipal.trim(),
+                videoUrl: editando.videoUrl.trim(),
+                youtubeVideoId: editando.youtubeVideoId.trim() || extractYouTubeVideoId(editando.videoUrl.trim()) || "",
                 imagenPrincipalPublicId:
                   editando.imagenPrincipalPublicId || extractCloudinaryPublicId(editando.imagenPrincipal) || "",
                 galeria: editando.galeria,
@@ -328,6 +338,22 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 }
                 className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
                 placeholder="Imagen URL"
+              />
+              <input
+                value={editando.videoUrl}
+                onChange={(e) =>
+                  setEditando((p) =>
+                    p
+                      ? {
+                          ...p,
+                          videoUrl: e.target.value,
+                          youtubeVideoId: extractYouTubeVideoId(e.target.value) ?? p.youtubeVideoId,
+                        }
+                      : p,
+                  )
+                }
+                className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm sm:col-span-2"
+                placeholder="Video YouTube (opcional)"
               />
             </div>
             <textarea value={editando.resumen} onChange={(e) => setEditando((p) => (p ? { ...p, resumen: e.target.value } : p))} className="mt-3 min-h-20 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" placeholder="Resumen" />

@@ -18,6 +18,8 @@ export type Novedad = {
   resumen: string;
   contenido: string;
   imagenPrincipal: string;
+  videoUrl?: string;
+  youtubeVideoId?: string;
   imagenPrincipalPublicId?: string;
   galeria: string[];
   galeriaPublicIds?: string[];
@@ -33,6 +35,8 @@ type NovedadFirestore = {
   resumen?: string;
   contenido?: string;
   imagenPrincipal?: string;
+  videoUrl?: string;
+  youtubeVideoId?: string;
   imagenPrincipalPublicId?: string;
   galeria?: string[];
   galeriaPublicIds?: string[];
@@ -63,6 +67,8 @@ const mapNovedad = (id: string, data: NovedadFirestore): Novedad => {
     resumen: data.resumen ?? "",
     contenido: data.contenido ?? "",
     imagenPrincipal: data.imagenPrincipal ?? "",
+    videoUrl: data.videoUrl?.trim() || "",
+    youtubeVideoId: data.youtubeVideoId?.trim() || "",
     imagenPrincipalPublicId: data.imagenPrincipalPublicId,
     galeria: data.galeria ?? [],
     galeriaPublicIds: data.galeriaPublicIds ?? [],

@@ -16,6 +16,8 @@ type NovedadAdmin = {
   resumen: string;
   contenido: string;
   imagenPrincipal: string;
+  videoUrl: string;
+  youtubeVideoId: string;
   imagenPrincipalPublicId: string;
   galeria: string[];
   galeriaPublicIds: string[];
@@ -82,6 +84,7 @@ export default function AdminNovedadesVerPage() {
       setEliminandoId(id);
       await postAdminAction("/api/admin/delete-novedad", { id });
       toast.success("Novedad eliminada");
+      toast.info("Si tenia video en YouTube, borralo manualmente en YouTube Studio.");
       await cargarNovedades();
     } catch {
       toast.error("No se pudo eliminar la novedad");
@@ -196,6 +199,7 @@ function NovedadCard({
       <p className="text-sm font-bold text-brand-dark">{novedad.titulo}</p>
       <p className="mt-1 text-xs text-brand-dark/70">Slug: {novedad.slug}</p>
       <p className="mt-1 text-xs text-brand-dark/75 line-clamp-2">{novedad.resumen || "Sin resumen"}</p>
+      {novedad.videoUrl ? <p className="mt-1 text-xs text-brand-dark/70">Incluye video de YouTube</p> : null}
 
       <div className="mt-3 flex flex-wrap gap-2">
         <button

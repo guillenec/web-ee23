@@ -7,6 +7,7 @@ Aplicacion Next.js (App Router) del sitio institucional.
 - Next.js 16
 - Firebase (Auth + Firestore)
 - Cloudinary (media)
+- YouTube Data API v3 (subida de video desde admin via OAuth)
 - OpenRouter (asistente IA en admin)
 - Resend (envio de formulario de contacto)
 
@@ -22,6 +23,13 @@ Abrir `http://localhost:3000`.
 ## Configuracion
 
 Variables de entorno de referencia en `./.env.example`.
+
+Para subida de video a YouTube configurar:
+
+- `YOUTUBE_CLIENT_ID`
+- `YOUTUBE_CLIENT_SECRET`
+- `YOUTUBE_REDIRECT_URI`
+- `YOUTUBE_REFRESH_TOKEN`
 
 Para el formulario de contacto configurar:
 

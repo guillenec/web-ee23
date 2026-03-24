@@ -14,6 +14,8 @@ type NovedadAdminDTO = {
   resumen: string;
   contenido: string;
   imagenPrincipal: string;
+  videoUrl: string;
+  youtubeVideoId: string;
   imagenPrincipalPublicId: string;
   galeria: string[];
   galeriaPublicIds: string[];
@@ -54,6 +56,8 @@ export async function GET(request: NextRequest) {
           resumen?: string;
           contenido?: string;
           imagenPrincipal?: string;
+          videoUrl?: string;
+          youtubeVideoId?: string;
           imagenPrincipalPublicId?: string;
           galeria?: string[];
           galeriaPublicIds?: string[];
@@ -73,6 +77,8 @@ export async function GET(request: NextRequest) {
           resumen: data.resumen ?? "",
           contenido: data.contenido ?? "",
           imagenPrincipal: data.imagenPrincipal ?? "",
+          videoUrl: data.videoUrl?.trim() ?? "",
+          youtubeVideoId: data.youtubeVideoId?.trim() ?? "",
           imagenPrincipalPublicId: data.imagenPrincipalPublicId ?? "",
           galeria: Array.isArray(data.galeria) ? data.galeria : [],
           galeriaPublicIds: Array.isArray(data.galeriaPublicIds) ? data.galeriaPublicIds : [],

@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { uploadImageWithMeta } from "@/lib/cloudinary";
 import { extractCloudinaryPublicId } from "@/lib/cloudinary-utils";
 import { auth, db } from "@/lib/firebase";
+import { uploadVideoFromAdmin } from "@/lib/youtube-admin-client";
+import { extractYouTubeVideoId, isValidYouTubeUrl } from "@/lib/youtube";
 
 type FormData = {
   titulo: string;
@@ -16,6 +18,8 @@ type FormData = {
   resumen: string;
   contenido: string;
   imagenPrincipal: string;
+  videoUrl: string;
+  youtubeVideoId: string;
   imagenPrincipalPublicId: string;
   galeria: string[];
   galeriaPublicIds: string[];
@@ -34,6 +38,8 @@ const inicial: FormData = {
   resumen: "",
   contenido: "",
   imagenPrincipal: "",
+  videoUrl: "",
+  youtubeVideoId: "",
   imagenPrincipalPublicId: "",
   galeria: [],
   galeriaPublicIds: [],
@@ -53,6 +59,7 @@ export default function AdminNovedadesCrearPage() {
   const [galeriaInput, setGaleriaInput] = useState("");
   const [subiendoPrincipal, setSubiendoPrincipal] = useState(false);
   const [subiendoGaleria, setSubiendoGaleria] = useState(false);
+  const [subiendoVideo, setSubiendoVideo] = useState(false);
   const [tonoIa, setTonoIa] = useState<TonoIa>("moderado");
   const [modoAplicacionIa, setModoAplicacionIa] = useState<ModoAplicacionIa>("mantener");
   const [mejorandoTituloIa, setMejorandoTituloIa] = useState(false);
@@ -106,6 +113,9 @@ export default function AdminNovedadesCrearPage() {
     if (!form.imagenPrincipal.trim()) {
       next.imagenPrincipal = "La URL de imagen principal es obligatoria.";
     }
+    if (form.videoUrl.trim() && !isValidYouTubeUrl(form.videoUrl.trim())) {
+      next.videoUrl = "Ingresa un enlace valido de YouTube (watch, shorts, embed o youtu.be).";
+    }
 
     return next;
   }, [form]);
@@ -122,6 +132,8 @@ export default function AdminNovedadesCrearPage() {
       categoria: form.categoria.trim(),
       autor: form.autor.trim(),
       imagenPrincipal: form.imagenPrincipal.trim(),
+      videoUrl: form.videoUrl.trim(),
+      youtubeVideoId: form.youtubeVideoId.trim(),
       galeria: form.galeria.filter(Boolean),
       fecha: form.fecha,
     };
@@ -226,6 +238,34 @@ export default function AdminNovedadesCrearPage() {
     }
   };
 
+  const onSubirVideoYoutube = async (file: File | null) => {
+    if (!file) return;
+
+    try {
+      setSubiendoVideo(true);
+      setGuardadoError(null);
+      const upload = await uploadVideoFromAdmin({
+        file,
+        titulo: form.titulo.trim() || "Video institucional - Escuela Especial N 23",
+        descripcion: form.resumen.trim() || "Video institucional cargado desde el panel admin.",
+        privacidad: "unlisted",
+      });
+
+      setForm((prev) => ({
+        ...prev,
+        videoUrl: upload.videoUrl,
+        youtubeVideoId: upload.videoId,
+      }));
+      toast.success("Video subido a YouTube");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "No se pudo subir video a YouTube";
+      setGuardadoError(message);
+      toast.error("Error al subir video");
+    } finally {
+      setSubiendoVideo(false);
+    }
+  };
+
   const guardarEnFirebase = async () => {
     setTocado(true);
     setGuardadoOk(null);
@@ -249,6 +289,8 @@ export default function AdminNovedadesCrearPage() {
         resumen: form.resumen.trim(),
         contenido: form.contenido.trim(),
         imagenPrincipal: form.imagenPrincipal.trim(),
+        videoUrl: form.videoUrl.trim(),
+        youtubeVideoId: form.youtubeVideoId.trim() || extractYouTubeVideoId(form.videoUrl.trim()) || "",
         imagenPrincipalPublicId:
           form.imagenPrincipalPublicId || extractCloudinaryPublicId(form.imagenPrincipal) || "",
         galeria: form.galeria.filter(Boolean),
@@ -563,6 +605,48 @@ export default function AdminNovedadesCrearPage() {
                     }}
                   />
                 </label>
+              </div>
+            </Campo>
+
+            <Campo label="Video de YouTube (opcional)" error={tocado ? errores.videoUrl : ""}>
+              <div className="space-y-2">
+                <input
+                  value={form.videoUrl}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setForm((prev) => ({
+                      ...prev,
+                      videoUrl: value,
+                      youtubeVideoId: extractYouTubeVideoId(value) ?? prev.youtubeVideoId,
+                    }));
+                  }}
+                  className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                  placeholder="https://www.youtube.com/watch?v=..."
+                />
+                <label className="inline-block cursor-pointer rounded-full border border-brand-main/35 bg-brand-main/8 px-3 py-1.5 text-xs font-semibold text-brand-main transition hover:bg-brand-main hover:text-white">
+                  {subiendoVideo ? "Subiendo video..." : "Subir video desde equipo"}
+                  <input
+                    type="file"
+                    accept="video/*"
+                    className="hidden"
+                    disabled={subiendoVideo}
+                    onChange={(e) => {
+                      void onSubirVideoYoutube(e.target.files?.[0] ?? null);
+                      e.currentTarget.value = "";
+                    }}
+                  />
+                </label>
+                <a
+                  href="/api/admin/youtube/oauth/start"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="ml-2 inline-block rounded-full border border-brand-dark/20 px-3 py-1.5 text-xs font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                >
+                  Conectar YouTube (generar refresh token)
+                </a>
+                <p className="text-xs text-brand-dark/65">
+                  Se sube al canal YouTube conectado. Al eliminar la novedad, recuerda borrar el video manualmente en YouTube Studio.
+                </p>
               </div>
             </Campo>
 

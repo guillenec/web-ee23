@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { TransitionLink } from "@/components/transition-link";
 import { getNovedadPublicadaPorSlug, type Novedad } from "@/lib/novedades";
+import { toYouTubeEmbedUrl } from "@/lib/youtube";
 
 export default function NovedadDetallePage() {
   const params = useParams<{ slug: string }>();
@@ -53,6 +54,20 @@ export default function NovedadDetallePage() {
   const imagenesGaleria = useMemo(() => {
     if (!novedad) return [];
     return (novedad.galeria ?? []).map((item) => item.trim()).filter(Boolean);
+  }, [novedad]);
+
+  const videoEmbedUrl = useMemo(() => {
+    if (!novedad) return null;
+
+    if (novedad.videoUrl) {
+      return toYouTubeEmbedUrl(novedad.videoUrl);
+    }
+
+    if (novedad.youtubeVideoId) {
+      return `https://www.youtube.com/embed/${novedad.youtubeVideoId}`;
+    }
+
+    return null;
   }, [novedad]);
 
   return (
@@ -128,6 +143,25 @@ export default function NovedadDetallePage() {
                 <p>Sin contenido ampliado para esta novedad.</p>
               )}
             </div>
+
+            {videoEmbedUrl ? (
+              <section className="mt-8 space-y-3">
+                <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Video relacionado</p>
+                <div className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-black shadow-[0_8px_24px_rgba(0,0,0,0.18)]">
+                  <div className="relative aspect-video w-full">
+                    <iframe
+                      src={videoEmbedUrl}
+                      title={`Video de ${novedad.titulo}`}
+                      className="h-full w-full"
+                      loading="lazy"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              </section>
+            ) : null}
 
             {imagenesGaleria.length ? (
               <section className="mt-8 space-y-3">

@@ -25,6 +25,10 @@ En Vercel y local, definir:
 - `OPENROUTER_API_KEY` (solo server)
 - `OPENROUTER_MODEL` (solo server)
 - `OPENROUTER_BASE_URL` (opcional; por defecto `https://openrouter.ai/api/v1`)
+- `YOUTUBE_CLIENT_ID` (solo server)
+- `YOUTUBE_CLIENT_SECRET` (solo server)
+- `YOUTUBE_REDIRECT_URI` (solo server)
+- `YOUTUBE_REFRESH_TOKEN` (solo server; token offline del canal conectado)
 
 Ejemplo:
 
@@ -69,6 +73,7 @@ Aplicacion manual en Firebase Console:
 - Si el correo no esta en whitelist: se bloquea acceso
 - Carga de novedades: formulario guiado con validacion + guardado directo en Firestore
 - Carga de imagenes: URL manual o subida local a Cloudinary (principal y galeria)
+- Carga de video: URL manual de YouTube o subida desde equipo a canal YouTube conectado (OAuth)
 - Persistencia de borrador: `localStorage` para evitar perdida al recargar
 
 ### Troubleshooting rapido: no se listan pendientes/publicadas
@@ -89,11 +94,15 @@ Rutas:
 - `POST /api/admin/delete-galeria-item`
 - `POST /api/admin/ai-novedad-suggest`
 - `POST /api/admin/ai-galeria-suggest`
+- `GET /api/admin/youtube/oauth/start`
+- `GET /api/admin/youtube/oauth/callback`
+- `POST /api/admin/youtube/upload`
 
 Notas:
 
 - Requieren `Authorization: Bearer <Firebase ID Token>`.
 - Validan whitelist admin por email (`NEXT_PUBLIC_ADMIN_EMAILS` o `ADMIN_EMAILS`).
 - Borran assets en Cloudinary y luego eliminan documento en Firestore.
+- Al eliminar novedades con video YouTube, se muestra recordatorio para borrado manual en YouTube Studio.
 - Para nuevas cargas se guarda metadata de media (`publicId`) para borrado exacto.
 - Para verificar token en servidor se inicializa Firebase Admin con variables `FIREBASE_ADMIN_*`.
