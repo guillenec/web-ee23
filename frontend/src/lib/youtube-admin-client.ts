@@ -19,32 +19,54 @@ export async function uploadVideoFromAdmin({
   }
 
   const idToken = await user.getIdToken();
-  const form = new FormData();
-  form.append("file", file);
-  form.append("titulo", titulo);
-  form.append("descripcion", descripcion);
-  form.append("privacidad", privacidad);
-
   const response = await fetch("/api/admin/youtube/upload", {
     method: "POST",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${idToken}`,
     },
-    body: form,
+    body: JSON.stringify({
+      titulo,
+      descripcion,
+      privacidad,
+      contentType: file.type || "video/mp4",
+      contentLength: file.size,
+    }),
   });
 
   const data = (await response.json()) as {
     error?: string;
-    videoId?: string;
-    videoUrl?: string;
+    uploadUrl?: string;
   };
 
-  if (!response.ok || !data.videoId || !data.videoUrl) {
-    throw new Error(data.error || "No se pudo subir video a YouTube");
+  if (!response.ok || !data.uploadUrl) {
+    throw new Error(data.error || "No se pudo iniciar la carga de video");
+  }
+
+  const uploadResponse = await fetch(data.uploadUrl, {
+    method: "PUT",
+    headers: {
+      "Content-Type": file.type || "video/mp4",
+    },
+    body: file,
+  });
+
+  const uploadText = await uploadResponse.text();
+  let uploadData: { id?: string; error?: { message?: string } } = {};
+  if (uploadText) {
+    try {
+      uploadData = JSON.parse(uploadText) as { id?: string; error?: { message?: string } };
+    } catch {
+      // ignore parse error
+    }
+  }
+
+  if (!uploadResponse.ok || !uploadData.id) {
+    throw new Error(uploadData.error?.message || "No se pudo completar la carga del video");
   }
 
   return {
-    videoId: data.videoId,
-    videoUrl: data.videoUrl,
+    videoId: uploadData.id,
+    videoUrl: `https://www.youtube.com/watch?v=${uploadData.id}`,
   };
 }

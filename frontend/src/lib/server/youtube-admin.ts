@@ -15,6 +15,14 @@ type UploadVideoInput = {
   privacyStatus: "private" | "public" | "unlisted";
 };
 
+type StartResumableUploadInput = {
+  title: string;
+  description: string;
+  privacyStatus: "private" | "public" | "unlisted";
+  contentType: string;
+  contentLength: number;
+};
+
 function getYouTubeConfig() {
   const clientId = process.env.YOUTUBE_CLIENT_ID ?? "";
   const clientSecret = process.env.YOUTUBE_CLIENT_SECRET ?? "";
@@ -97,6 +105,48 @@ async function getAccessTokenFromRefreshToken(): Promise<string> {
   }
 
   return data.access_token;
+}
+
+export async function startYouTubeResumableUpload({
+  title,
+  description,
+  privacyStatus,
+  contentType,
+  contentLength,
+}: StartResumableUploadInput): Promise<string> {
+  const accessToken = await getAccessTokenFromRefreshToken();
+  const uploadStart = await fetch("https://www.googleapis.com/upload/youtube/v3/videos?part=snippet,status&uploadType=resumable", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json; charset=UTF-8",
+      "X-Upload-Content-Type": contentType || "video/mp4",
+      "X-Upload-Content-Length": String(contentLength),
+    },
+    body: JSON.stringify({
+      snippet: {
+        title,
+        description,
+        categoryId: "22",
+      },
+      status: {
+        privacyStatus,
+      },
+    }),
+    cache: "no-store",
+  });
+
+  if (!uploadStart.ok) {
+    const text = await uploadStart.text();
+    throw new Error(`YouTube rechazo inicio de carga: ${text || uploadStart.statusText}`);
+  }
+
+  const uploadUrl = uploadStart.headers.get("location");
+  if (!uploadUrl) {
+    throw new Error("YouTube no devolvio URL de carga");
+  }
+
+  return uploadUrl;
 }
 
 export async function uploadVideoToYouTube({
