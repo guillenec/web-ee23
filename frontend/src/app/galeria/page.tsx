@@ -180,7 +180,7 @@ export default function GaleriaPage() {
               key={opcion}
               type="button"
               onClick={() => setFiltro(opcion)}
-              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+              className={`chip-hover rounded-full px-4 py-2 text-sm font-semibold transition ${
                 filtro === opcion
                   ? "bg-brand-main text-white"
                   : "border border-brand-dark/15 bg-surface text-brand-dark hover:bg-brand-dark/5"
@@ -206,14 +206,14 @@ export default function GaleriaPage() {
             <article
               key={foto.id}
               data-reveal
-              className="card-lift relative overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
+              className="card-lift group relative overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
             >
               {esAdmin ? (
                 <>
                   <button
                     type="button"
                     onClick={() => abrirEdicion(foto)}
-                    className="absolute top-3 right-14 z-10 rounded-full border border-brand-main/50 bg-white/90 p-2 text-brand-main transition hover:bg-brand-main hover:text-white"
+                    className="chip-hover absolute top-3 right-14 z-10 rounded-full border border-brand-main/50 bg-white/90 p-2 text-brand-main transition hover:bg-brand-main hover:text-white"
                     aria-label={`Editar imagen ${foto.titulo}`}
                     title="Editar imagen"
                   >
@@ -226,7 +226,7 @@ export default function GaleriaPage() {
                     type="button"
                     onClick={() => void eliminarFoto(foto)}
                     disabled={eliminandoId === foto.id}
-                    className="absolute top-3 right-3 z-10 rounded-full border border-red-400/70 bg-white/90 p-2 text-red-700 transition hover:bg-red-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                    className="chip-hover absolute top-3 right-3 z-10 rounded-full border border-red-400/70 bg-white/90 p-2 text-red-700 transition hover:bg-red-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                     aria-label={`Eliminar imagen ${foto.titulo}`}
                     title="Eliminar imagen"
                   >
@@ -251,7 +251,7 @@ export default function GaleriaPage() {
                   alt={foto.titulo}
                   width={1000}
                   height={700}
-                  className="h-52 w-full object-cover"
+                  className="h-52 w-full object-cover transition duration-500 ease-out group-hover:scale-[1.05]"
                 />
               </button>
               <div className="space-y-2 p-4">

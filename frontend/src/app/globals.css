@@ -126,6 +126,52 @@ h4 {
   box-shadow: 0 16px 34px rgba(75, 56, 49, 0.16);
 }
 
+.surface-hover {
+  transition: transform 240ms ease, box-shadow 240ms ease, border-color 240ms ease;
+}
+
+.surface-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(202, 66, 19, 0.32);
+  box-shadow: 0 14px 30px rgba(75, 56, 49, 0.14);
+}
+
+:root[data-theme="dark"] .surface-hover:hover {
+  border-color: rgba(232, 133, 56, 0.5);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.38);
+}
+
+.chip-hover {
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.chip-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 18px rgba(75, 56, 49, 0.16);
+}
+
+.link-sweep {
+  position: relative;
+}
+
+.link-sweep::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1.5px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+  background: currentColor;
+  opacity: 0.7;
+}
+
+.link-sweep:hover::after {
+  transform: scaleX(1);
+}
+
 .page-enter {
   animation: page-enter 520ms ease both;
 }
@@ -227,6 +273,8 @@ h4 {
   .lightbox-fade,
   .lightbox-zoom,
   .page-enter,
+  .surface-hover,
+  .chip-hover,
   [data-reveal],
   [data-reveal].is-visible {
     animation: none !important;

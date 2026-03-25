@@ -40,7 +40,7 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setMenuAbierto((prev) => !prev)}
-          className="rounded-full border border-brand-dark/20 px-3 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white md:hidden"
+          className="chip-hover rounded-full border border-brand-dark/20 px-3 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white md:hidden"
           aria-expanded={menuAbierto}
           aria-label="Abrir menú principal"
         >
@@ -55,7 +55,7 @@ export function SiteHeader() {
               <TransitionLink
                 key={enlace.href}
                 href={enlace.href}
-                className={`rounded-full px-3 py-2 text-sm font-semibold transition ${activa
+                className={`chip-hover rounded-full px-3 py-2 text-sm font-semibold transition ${activa
                     ? "bg-brand-main text-white"
                     : "text-brand-dark/80 hover:bg-brand-dark/10 hover:text-brand-dark"
                   }`}
@@ -66,7 +66,7 @@ export function SiteHeader() {
           })}
           <TransitionLink
             href="/contacto"
-            className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${contactoActivo
+            className={`chip-hover rounded-full border px-4 py-2 text-sm font-semibold transition ${contactoActivo
                 ? "border-brand-main bg-brand-main text-white"
                 : "border-brand-main text-brand-main hover:bg-brand-main hover:text-white"
               }`}
@@ -87,7 +87,7 @@ export function SiteHeader() {
                   key={`mobile-${enlace.href}`}
                   href={enlace.href}
                   onClick={() => setMenuAbierto(false)}
-                  className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${activa
+                  className={`chip-hover rounded-xl px-4 py-2 text-sm font-semibold transition ${activa
                       ? "bg-brand-main text-white"
                       : "text-brand-dark/80 hover:bg-brand-dark/10 hover:text-brand-dark"
                     }`}
@@ -100,7 +100,7 @@ export function SiteHeader() {
             <TransitionLink
               href="/contacto"
               onClick={() => setMenuAbierto(false)}
-              className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${contactoActivo
+              className={`chip-hover rounded-xl border px-4 py-2 text-sm font-semibold transition ${contactoActivo
                   ? "border-brand-main bg-brand-main text-white"
                   : "border-brand-main text-brand-main hover:bg-brand-main hover:text-white"
                 }`}

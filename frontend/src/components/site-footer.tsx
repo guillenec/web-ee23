@@ -26,10 +26,16 @@ export function SiteFooter() {
         <div className="space-y-2 text-sm text-white/85 sm:text-right">
           <p>{contactoInstitucional.direccion}</p>
           <p>
-            Teléfono: <a href={`tel:${contactoInstitucional.telefonoLink}`}>{contactoInstitucional.telefonoVisible}</a>
+            Teléfono:{" "}
+            <a className="link-sweep" href={`tel:${contactoInstitucional.telefonoLink}`}>
+              {contactoInstitucional.telefonoVisible}
+            </a>
           </p>
           <p>
-            Email: <a href={`mailto:${contactoInstitucional.email}`}>{contactoInstitucional.email}</a>
+            Email:{" "}
+            <a className="link-sweep" href={`mailto:${contactoInstitucional.email}`}>
+              {contactoInstitucional.email}
+            </a>
           </p>
           <p>Comunidad educativa 2026</p>
         </div>

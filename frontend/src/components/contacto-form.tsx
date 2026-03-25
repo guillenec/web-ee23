@@ -57,7 +57,7 @@ export function ContactoForm() {
   };
 
   return (
-    <article data-reveal className="h-full rounded-2xl border border-brand-dark/10 bg-white/70 p-5">
+    <article data-reveal className="surface-hover h-full rounded-2xl border border-brand-dark/10 bg-white/70 p-5">
       <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Formulario directo</p>
       <h3 className="mt-1 text-xl font-black text-brand-dark">Escribinos tu consulta</h3>
       <p className="mt-2 text-sm text-brand-dark/80">
@@ -95,7 +95,7 @@ export function ContactoForm() {
                 setEnvioExitoso(false);
                 setForm((prev) => ({ ...prev, nombre: e.target.value }));
               }}
-              className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+              className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm transition hover:border-brand-main/45 focus:border-brand-main/60 focus:outline-none"
             />
           </Campo>
           <Campo label="Email" error={tocado ? errores.email : undefined}>
@@ -106,7 +106,7 @@ export function ContactoForm() {
                 setEnvioExitoso(false);
                 setForm((prev) => ({ ...prev, email: e.target.value }));
               }}
-              className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+              className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm transition hover:border-brand-main/45 focus:border-brand-main/60 focus:outline-none"
             />
           </Campo>
         </div>
@@ -118,7 +118,7 @@ export function ContactoForm() {
               setEnvioExitoso(false);
               setForm((prev) => ({ ...prev, asunto: e.target.value }));
             }}
-            className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+            className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm transition hover:border-brand-main/45 focus:border-brand-main/60 focus:outline-none"
           />
         </Campo>
 
@@ -129,7 +129,7 @@ export function ContactoForm() {
               setEnvioExitoso(false);
               setForm((prev) => ({ ...prev, mensaje: e.target.value }));
             }}
-            className="min-h-32 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+            className="min-h-32 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm transition hover:border-brand-main/45 focus:border-brand-main/60 focus:outline-none"
           />
         </Campo>
 
@@ -142,7 +142,7 @@ export function ContactoForm() {
         <button
           type="submit"
           disabled={enviando}
-          className="w-fit rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft"
+          className="chip-hover w-fit rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft"
         >
           {enviando ? "Enviando..." : "Enviar consulta"}
         </button>

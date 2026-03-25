@@ -71,7 +71,7 @@ export default function Home() {
         <section
           id="sobre-nosotros"
           data-reveal
-          className="rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8"
+          className="surface-hover rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8"
         >
           <div className="grid gap-7 lg:grid-cols-[1.3fr_1fr]">
             <div className="space-y-4">
@@ -89,26 +89,26 @@ export default function Home() {
               </p>
               <TransitionLink
                 href="/sobre-nosotros"
-                className="inline-flex rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                className="chip-hover inline-flex rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
               >
                 Conocer más
               </TransitionLink>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              <article className="rounded-2xl border border-brand-dark/12 bg-white/70 p-4">
+              <article className="surface-hover rounded-2xl border border-brand-dark/12 bg-white/70 p-4">
                 <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Enfoque</p>
                 <p className="mt-2 text-sm text-brand-dark/80">
                   Acompañamiento personalizado y contenidos adaptados a cada estudiante.
                 </p>
               </article>
-              <article className="rounded-2xl border border-brand-dark/12 bg-white/70 p-4">
+              <article className="surface-hover rounded-2xl border border-brand-dark/12 bg-white/70 p-4">
                 <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Comunidad</p>
                 <p className="mt-2 text-sm text-brand-dark/80">
                   Trabajo conjunto con familias, equipos y redes locales para sostener cada proceso.
                 </p>
               </article>
-              <article className="rounded-2xl border border-brand-dark/12 bg-white/70 p-4 sm:col-span-2 lg:col-span-1">
+              <article className="surface-hover rounded-2xl border border-brand-dark/12 bg-white/70 p-4 sm:col-span-2 lg:col-span-1">
                 <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Accesibilidad</p>
                 <p className="mt-2 text-sm text-brand-dark/80">
                   Entorno institucional accesible y propuestas que fortalecen autonomía para la vida diaria.
@@ -132,10 +132,10 @@ export default function Home() {
               <p className="mt-2 text-sm text-white/90">
                 Comunicados, actos, proyectos y actividades con actualización periódica.
               </p>
-              <TransitionLink
-                href="/novedades"
-                className="mt-3 inline-block rounded-full border border-white/45 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-white hover:text-brand-dark"
-              >
+                <TransitionLink
+                  href="/novedades"
+                  className="chip-hover mt-3 inline-block rounded-full border border-white/45 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-white hover:text-brand-dark"
+                >
                 Ver novedades
               </TransitionLink>
             </div>
@@ -153,10 +153,10 @@ export default function Home() {
               <p className="mt-2 text-sm text-brand-dark/85">
                 Registro visual del trabajo pedagógico en escuelas y parajes de la región.
               </p>
-              <TransitionLink
-                href="/galeria"
-                className="mt-3 inline-block rounded-full border border-brand-dark/25 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-brand-dark hover:text-white"
-              >
+                <TransitionLink
+                  href="/galeria"
+                  className="chip-hover mt-3 inline-block rounded-full border border-brand-dark/25 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-brand-dark hover:text-white"
+                >
                 Abrir galería
               </TransitionLink>
             </div>
@@ -176,10 +176,10 @@ export default function Home() {
               <p className="mt-2 text-sm text-brand-dark/85">
                 Canal directo con la escuela para familias e instituciones de la zona.
               </p>
-              <TransitionLink
-                href="/contacto"
-                className="mt-3 inline-block rounded-full border border-brand-dark/25 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-brand-dark hover:text-white"
-              >
+                <TransitionLink
+                  href="/contacto"
+                  className="chip-hover mt-3 inline-block rounded-full border border-brand-dark/25 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-brand-dark hover:text-white"
+                >
                 Ir a contacto
               </TransitionLink>
             </div>
@@ -189,7 +189,7 @@ export default function Home() {
         <section
           id="contacto"
           data-reveal
-          className="rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8"
+          className="surface-hover rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8"
         >
           <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
             <div className="space-y-4">
@@ -205,26 +205,26 @@ export default function Home() {
                   href={contactoInstitucional.whatsappUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="rounded-full border border-brand-main/35 bg-brand-main/8 px-4 py-2 text-sm font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
+                  className="chip-hover rounded-full border border-brand-main/35 bg-brand-main/8 px-4 py-2 text-sm font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
                 >
                   WhatsApp
                 </a>
                 <a
                   href={`mailto:${contactoInstitucional.email}`}
-                  className="rounded-full border border-brand-dark/20 bg-white px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                  className="chip-hover rounded-full border border-brand-dark/20 bg-white px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
                 >
                   Email
                 </a>
                 <TransitionLink
                   href="/contacto"
-                  className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                  className="chip-hover rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
                 >
                   Conocer más
                 </TransitionLink>
               </div>
             </div>
 
-            <article className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
+            <article className="surface-hover overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
               <iframe
                 title="Ubicación Escuela Especial N 23"
                 src={contactoInstitucional.mapsEmbedUrl}
@@ -246,7 +246,7 @@ export default function Home() {
             </div>
             <TransitionLink
               href="/galeria"
-              className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+              className="chip-hover rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
             >
               Ver galería completa
             </TransitionLink>
@@ -265,7 +265,7 @@ export default function Home() {
             </div>
             <TransitionLink
               href="/novedades"
-              className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+              className="chip-hover rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
             >
               Ver todas
             </TransitionLink>
@@ -274,7 +274,7 @@ export default function Home() {
         </section>
 
         <section id="alcance" data-reveal className="space-y-5">
-          <div className="rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_10px_24px_rgba(75,56,49,0.07)] sm:p-7">
+          <div className="surface-hover rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_10px_24px_rgba(75,56,49,0.07)] sm:p-7">
             <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Alcance territorial</p>
             <h2 className="mt-2 text-2xl font-black text-brand-dark sm:text-3xl">Región Sur y localidades acompañadas</h2>
             <p className="mt-2 max-w-3xl text-sm leading-relaxed text-brand-dark/80 sm:text-base">
@@ -287,7 +287,7 @@ export default function Home() {
             {localidades.map((localidad, idx) => (
               <article
                 key={localidad}
-                className="fade-up rounded-2xl border border-brand-dark/12 bg-surface p-4 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
+                className="surface-hover fade-up rounded-2xl border border-brand-dark/12 bg-surface p-4 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
                 style={{ animationDelay: `${0.08 * idx}s` }}
               >
                 <p className="text-[11px] font-bold tracking-[0.13em] text-brand-main uppercase">Localidad</p>

@@ -30,14 +30,14 @@ export function ContactoSection({
           href={contactoInstitucional.mapsUrl}
           target="_blank"
           rel="noreferrer"
-          className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+          className="chip-hover rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
         >
           Abrir en Google Maps
         </a>
       </div>
 
       <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_1.1fr]">
-        <article className="space-y-4 rounded-2xl border border-brand-dark/10 bg-white/70 p-5">
+        <article className="surface-hover space-y-4 rounded-2xl border border-brand-dark/10 bg-white/70 p-5">
           <div>
             <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Dirección</p>
             <p className="mt-1 text-sm text-brand-dark/85">{contactoInstitucional.direccion}</p>
@@ -48,13 +48,13 @@ export function ContactoSection({
               href={contactoInstitucional.whatsappUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-xl border border-brand-main/35 bg-brand-main/8 px-3 py-2 text-center text-sm font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
+              className="chip-hover rounded-xl border border-brand-main/35 bg-brand-main/8 px-3 py-2 text-center text-sm font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
             >
               WhatsApp
             </a>
             <a
               href={`mailto:${contactoInstitucional.email}`}
-              className="rounded-xl border border-brand-dark/20 bg-white px-3 py-2 text-center text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+              className="chip-hover rounded-xl border border-brand-dark/20 bg-white px-3 py-2 text-center text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
             >
               Email
             </a>
@@ -62,7 +62,7 @@ export function ContactoSection({
               href={contactoInstitucional.facebookUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-xl border border-sky/45 bg-sky/45 px-3 py-2 text-center text-sm font-semibold text-brand-dark transition hover:bg-sky/70"
+              className="chip-hover rounded-xl border border-sky/45 bg-sky/45 px-3 py-2 text-center text-sm font-semibold text-brand-dark transition hover:bg-sky/70"
             >
               Facebook
             </a>
@@ -89,7 +89,7 @@ export function ContactoSection({
           </div>
         </article>
 
-        <div className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
+        <div className="surface-hover overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
           <iframe
             title="Ubicación Escuela Especial N 23"
             src={contactoInstitucional.mapsEmbedUrl}
@@ -107,7 +107,7 @@ export function ContactoSection({
 
         <article
           data-reveal
-          className="flex items-center justify-center rounded-2xl border border-brand-dark/10 bg-[linear-gradient(160deg,rgba(197,228,231,0.26),rgba(255,255,255,0.75))] p-6"
+          className="surface-hover flex items-center justify-center rounded-2xl border border-brand-dark/10 bg-[linear-gradient(160deg,rgba(197,228,231,0.26),rgba(255,255,255,0.75))] p-6"
         >
           <div className="flex h-full w-full flex-col items-center justify-start gap-4">
             <h2 className="text-sm font-semibold text-brand-dark/75 text-center">

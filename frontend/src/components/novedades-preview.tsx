@@ -229,7 +229,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
       {novedades.map((novedad, idx) => (
         <article
           key={novedad.id}
-          className="card-lift fade-up relative rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
+          className="card-lift group fade-up relative rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
           data-reveal
           style={{ animationDelay: `${0.08 * idx}s` }}
         >
@@ -238,7 +238,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
               <button
                 type="button"
                 onClick={() => abrirEdicion(novedad)}
-                className="absolute top-3 right-14 z-10 rounded-full border border-brand-main/50 bg-white/90 p-2 text-brand-main transition hover:bg-brand-main hover:text-white"
+                className="chip-hover absolute top-3 right-14 z-10 rounded-full border border-brand-main/50 bg-white/90 p-2 text-brand-main transition hover:bg-brand-main hover:text-white"
                 aria-label={`Editar novedad ${novedad.titulo}`}
                 title="Editar novedad"
               >
@@ -251,7 +251,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 type="button"
                 onClick={() => void eliminarNovedad(novedad)}
                 disabled={eliminandoId === novedad.id}
-                className="absolute top-3 right-3 z-10 rounded-full border border-red-400/70 bg-white/90 p-2 text-red-700 transition hover:bg-red-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+                className="chip-hover absolute top-3 right-3 z-10 rounded-full border border-red-400/70 bg-white/90 p-2 text-red-700 transition hover:bg-red-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                 aria-label={`Eliminar novedad ${novedad.titulo}`}
                 title="Eliminar novedad"
               >
@@ -279,7 +279,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 height={500}
                 priority={idx === 0}
                 loading={idx === 0 ? "eager" : "lazy"}
-                className="mb-4 h-40 w-full rounded-xl object-cover"
+                className="mb-4 h-40 w-full rounded-xl object-cover transition duration-500 ease-out group-hover:scale-[1.04]"
                 style={{ viewTransitionName: `novedad-${(novedad.slug || novedad.id).replace(/[^a-zA-Z0-9_-]/g, "-")}` }}
               />
             ) : null}
@@ -296,7 +296,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 Publicado: {new Date(novedad.fecha).toLocaleDateString("es-AR")}
               </p>
             )}
-            <p className="mt-4 text-sm font-semibold text-brand-main">Leer nota completa</p>
+            <p className="link-sweep mt-4 inline-block text-sm font-semibold text-brand-main">Leer nota completa</p>
           </TransitionLink>
         </article>
       ))}
