@@ -7,6 +7,20 @@ type UploadVideoParams = {
   privacidad?: "private" | "public" | "unlisted";
 };
 
+type StartUploadResponse = {
+  error?: string;
+  uploadUrl?: string;
+};
+
+type ChunkUploadResponse = {
+  error?: string;
+  complete?: boolean;
+  videoId?: string;
+  videoUrl?: string;
+};
+
+const CHUNK_SIZE_BYTES = 4 * 1024 * 1024;
+
 export async function uploadVideoFromAdmin({
   file,
   titulo,
@@ -34,39 +48,49 @@ export async function uploadVideoFromAdmin({
     }),
   });
 
-  const data = (await response.json()) as {
-    error?: string;
-    uploadUrl?: string;
-  };
+  const data = (await response.json()) as StartUploadResponse;
 
   if (!response.ok || !data.uploadUrl) {
     throw new Error(data.error || "No se pudo iniciar la carga de video");
   }
 
-  const uploadResponse = await fetch(data.uploadUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Type": file.type || "video/mp4",
-    },
-    body: file,
-  });
+  const contentType = file.type || "video/mp4";
+  let offset = 0;
 
-  const uploadText = await uploadResponse.text();
-  let uploadData: { id?: string; error?: { message?: string } } = {};
-  if (uploadText) {
-    try {
-      uploadData = JSON.parse(uploadText) as { id?: string; error?: { message?: string } };
-    } catch {
-      // ignore parse error
+  while (offset < file.size) {
+    const end = Math.min(offset + CHUNK_SIZE_BYTES, file.size) - 1;
+    const chunkBlob = file.slice(offset, end + 1);
+    const query = new URLSearchParams({
+      uploadUrl: data.uploadUrl,
+      start: String(offset),
+      end: String(end),
+      total: String(file.size),
+      contentType,
+    });
+
+    const chunkResponse = await fetch(`/api/admin/youtube/upload/chunk?${query.toString()}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/octet-stream",
+        Authorization: `Bearer ${idToken}`,
+      },
+      body: await chunkBlob.arrayBuffer(),
+    });
+
+    const chunkData = (await chunkResponse.json()) as ChunkUploadResponse;
+    if (!chunkResponse.ok) {
+      throw new Error(chunkData.error || "Fallo al subir un bloque del video");
     }
+
+    if (chunkData.complete && chunkData.videoId && chunkData.videoUrl) {
+      return {
+        videoId: chunkData.videoId,
+        videoUrl: chunkData.videoUrl,
+      };
+    }
+
+    offset = end + 1;
   }
 
-  if (!uploadResponse.ok || !uploadData.id) {
-    throw new Error(uploadData.error?.message || "No se pudo completar la carga del video");
-  }
-
-  return {
-    videoId: uploadData.id,
-    videoUrl: `https://www.youtube.com/watch?v=${uploadData.id}`,
-  };
+  throw new Error("La carga finalizo sin confirmacion de YouTube. Revisa YouTube Studio y vuelve a intentar.");
 }

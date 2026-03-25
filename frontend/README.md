@@ -31,7 +31,7 @@ Para subida de video a YouTube configurar:
 - `YOUTUBE_REDIRECT_URI`
 - `YOUTUBE_REFRESH_TOKEN`
 
-Nota operativa: en Vercel la carga de video se hace en dos pasos (inicio server-side + PUT directo del navegador a YouTube) para evitar `413 Content Too Large` en funciones serverless.
+Nota operativa: en Vercel la carga de video se hace en dos pasos (inicio resumable + envio en bloques via API admin) para evitar `413 Content Too Large` y errores CORS del navegador.
 
 Para el formulario de contacto configurar:
 
