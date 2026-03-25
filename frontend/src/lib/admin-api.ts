@@ -1,6 +1,9 @@
 import { auth } from "@/lib/firebase";
 
-export async function postAdminAction(path: string, payload: Record<string, unknown>): Promise<void> {
+export async function postAdminAction<TResponse = Record<string, unknown>>(
+  path: string,
+  payload: Record<string, unknown>,
+): Promise<TResponse> {
   const user = auth.currentUser;
   if (!user) {
     throw new Error("Debes iniciar sesion como admin");
@@ -26,5 +29,11 @@ export async function postAdminAction(path: string, payload: Record<string, unkn
     }
 
     throw new Error(message);
+  }
+
+  try {
+    return (await response.json()) as TResponse;
+  } catch {
+    return {} as TResponse;
   }
 }

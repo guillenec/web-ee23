@@ -34,7 +34,10 @@ export function buildYouTubeConsentUrl(state: string): string {
   url.searchParams.set("client_id", clientId);
   url.searchParams.set("redirect_uri", redirectUri);
   url.searchParams.set("response_type", "code");
-  url.searchParams.set("scope", "https://www.googleapis.com/auth/youtube.upload");
+  url.searchParams.set(
+    "scope",
+    ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.force-ssl"].join(" "),
+  );
   url.searchParams.set("access_type", "offline");
   url.searchParams.set("prompt", "consent");
   url.searchParams.set("include_granted_scopes", "true");
@@ -156,4 +159,23 @@ export async function uploadVideoToYouTube({
     videoId: result.id,
     videoUrl: `https://www.youtube.com/watch?v=${result.id}`,
   };
+}
+
+export async function deleteYouTubeVideo(videoId: string): Promise<void> {
+  const normalizedVideoId = videoId.trim();
+  if (!normalizedVideoId) return;
+
+  const accessToken = await getAccessTokenFromRefreshToken();
+  const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${encodeURIComponent(normalizedVideoId)}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`YouTube rechazo borrar video: ${text || response.statusText}`);
+  }
 }

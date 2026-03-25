@@ -36,6 +36,10 @@ type NovedadEditForm = {
   estado: "publicado" | "pendiente";
 };
 
+type DeleteNovedadResponse = {
+  youtubeDeleteWarning?: string;
+};
+
 export function NovedadesPreview({ cantidad = 3 }: Props) {
   const [novedades, setNovedades] = useState<Novedad[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,10 +78,12 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
 
     try {
       setEliminandoId(novedad.id);
-      await postAdminAction("/api/admin/delete-novedad", { id: novedad.id });
+      const result = await postAdminAction<DeleteNovedadResponse>("/api/admin/delete-novedad", { id: novedad.id });
       setNovedades((prev) => prev.filter((item) => item.id !== novedad.id));
       toast.success("Novedad eliminada con exito");
-      toast.info("Si tenia video en YouTube, borralo manualmente en YouTube Studio.");
+      if (result.youtubeDeleteWarning) {
+        toast.warning("La novedad se elimino, pero el video no pudo borrarse automaticamente en YouTube.");
+      }
     } catch {
       toast.error("No se pudo eliminar la novedad");
     } finally {

@@ -645,7 +645,7 @@ export default function AdminNovedadesCrearPage() {
                   Conectar YouTube (generar refresh token)
                 </a>
                 <p className="text-xs text-brand-dark/65">
-                  Se sube al canal YouTube conectado. Al eliminar la novedad, recuerda borrar el video manualmente en YouTube Studio.
+                  Se sube al canal YouTube conectado. Al eliminar la novedad, el sistema intenta borrar el video automaticamente.
                 </p>
               </div>
             </Campo>

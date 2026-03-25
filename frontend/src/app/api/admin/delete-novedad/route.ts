@@ -3,6 +3,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { assertAdminRequest } from "@/lib/server/admin-request";
 import { collectCloudinaryPublicIds, deleteCloudinaryAssets } from "@/lib/server/cloudinary-admin";
 import { getAdminDb } from "@/lib/server/firebase-admin";
+import { deleteYouTubeVideo } from "@/lib/server/youtube-admin";
+import { extractYouTubeVideoId } from "@/lib/youtube";
 
 export const runtime = "nodejs";
 
@@ -11,6 +13,8 @@ type NovedadDoc = {
   imagenPrincipalPublicId?: string;
   galeria?: string[];
   galeriaPublicIds?: string[];
+  videoUrl?: string;
+  youtubeVideoId?: string;
 };
 
 export async function POST(request: NextRequest) {
@@ -30,6 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = (snap.data() ?? {}) as NovedadDoc;
+    const youtubeVideoId = data.youtubeVideoId?.trim() || extractYouTubeVideoId(data.videoUrl ?? "") || "";
     const ids = collectCloudinaryPublicIds([
       data.imagenPrincipalPublicId,
       data.imagenPrincipal,
@@ -37,10 +42,28 @@ export async function POST(request: NextRequest) {
       ...(data.galeria ?? []),
     ]);
 
+    let deletedYouTubeVideo = false;
+    let youtubeDeleteWarning = "";
+
+    if (youtubeVideoId) {
+      try {
+        await deleteYouTubeVideo(youtubeVideoId);
+        deletedYouTubeVideo = true;
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "No se pudo borrar el video en YouTube";
+        youtubeDeleteWarning = `${message} (videoId: ${youtubeVideoId})`;
+      }
+    }
+
     await deleteCloudinaryAssets(ids);
     await ref.delete();
 
-    return NextResponse.json({ ok: true, deletedCloudinaryAssets: ids.length });
+    return NextResponse.json({
+      ok: true,
+      deletedCloudinaryAssets: ids.length,
+      deletedYouTubeVideo,
+      youtubeDeleteWarning: youtubeDeleteWarning || undefined,
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Error inesperado";
     const status = message.includes("autoriz") || message.includes("token") ? 401 : 500;
