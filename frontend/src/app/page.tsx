@@ -23,7 +23,7 @@ export default function Home() {
         <section
           id="banner"
           data-reveal
-          className="relative h-[520px] overflow-hidden rounded-3xl bg-brand-dark text-white shadow-[0_24px_50px_rgba(78,56,49,0.28)] md:h-[550px]"
+          className="relative h-130 overflow-hidden rounded-3xl bg-brand-dark text-white shadow-[0_24px_50px_rgba(78,56,49,0.28)] md:h-137.5"
         >
           <Image
             src="/assets/images/hero-frente.jpg"
@@ -33,7 +33,7 @@ export default function Home() {
             className="hero-pan  w-full h-full object-cover opacity-90"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/80 to-brand-main/55" />
+          <div className="absolute inset-0 bg-linear-to-r from-brand-dark via-brand-dark/80 to-brand-main/55" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_22%,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0)_58%)]" />
           <div className="float-shape absolute -top-16 -right-10 h-44 w-44 rounded-full bg-brand-soft/55 blur-2xl" />
           <div className="float-shape absolute -bottom-16 left-8 h-40 w-40 rounded-full bg-sky/30 blur-2xl" />
@@ -118,80 +118,50 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="proximamente" data-reveal className="grid gap-5 lg:grid-cols-3">
-          <article className="card-lift overflow-hidden rounded-2xl bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]">
-            <Image
-              src="/assets/images/alumnos-jardin.jpg"
-              alt="Actividad con estudiantes"
-              width={800}
-              height={600}
-              className="h-44 w-full object-cover"
-            />
-            <div className="bg-brand-main p-5 text-white">
-              <h3 className="text-xl font-black">Novedades</h3>
-              <p className="mt-2 text-sm text-white/90">
-                Comunicados, actos, proyectos y actividades con actualización periódica.
+        <section data-reveal className="space-y-4">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
+                Galería institucional
               </p>
-                <TransitionLink
-                  href="/novedades"
-                  className="chip-hover mt-3 inline-block rounded-full border border-white/45 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-white hover:text-brand-dark"
-                >
-                Ver novedades
-              </TransitionLink>
+              <h2 className="text-2xl font-black text-brand-dark">Imágenes destacadas</h2>
             </div>
-          </article>
-          <article className="card-lift overflow-hidden rounded-2xl bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]">
-            <Image
-              src="/assets/images/educacion-vial.jpg"
-              alt="Jornada de educación vial"
-              width={800}
-              height={600}
-              className="h-44 w-full object-cover"
-            />
-            <div className="bg-sky p-5 text-brand-dark">
-              <h3 className="text-xl font-black">Galería institucional</h3>
-              <p className="mt-2 text-sm text-brand-dark/85">
-                Registro visual del trabajo pedagógico en escuelas y parajes de la región.
-              </p>
-                <TransitionLink
-                  href="/galeria"
-                  className="chip-hover mt-3 inline-block rounded-full border border-brand-dark/25 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-brand-dark hover:text-white"
-                >
-                Abrir galería
-              </TransitionLink>
-            </div>
-          </article>
-          <article
-            className="card-lift overflow-hidden rounded-2xl bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
-          >
-            <Image
-              src="/assets/images/acto-tradicion.jpg"
-              alt="Acto escolar de tradición"
-              width={800}
-              height={600}
-              className="h-44 w-full object-cover"
-            />
-            <div className="bg-neutral p-5 text-brand-dark">
-              <h3 className="text-xl font-black">Contacto y acompañamiento</h3>
-              <p className="mt-2 text-sm text-brand-dark/85">
-                Canal directo con la escuela para familias e instituciones de la zona.
-              </p>
-                <TransitionLink
-                  href="/contacto"
-                  className="chip-hover mt-3 inline-block rounded-full border border-brand-dark/25 px-3 py-1.5 text-xs font-bold uppercase transition hover:bg-brand-dark hover:text-white"
-                >
-                Ir a contacto
-              </TransitionLink>
-            </div>
-          </article>
+            <TransitionLink
+              href="/galeria"
+              className="chip-hover rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+            >
+              Ver galería completa
+            </TransitionLink>
+          </div>
+
+          <GaleriaPreview cantidad={3} />
         </section>
+
+        <section data-reveal className="space-y-4">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
+                Novedades
+              </p>
+              <h2 className="text-2xl font-black text-brand-dark">Últimas novedades publicadas</h2>
+            </div>
+            <TransitionLink
+              href="/novedades"
+              className="chip-hover rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+            >
+              Ver todas
+            </TransitionLink>
+          </div>
+          <NovedadesPreview cantidad={3} />
+        </section>
+
 
         <section
           id="contacto"
           data-reveal
-          className="surface-hover rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8"
+          className="space-y-4"
         >
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+          <div className="surface-hover grid gap-6 lg:grid-cols-[1.2fr_1fr] rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8 ">
             <div className="space-y-4">
               <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Contacto</p>
               <h2 className="text-2xl font-black text-brand-dark sm:text-3xl">Canales directos de la escuela</h2>
@@ -224,11 +194,11 @@ export default function Home() {
               </div>
             </div>
 
-            <article className="surface-hover overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
+            <article className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
               <iframe
                 title="Ubicación Escuela Especial N 23"
                 src={contactoInstitucional.mapsEmbedUrl}
-                className="h-[280px] w-full"
+                className="h-70 w-full"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
@@ -236,44 +206,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section data-reveal className="space-y-4">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
-                <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
-                  Galería institucional
-                </p>
-              <h2 className="text-2xl font-black text-brand-dark">Imágenes destacadas</h2>
-            </div>
-            <TransitionLink
-              href="/galeria"
-              className="chip-hover rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
-            >
-              Ver galería completa
-            </TransitionLink>
-          </div>
-
-          <GaleriaPreview cantidad={3} />
-        </section>
-
-        <section data-reveal className="space-y-4">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
-                <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">
-                  Conexión Firestore
-                </p>
-              <h2 className="text-2xl font-black text-brand-dark">Últimas novedades publicadas</h2>
-            </div>
-            <TransitionLink
-              href="/novedades"
-              className="chip-hover rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
-            >
-              Ver todas
-            </TransitionLink>
-          </div>
-          <NovedadesPreview cantidad={3} />
-        </section>
-
-        <section id="alcance" data-reveal className="space-y-5">
+        <section id="alcance" data-reveal className="space-y-4">
           <div className="surface-hover rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_10px_24px_rgba(75,56,49,0.07)] sm:p-7">
             <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Alcance territorial</p>
             <h2 className="mt-2 text-2xl font-black text-brand-dark sm:text-3xl">Región Sur y localidades acompañadas</h2>
@@ -283,11 +216,11 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 relative" id="regiones">
             {localidades.map((localidad, idx) => (
               <article
                 key={localidad}
-                className="surface-hover fade-up rounded-2xl border border-brand-dark/12 bg-surface p-4 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
+                className="surface-hover rounded-2xl border border-brand-dark/12 bg-surface p-4 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
                 style={{ animationDelay: `${0.08 * idx}s` }}
               >
                 <p className="text-[11px] font-bold tracking-[0.13em] text-brand-main uppercase">Localidad</p>

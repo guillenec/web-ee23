@@ -155,24 +155,24 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
         return prev.map((item) =>
           item.id === editando.idOriginal
             ? {
-                ...item,
-                id: slugFinal,
-                slug: slugFinal,
-                titulo: editando.titulo.trim(),
-                categoria: editando.categoria.trim(),
-                autor: editando.autor.trim(),
-                resumen: editando.resumen.trim(),
-                contenido: editando.contenido.trim(),
-                imagenPrincipal: editando.imagenPrincipal.trim(),
-                videoUrl: editando.videoUrl.trim(),
-                youtubeVideoId: editando.youtubeVideoId.trim() || extractYouTubeVideoId(editando.videoUrl.trim()) || "",
-                imagenPrincipalPublicId:
-                  editando.imagenPrincipalPublicId || extractCloudinaryPublicId(editando.imagenPrincipal) || "",
-                galeria: editando.galeria,
-                galeriaPublicIds: editando.galeriaPublicIds,
-                fecha: editando.fecha ? new Date(`${editando.fecha}T12:00:00`).toISOString() : item.fecha,
-                estado: editando.estado,
-              }
+              ...item,
+              id: slugFinal,
+              slug: slugFinal,
+              titulo: editando.titulo.trim(),
+              categoria: editando.categoria.trim(),
+              autor: editando.autor.trim(),
+              resumen: editando.resumen.trim(),
+              contenido: editando.contenido.trim(),
+              imagenPrincipal: editando.imagenPrincipal.trim(),
+              videoUrl: editando.videoUrl.trim(),
+              youtubeVideoId: editando.youtubeVideoId.trim() || extractYouTubeVideoId(editando.videoUrl.trim()) || "",
+              imagenPrincipalPublicId:
+                editando.imagenPrincipalPublicId || extractCloudinaryPublicId(editando.imagenPrincipal) || "",
+              galeria: editando.galeria,
+              galeriaPublicIds: editando.galeriaPublicIds,
+              fecha: editando.fecha ? new Date(`${editando.fecha}T12:00:00`).toISOString() : item.fecha,
+              estado: editando.estado,
+            }
             : item,
         );
       });
@@ -225,11 +225,11 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div data-reveal id="cards_novedades" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" >
       {novedades.map((novedad, idx) => (
         <article
           key={novedad.id}
-          className="card-lift group fade-up relative rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
+          className="surface-hover card-lift group relative rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
           data-reveal
           style={{ animationDelay: `${0.08 * idx}s` }}
         >
@@ -279,7 +279,7 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 height={500}
                 priority={idx === 0}
                 loading={idx === 0 ? "eager" : "lazy"}
-                className="mb-4 h-40 w-full rounded-xl object-cover transition duration-500 ease-out group-hover:scale-[1.04]"
+                className="mb-4 h-40 w-full rounded-xl object-cover"
                 style={{ viewTransitionName: `novedad-${(novedad.slug || novedad.id).replace(/[^a-zA-Z0-9_-]/g, "-")}` }}
               />
             ) : null}
@@ -319,11 +319,10 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                 onChange={(e) =>
                   setEditando((p) => (p ? { ...p, estado: e.target.value === "publicado" ? "publicado" : "pendiente" } : p))
                 }
-                className={`rounded-xl border px-3 py-2 text-sm font-semibold ${
-                  editando.estado === "publicado"
-                    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                    : "border-amber-300 bg-amber-50 text-amber-800"
-                }`}
+                className={`rounded-xl border px-3 py-2 text-sm font-semibold ${editando.estado === "publicado"
+                  ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                  : "border-amber-300 bg-amber-50 text-amber-800"
+                  }`}
               >
                 <option value="publicado">Publicado</option>
                 <option value="pendiente">Pendiente</option>
@@ -334,11 +333,11 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                   setEditando((p) =>
                     p
                       ? {
-                          ...p,
-                          imagenPrincipal: e.target.value,
-                          imagenPrincipalPublicId:
-                            extractCloudinaryPublicId(e.target.value) ?? p.imagenPrincipalPublicId,
-                        }
+                        ...p,
+                        imagenPrincipal: e.target.value,
+                        imagenPrincipalPublicId:
+                          extractCloudinaryPublicId(e.target.value) ?? p.imagenPrincipalPublicId,
+                      }
                       : p,
                   )
                 }
@@ -351,10 +350,10 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                   setEditando((p) =>
                     p
                       ? {
-                          ...p,
-                          videoUrl: e.target.value,
-                          youtubeVideoId: extractYouTubeVideoId(e.target.value) ?? p.youtubeVideoId,
-                        }
+                        ...p,
+                        videoUrl: e.target.value,
+                        youtubeVideoId: extractYouTubeVideoId(e.target.value) ?? p.youtubeVideoId,
+                      }
                       : p,
                   )
                 }
