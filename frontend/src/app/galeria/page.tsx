@@ -138,15 +138,15 @@ export default function GaleriaPage() {
         prev.map((item) =>
           item.id === editandoFoto.id
             ? {
-                ...item,
-                titulo: editandoFoto.titulo.trim(),
-                categoria: editandoFoto.categoria,
-                descripcion: editandoFoto.descripcion.trim(),
-                src: editandoFoto.src.trim(),
-                publicId: editandoFoto.publicId || extractCloudinaryPublicId(editandoFoto.src) || "",
-                fecha: editandoFoto.fecha ? new Date(`${editandoFoto.fecha}T12:00:00`).toISOString() : item.fecha,
-                visible: editandoFoto.visible,
-              }
+              ...item,
+              titulo: editandoFoto.titulo.trim(),
+              categoria: editandoFoto.categoria,
+              descripcion: editandoFoto.descripcion.trim(),
+              src: editandoFoto.src.trim(),
+              publicId: editandoFoto.publicId || extractCloudinaryPublicId(editandoFoto.src) || "",
+              fecha: editandoFoto.fecha ? new Date(`${editandoFoto.fecha}T12:00:00`).toISOString() : item.fecha,
+              visible: editandoFoto.visible,
+            }
             : item,
         ),
       );
@@ -180,11 +180,10 @@ export default function GaleriaPage() {
               key={opcion}
               type="button"
               onClick={() => setFiltro(opcion)}
-              className={`chip-hover rounded-full px-4 py-2 text-sm font-semibold transition ${
-                filtro === opcion
+              className={`chip-hover rounded-full px-4 py-2 text-sm font-semibold transition ${filtro === opcion
                   ? "bg-brand-main text-white"
                   : "border border-brand-dark/15 bg-surface text-brand-dark hover:bg-brand-dark/5"
-              }`}
+                }`}
             >
               {opcion}
             </button>
@@ -205,8 +204,7 @@ export default function GaleriaPage() {
           {fotos.map((foto) => (
             <article
               key={foto.id}
-              data-reveal
-              className="card-lift group relative overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
+              className="surface-hover card-lift group relative overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
             >
               {esAdmin ? (
                 <>
@@ -251,7 +249,7 @@ export default function GaleriaPage() {
                   alt={foto.titulo}
                   width={1000}
                   height={700}
-                  className="h-52 w-full object-cover transition duration-500 ease-out group-hover:scale-[1.05]"
+                  className="h-52 w-full object-cover"
                 />
               </button>
               <div className="space-y-2 p-4">
@@ -313,10 +311,10 @@ export default function GaleriaPage() {
                   setEditandoFoto((p) =>
                     p
                       ? {
-                          ...p,
-                          src: e.target.value,
-                          publicId: extractCloudinaryPublicId(e.target.value) ?? p.publicId,
-                        }
+                        ...p,
+                        src: e.target.value,
+                        publicId: extractCloudinaryPublicId(e.target.value) ?? p.publicId,
+                      }
                       : p,
                   )
                 }

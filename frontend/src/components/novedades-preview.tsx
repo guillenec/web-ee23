@@ -225,13 +225,11 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
   }
 
   return (
-    <div data-reveal id="cards_novedades" className="grid gap-4 md:grid-cols-2 lg:grid-cols-3" >
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {novedades.map((novedad, idx) => (
         <article
           key={novedad.id}
-          className="surface-hover card-lift group relative rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
-          data-reveal
-          style={{ animationDelay: `${0.08 * idx}s` }}
+          className="surface-hover card-lift group relative overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
         >
           {esAdmin ? (
             <>
@@ -320,8 +318,8 @@ export function NovedadesPreview({ cantidad = 3 }: Props) {
                   setEditando((p) => (p ? { ...p, estado: e.target.value === "publicado" ? "publicado" : "pendiente" } : p))
                 }
                 className={`rounded-xl border px-3 py-2 text-sm font-semibold ${editando.estado === "publicado"
-                  ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                  : "border-amber-300 bg-amber-50 text-amber-800"
+                    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
+                    : "border-amber-300 bg-amber-50 text-amber-800"
                   }`}
               >
                 <option value="publicado">Publicado</option>
