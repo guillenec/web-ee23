@@ -17,7 +17,6 @@ export function ContactoSection({
   return (
     <section
       id={id}
-      data-reveal
       className="rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8"
     >
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -36,7 +35,7 @@ export function ContactoSection({
         </a>
       </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_1.1fr]">
+      <div className="mt-6 grid gap-5 md:gap-6 lg:grid-cols-[1fr_1.1fr]">
         <article className="surface-hover space-y-4 rounded-2xl border border-brand-dark/10 bg-white/70 p-5">
           <div>
             <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Dirección</p>
@@ -93,22 +92,19 @@ export function ContactoSection({
           <iframe
             title="Ubicación Escuela Especial N 23"
             src={contactoInstitucional.mapsEmbedUrl}
-            className="h-[360px] w-full"
+            className="h-90 w-full"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
         </div>
       </div>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+      <div className="md:mt-6 mt-5 grid gap-5 md:gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
         <div className="min-w-0 lg:max-w-3xl">
           <ContactoForm />
         </div>
 
-        <article
-          data-reveal
-          className="surface-hover flex items-center justify-center rounded-2xl border border-brand-dark/10 bg-[linear-gradient(160deg,rgba(197,228,231,0.26),rgba(255,255,255,0.75))] p-6"
-        >
+        <article className="surface-hover flex items-center justify-center rounded-2xl border border-brand-dark/10 bg-[linear-gradient(160deg,rgba(197,228,231,0.26),rgba(255,255,255,0.75))] p-6">
           <div className="flex h-full w-full flex-col items-center justify-start gap-4">
             <h2 className="text-sm font-semibold text-brand-dark/75 text-center">
               Comunidad educativa, inclusión y acompañamiento territorial.
@@ -119,7 +115,7 @@ export function ContactoSection({
               width={460}
               height={376}
               loading="eager"
-              className="h-72 w-auto rounded-lg border border-brand-dark/20 object-contain object-center md:h-[400px]"
+              className="h-72 w-auto rounded-lg border border-brand-dark/20 object-contain object-center md:h-100"
             />
           </div>
         </article>

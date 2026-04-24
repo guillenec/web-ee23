@@ -29,6 +29,7 @@ type FotoEditForm = {
 export default function GaleriaPage() {
   const [filtro, setFiltro] = useState<Filtro>("Todas");
   const [fotosBase, setFotosBase] = useState<FotoGaleria[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [fotoActiva, setFotoActiva] = useState<FotoGaleria | null>(null);
   const [esAdmin, setEsAdmin] = useState(false);
@@ -43,6 +44,8 @@ export default function GaleriaPage() {
         setFotosBase(data);
       } catch {
         setError("No se pudo cargar la galeria en este momento.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -191,17 +194,30 @@ export default function GaleriaPage() {
         </section>
 
         <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {loading
+            ? Array.from({ length: 6 }).map((_, idx) => (
+              <article
+                key={`galeria-sk-${idx}`}
+                className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface p-4 shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
+              >
+                <div className="h-52 animate-pulse rounded-xl bg-brand-dark/10" />
+                <div className="mt-4 h-3 w-24 animate-pulse rounded bg-brand-dark/10" />
+                <div className="mt-3 h-5 w-5/6 animate-pulse rounded bg-brand-dark/10" />
+                <div className="mt-3 h-3.5 w-11/12 animate-pulse rounded bg-brand-dark/10" />
+              </article>
+            ))
+            : null}
           {error ? (
             <article className="rounded-2xl border border-brand-main/25 bg-brand-main/5 p-4 text-sm text-brand-dark">
               {error}
             </article>
           ) : null}
-          {!error && fotos.length === 0 ? (
+          {!loading && !error && fotos.length === 0 ? (
             <article className="rounded-2xl border border-brand-dark/15 bg-surface p-4 text-sm text-brand-dark/75">
               Aun no hay imagenes publicadas en la galeria.
             </article>
           ) : null}
-          {fotos.map((foto) => (
+          {!loading && !error ? fotos.map((foto) => (
             <article
               key={foto.id}
               className="surface-hover card-lift group relative overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
@@ -258,7 +274,7 @@ export default function GaleriaPage() {
                 <p className="text-sm text-brand-dark/80">{foto.descripcion}</p>
               </div>
             </article>
-          ))}
+          )) : null}
         </section>
       </div>
 
