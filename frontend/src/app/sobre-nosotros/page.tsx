@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Sobre Nosotros",
+  description:
+    "Conoce la misión, visión y enfoque de trabajo de la Escuela Especial N 23 de Ingeniero Jacobacci.",
+  alternates: {
+    canonical: "/sobre-nosotros",
+  },
+};
 
 export default function SobreNosotrosPage() {
   return (
@@ -23,6 +33,8 @@ export default function SobreNosotrosPage() {
               width={1200}
               height={800}
               className="h-64 w-full rounded-2xl object-cover"
+              priority
+              sizes="(max-width: 640px) 100vw, 50vw"
             />
           </section>
         </div>
