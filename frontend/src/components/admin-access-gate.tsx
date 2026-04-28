@@ -132,7 +132,7 @@ function AccesoBase({
   error: string | null;
   extra?: React.ReactNode;
 }) {
-  const admins = getAdminEmails();
+  // const admins = getAdminEmails();
 
   return (
     <main className="min-h-[60vh] bg-app px-5 py-10 sm:px-8">
@@ -155,8 +155,8 @@ function AccesoBase({
         {error ? <p className="mt-3 text-sm text-brand-main">{error}</p> : null}
 
         <div className="mt-5 rounded-xl border border-brand-dark/12 bg-white/70 p-4 text-xs text-brand-dark/75">
-          <p className="font-semibold">Admins habilitados (env `NEXT_PUBLIC_ADMIN_EMAILS`):</p>
-          {admins.length ? (
+          {/* <p className="font-semibold">Admins habilitados (env `NEXT_PUBLIC_ADMIN_EMAILS`):</p> */}
+          {/* {admins.length ? (
             <ul className="mt-2 space-y-1">
               {admins.map((email) => (
                 <li key={email}>- {email}</li>
@@ -164,7 +164,8 @@ function AccesoBase({
             </ul>
           ) : (
             <p className="mt-2">No hay correos configurados aun.</p>
-          )}
+          )} */}
+          <p className="mt-2">Solo Usuarios Habilitados en el sistema pueden acceder a este panel.</p>
         </div>
       </div>
     </main>
