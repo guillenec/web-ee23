@@ -21,7 +21,7 @@ export default function NovedadesPage() {
           </div>
           <p className="text-sm text-brand-dark/75">Selecciona una tarjeta para ver la nota completa.</p>
         </div>
-        <NovedadesPreview cantidad={12} />
+        <NovedadesPreview cantidad={12} headingLevel="h2" />
       </div>
     </main>
   );
