@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
+
 import { NovedadesPreview } from "@/components/novedades-preview";
+
+export const metadata: Metadata = {
+  title: "Novedades",
+  description: "Novedades institucionales y actividades de la Escuela Especial N 23.",
+  alternates: {
+    canonical: "/novedades",
+  },
+};
 
 export default function NovedadesPage() {
   return (

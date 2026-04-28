@@ -40,9 +40,6 @@ export const metadata: Metadata = {
     "Región Sur",
     "novedades escolares",
   ],
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     title: "Escuela Especial N 23 | Ingeniero Jacobacci",
     description:

@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 
 import { GaleriaPreview } from "@/components/galeria-preview";
 import { NovedadesPreview } from "@/components/novedades-preview";
 import { TransitionLink } from "@/components/transition-link";
 import { contactoInstitucional } from "@/lib/contacto";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default function Home() {
   const localidades = [

@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
+
 import { ContactoSection } from "@/components/contacto-section";
+
+export const metadata: Metadata = {
+  title: "Contacto",
+  description: "Canales de contacto institucional de la Escuela Especial N 23 en Ingeniero Jacobacci.",
+  alternates: {
+    canonical: "/contacto",
+  },
+};
 
 export default function ContactoPage() {
   return (
