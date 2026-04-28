@@ -24,7 +24,7 @@ export function ContactoSection({
         <div>
           <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Contacto institucional</p>
           <h2 className="text-2xl font-black text-brand-dark sm:text-3xl">{titulo}</h2>
-          <p className="mt-2 text-sm text-brand-dark/80">{subtitulo}</p>
+          <p className="mt-2 text-sm text-brand-dark/90">{subtitulo}</p>
         </div>
         <a
           href={contactoInstitucional.mapsUrl}
@@ -48,7 +48,7 @@ export function ContactoSection({
               href={contactoInstitucional.whatsappUrl}
               target="_blank"
               rel="noreferrer"
-              className="chip-hover rounded-xl border border-brand-main/35 bg-brand-main/8 px-3 py-2 text-center text-sm font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
+              className="chip-hover rounded-xl border border-brand-main bg-brand-main px-3 py-2 text-center text-sm font-semibold text-white transition hover:bg-brand-soft"
             >
               WhatsApp
             </a>
@@ -104,14 +104,15 @@ export function ContactoSection({
 
         <article className="surface-hover flex items-center justify-center rounded-2xl border border-brand-dark/10 bg-[linear-gradient(160deg,rgba(197,228,231,0.26),rgba(255,255,255,0.75))] p-6">
           <div className="flex h-full w-full flex-col items-center justify-start gap-4">
-            <h2 className="text-sm font-semibold text-brand-dark/75 text-center">
+            <h2 className="text-sm font-semibold text-brand-dark/90 text-center">
               Comunidad educativa, inclusión y acompañamiento territorial.
             </h2>
             <Image
-              src="/assets/images/identidad%20visual_ni%C3%B1os.png"
+              src="/assets/images/identidad%20visual_ni%C3%B1os.webp"
               alt="Logo institucional Escuela Especial N 23"
               width={460}
               height={376}
+              priority
               quality={58}
               sizes="(max-width: 768px) 78vw, 373px"
               className="h-72 w-auto rounded-lg border border-brand-dark/20 object-contain object-center md:h-100"
