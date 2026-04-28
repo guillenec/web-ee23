@@ -22,7 +22,7 @@ const sourceSans = Source_Sans_3({
   weight: ["400", "600", "700"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://escuela-especial-23.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.escuelaespecial23.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
