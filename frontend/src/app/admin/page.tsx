@@ -70,7 +70,7 @@ export default function AdminDashboardPage() {
               className="relative overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
             >
               <card.icon className="absolute top-4 right-4 h-5 w-5 text-brand-main/70" />
-              <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${card.color}`} />
+              <div className={`pointer-events-none absolute inset-0 bg-linear-to-br ${card.color}`} />
               <p className="relative text-[11px] font-bold tracking-[0.13em] text-brand-main uppercase">{card.etiqueta}</p>
               <h2 className="relative text-xl font-black text-brand-dark">{card.titulo}</h2>
               <p className="relative mt-2 text-sm text-brand-dark/80">{card.descripcion}</p>
