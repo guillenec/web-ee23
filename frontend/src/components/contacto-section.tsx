@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { ContactoForm } from "@/components/contacto-form";
+import { MapaEmbedLazy } from "@/components/mapa-embed-lazy";
 import { contactoInstitucional, horariosInstitucionales } from "@/lib/contacto";
 
 type Props = {
@@ -89,12 +90,9 @@ export function ContactoSection({
         </article>
 
         <div className="surface-hover overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
-          <iframe
-            title="Ubicación Escuela Especial N 23"
-            src={contactoInstitucional.mapsEmbedUrl}
-            className="h-90 w-full"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
+          <MapaEmbedLazy
+            mapsEmbedUrl={contactoInstitucional.mapsEmbedUrl}
+            mapsUrl={contactoInstitucional.mapsUrl}
           />
         </div>
       </div>
@@ -114,7 +112,8 @@ export function ContactoSection({
               alt="Logo institucional Escuela Especial N 23"
               width={460}
               height={376}
-              loading="eager"
+              quality={58}
+              sizes="(max-width: 768px) 78vw, 373px"
               className="h-72 w-auto rounded-lg border border-brand-dark/20 object-contain object-center md:h-100"
             />
           </div>
