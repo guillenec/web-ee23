@@ -34,7 +34,8 @@ export default function SobreNosotrosPage() {
               height={800}
               className="h-64 w-full rounded-2xl object-cover"
               priority
-              sizes="(max-width: 640px) 100vw, 50vw"
+              quality={62}
+              sizes="(max-width: 640px) 92vw, (max-width: 1024px) 80vw, 520px"
             />
           </section>
         </div>
