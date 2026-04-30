@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 import { useEffect, useMemo, useState } from "react";
 
-import { esEmailAdmin, getAdminEmails } from "@/lib/admin-auth";
+import { esEmailAdmin } from "@/lib/admin-auth";
 import { auth } from "@/lib/firebase";
 
 type Props = {
