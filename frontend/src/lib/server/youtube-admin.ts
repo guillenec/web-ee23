@@ -1,3 +1,5 @@
+import { getAdminDb } from "@/lib/server/firebase-admin";
+
 type YouTubeOAuthTokenResponse = {
   access_token?: string;
   expires_in?: number;
@@ -34,6 +36,28 @@ function getYouTubeConfig() {
   }
 
   return { clientId, clientSecret, redirectUri, refreshToken };
+}
+
+let cachedRefreshToken: { value: string; loadedAt: number } | null = null;
+
+async function getStoredRefreshToken(): Promise<string> {
+  if (cachedRefreshToken && Date.now() - cachedRefreshToken.loadedAt < 60_000) {
+    return cachedRefreshToken.value;
+  }
+
+  try {
+    const snapshot = await getAdminDb().collection("appConfig").doc("youtube").get();
+    const value = (snapshot.data()?.refreshToken ?? "") as string;
+    const refreshToken = value.trim();
+    if (refreshToken) {
+      cachedRefreshToken = { value: refreshToken, loadedAt: Date.now() };
+      return refreshToken;
+    }
+  } catch {
+    // ignore and fallback to env
+  }
+
+  return "";
 }
 
 export function buildYouTubeConsentUrl(state: string): string {
@@ -80,9 +104,10 @@ export async function exchangeCodeForYouTubeTokens(code: string): Promise<YouTub
 
 async function getAccessTokenFromRefreshToken(): Promise<string> {
   const { clientId, clientSecret, refreshToken } = getYouTubeConfig();
+  const runtimeRefreshToken = (await getStoredRefreshToken()) || refreshToken;
 
-  if (!refreshToken) {
-    throw new Error("Falta YOUTUBE_REFRESH_TOKEN. Conecta YouTube y agrega el refresh token en entorno.");
+  if (!runtimeRefreshToken) {
+    throw new Error("Falta refresh token de YouTube. Conecta YouTube desde el panel admin.");
   }
 
   const response = await fetch("https://oauth2.googleapis.com/token", {
@@ -93,7 +118,7 @@ async function getAccessTokenFromRefreshToken(): Promise<string> {
     body: new URLSearchParams({
       client_id: clientId,
       client_secret: clientSecret,
-      refresh_token: refreshToken,
+      refresh_token: runtimeRefreshToken,
       grant_type: "refresh_token",
     }),
     cache: "no-store",

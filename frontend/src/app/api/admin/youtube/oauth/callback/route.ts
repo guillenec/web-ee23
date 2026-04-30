@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { exchangeCodeForYouTubeTokens } from "@/lib/server/youtube-admin";
+import { getAdminDb } from "@/lib/server/firebase-admin";
 
 export const runtime = "nodejs";
 
@@ -45,6 +46,15 @@ export async function GET(request: NextRequest) {
     }
 
     const cookieStore = await cookies();
+    const hasAdminSession = cookieStore.get("yt_oauth_admin")?.value === "1";
+    if (!hasAdminSession) {
+      const html = renderHtml(
+        "Sesion requerida",
+        "<h1>Sesion admin requerida</h1><p>Vuelve al panel admin y usa el boton de conexion de YouTube.</p>",
+      );
+      return new NextResponse(html, { status: 401, headers: { "Content-Type": "text/html; charset=utf-8" } });
+    }
+
     const stateCookie = cookieStore.get("yt_oauth_state")?.value ?? "";
     if (!state || !stateCookie || state !== stateCookie) {
       const html = renderHtml(
@@ -69,14 +79,22 @@ export async function GET(request: NextRequest) {
       return new NextResponse(html, { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } });
     }
 
+    await getAdminDb().collection("appConfig").doc("youtube").set(
+      {
+        refreshToken,
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true },
+    );
+
     cookieStore.delete("yt_oauth_state");
+    cookieStore.delete("yt_oauth_admin");
 
     const html = renderHtml(
-      "Refresh token listo",
-      `<h1>Refresh token generado</h1>
-<p>Copia este valor y guardalo en tu entorno como <code>YOUTUBE_REFRESH_TOKEN</code> (local y Vercel).</p>
-<pre>${refreshToken}</pre>
-<p>Luego reinicia el entorno y vuelve al admin para subir videos.</p>`,
+      "Conexion YouTube lista",
+      `<h1>Canal de YouTube conectado</h1>
+<p>El token de renovacion se guardo de forma segura en el backend.</p>
+<p>Puedes cerrar esta ventana y volver al panel admin para subir videos.</p>`,
     );
 
     return new NextResponse(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });

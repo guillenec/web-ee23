@@ -1,9 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { TransitionLink } from "@/components/transition-link";
+import { postAdminAction } from "@/lib/admin-api";
+import { esEmailAdmin } from "@/lib/admin-auth";
+import { auth } from "@/lib/firebase";
 import { getNovedadesPublicadas, type Novedad } from "@/lib/novedades";
 
 type Props = {
@@ -15,6 +20,9 @@ export function NovedadesPreview({ cantidad = 3, headingLevel = "h3" }: Props) {
   const [novedades, setNovedades] = useState<Novedad[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [esAdmin, setEsAdmin] = useState(false);
+  const [eliminandoId, setEliminandoId] = useState<string | null>(null);
+  const [actualizandoId, setActualizandoId] = useState<string | null>(null);
   const HeadingTag = headingLevel;
 
   useEffect(() => {
@@ -31,6 +39,43 @@ export function NovedadesPreview({ cantidad = 3, headingLevel = "h3" }: Props) {
 
     void cargar();
   }, [cantidad]);
+
+  useEffect(() => {
+    const off = onAuthStateChanged(auth, (user) => {
+      setEsAdmin(esEmailAdmin(user?.email));
+    });
+
+    return () => off();
+  }, []);
+
+  const eliminarNovedad = async (novedad: Novedad) => {
+    const confirmado = window.confirm(`Se eliminara la novedad "${novedad.titulo}". Esta accion no se puede deshacer.`);
+    if (!confirmado) return;
+
+    try {
+      setEliminandoId(novedad.id);
+      await postAdminAction("/api/admin/delete-novedad", { id: novedad.id });
+      setNovedades((prev) => prev.filter((item) => item.id !== novedad.id));
+      toast.success("Novedad eliminada");
+    } catch {
+      toast.error("No se pudo eliminar la novedad");
+    } finally {
+      setEliminandoId(null);
+    }
+  };
+
+  const pasarAPendiente = async (novedad: Novedad) => {
+    try {
+      setActualizandoId(novedad.id);
+      await postAdminAction("/api/admin/update-novedad-estado", { id: novedad.id, estado: "pendiente" });
+      setNovedades((prev) => prev.filter((item) => item.id !== novedad.id));
+      toast.success("Novedad pasada a pendiente");
+    } catch {
+      toast.error("No se pudo actualizar el estado");
+    } finally {
+      setActualizandoId(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -77,6 +122,26 @@ export function NovedadesPreview({ cantidad = 3, headingLevel = "h3" }: Props) {
           key={novedad.id}
           className="surface-hover card-lift group relative overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.06)]"
         >
+          {esAdmin ? (
+            <div className="absolute top-3 right-3 z-10 flex gap-2">
+              <button
+                type="button"
+                onClick={() => void pasarAPendiente(novedad)}
+                disabled={actualizandoId === novedad.id || eliminandoId === novedad.id}
+                className="rounded-full border border-amber-400/70 bg-white/90 px-3 py-1 text-[11px] font-semibold text-amber-800 transition hover:bg-amber-500 hover:text-white disabled:opacity-60"
+              >
+                {actualizandoId === novedad.id ? "Moviendo..." : "Pendiente"}
+              </button>
+              <button
+                type="button"
+                onClick={() => void eliminarNovedad(novedad)}
+                disabled={actualizandoId === novedad.id || eliminandoId === novedad.id}
+                className="rounded-full border border-red-400/70 bg-white/90 px-3 py-1 text-[11px] font-semibold text-red-700 transition hover:bg-red-600 hover:text-white disabled:opacity-60"
+              >
+                {eliminandoId === novedad.id ? "Eliminando..." : "Eliminar"}
+              </button>
+            </div>
+          ) : null}
           <TransitionLink
             href={`/novedades/${encodeURIComponent(novedad.slug || novedad.id)}`}
             className="block"

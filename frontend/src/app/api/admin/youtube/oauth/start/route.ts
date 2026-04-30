@@ -9,8 +9,13 @@ export const runtime = "nodejs";
 
 export async function GET() {
   try {
-    const state = randomUUID();
     const cookieStore = await cookies();
+    const hasAdminSession = cookieStore.get("yt_oauth_admin")?.value === "1";
+    if (!hasAdminSession) {
+      return NextResponse.json({ error: "Sesion admin requerida para conectar YouTube" }, { status: 401 });
+    }
+
+    const state = randomUUID();
     cookieStore.set("yt_oauth_state", state, {
       httpOnly: true,
       sameSite: "lax",

@@ -60,6 +60,7 @@ export default function AdminNovedadesCrearPage() {
   const [subiendoPrincipal, setSubiendoPrincipal] = useState(false);
   const [subiendoGaleria, setSubiendoGaleria] = useState(false);
   const [subiendoVideo, setSubiendoVideo] = useState(false);
+  const [conectandoYoutube, setConectandoYoutube] = useState(false);
   const [tonoIa, setTonoIa] = useState<TonoIa>("moderado");
   const [modoAplicacionIa, setModoAplicacionIa] = useState<ModoAplicacionIa>("mantener");
   const [mejorandoTituloIa, setMejorandoTituloIa] = useState(false);
@@ -263,6 +264,37 @@ export default function AdminNovedadesCrearPage() {
       toast.error("Error al subir video");
     } finally {
       setSubiendoVideo(false);
+    }
+  };
+
+  const conectarYoutube = async () => {
+    const user = auth.currentUser;
+    if (!user) {
+      toast.error("Debes iniciar sesion como admin para conectar YouTube");
+      return;
+    }
+
+    try {
+      setConectandoYoutube(true);
+      const idToken = await user.getIdToken();
+      const response = await fetch("/api/admin/youtube/oauth/session", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        const data = (await response.json()) as { error?: string };
+        throw new Error(data.error ?? "No se pudo iniciar la sesion de OAuth");
+      }
+
+      window.open("/api/admin/youtube/oauth/start", "_blank", "noopener,noreferrer");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "No se pudo conectar YouTube";
+      toast.error(message);
+    } finally {
+      setConectandoYoutube(false);
     }
   };
 
@@ -636,14 +668,14 @@ export default function AdminNovedadesCrearPage() {
                     }}
                   />
                 </label>
-                <a
-                  href="/api/admin/youtube/oauth/start"
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  type="button"
+                  onClick={() => void conectarYoutube()}
+                  disabled={conectandoYoutube}
                   className="ml-2 inline-block rounded-full border border-brand-dark/20 px-3 py-1.5 text-xs font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
                 >
-                  Conectar YouTube (generar refresh token)
-                </a>
+                  {conectandoYoutube ? "Conectando..." : "Conectar YouTube (actualizar token)"}
+                </button>
                 <p className="text-xs text-brand-dark/65">
                   Se sube al canal YouTube conectado. Al eliminar la novedad, el sistema intenta borrar el video automaticamente.
                 </p>
