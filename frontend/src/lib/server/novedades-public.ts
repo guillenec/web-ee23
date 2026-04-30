@@ -82,6 +82,15 @@ export async function getNovedadesPublicadasServer(cantidad = 3): Promise<Noveda
   return novedades.slice(0, cantidad);
 }
 
+export async function getTodasNovedadesPublicadasServer(): Promise<Novedad[]> {
+  if (novedadesCache && Date.now() - novedadesCache.loadedAt < NOVEDADES_CACHE_TTL_MS) {
+    return novedadesCache.value;
+  }
+
+  await getNovedadesPublicadasServer(100);
+  return novedadesCache?.value ?? [];
+}
+
 export async function getNovedadPublicadaPorSlugServer(slug: string): Promise<Novedad | null> {
   const normalizado = decodeURIComponent(slug).trim().toLowerCase();
   if (!normalizado) return null;
