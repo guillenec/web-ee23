@@ -1,50 +1,22 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
-import { getFotosGaleriaPublicas, type FotoGaleria } from "@/lib/galeria";
+import { getFotosGaleriaPublicasServer } from "@/lib/server/galeria-public";
 
 type Props = {
   cantidad?: number;
 };
 
-export function GaleriaPreview({ cantidad = 3 }: Props) {
-  const [fotos, setFotos] = useState<FotoGaleria[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export async function GaleriaPreview({ cantidad = 3 }: Props) {
+  let fotos;
 
-  useEffect(() => {
-    const cargar = async () => {
-      try {
-        const data = await getFotosGaleriaPublicas();
-        setFotos(data.slice(0, cantidad));
-      } catch {
-        setError("No se pudieron cargar imagenes destacadas.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    void cargar();
-  }, [cantidad]);
-
-  if (loading) {
-    return (
-      <div className="grid gap-5 md:grid-cols-3">
-        {Array.from({ length: cantidad }).map((_, idx) => (
-          <article key={idx} className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface p-4">
-            <div className="h-44 animate-pulse rounded-xl bg-brand-dark/10" />
-            <div className="mt-3 h-4 w-2/3 animate-pulse rounded bg-brand-dark/10" />
-            <div className="mt-2 h-3 w-5/6 animate-pulse rounded bg-brand-dark/10" />
-          </article>
-        ))}
-      </div>
-    );
+  try {
+    fotos = await getFotosGaleriaPublicasServer(cantidad);
+  } catch {
+    fotos = null;
   }
 
-  if (error) {
-    return <article className="rounded-2xl border border-brand-main/25 bg-brand-main/5 p-4 text-sm text-brand-dark">{error}</article>;
+  if (fotos === null) {
+    return <article className="rounded-2xl border border-brand-main/25 bg-brand-main/5 p-4 text-sm text-brand-dark">No se pudieron cargar imagenes destacadas.</article>;
   }
 
   if (!fotos.length) {

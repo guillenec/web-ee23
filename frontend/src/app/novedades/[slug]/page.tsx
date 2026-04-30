@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { NovedadDetalleClient } from "@/components/novedad-detalle-client";
-import { getNovedadPublicadaPorSlug } from "@/lib/novedades";
+import { getNovedadPublicadaPorSlugServer } from "@/lib/server/novedades-public";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -15,7 +15,7 @@ export default async function NovedadDetallePage({ params }: PageProps) {
     notFound();
   }
 
-  const novedad = await getNovedadPublicadaPorSlug(slug);
+  const novedad = await getNovedadPublicadaPorSlugServer(slug);
   if (!novedad) {
     notFound();
   }
