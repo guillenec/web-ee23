@@ -36,8 +36,10 @@ Nota operativa: en Vercel la carga de video se hace en dos pasos (inicio resumab
 Para el formulario de contacto configurar:
 
 - `RESEND_API_KEY`
-- `CONTACT_FORM_TO_EMAIL`
-- `CONTACT_FORM_FROM_EMAIL` (en pruebas puede ser `onboarding@resend.dev`)
+- `CONTACT_FORM_TO_EMAIL` (ej: `contacto@escuelaespecial23.com`)
+- `CONTACT_FORM_FROM_EMAIL` (debe estar validado en Resend; en pruebas puede ser `onboarding@resend.dev`)
+
+Nota operativa contacto: el endpoint `POST /api/contact` aplica controles anti-spam (honeypot, tiempo minimo de completado y limite por IP).
 
 Setup completo de admin, Firebase, Cloudinary e IA en:
 

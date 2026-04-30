@@ -5,21 +5,70 @@ type ContactoPayload = {
   email?: string;
   asunto?: string;
   mensaje?: string;
+  website?: string;
+  formStartedAt?: number;
 };
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const DESTINO_CONTACTO = process.env.CONTACT_FORM_TO_EMAIL ?? "guillermoneculqueo@gmail.com";
-const CONTACTO_FROM_EMAIL = process.env.CONTACT_FORM_FROM_EMAIL ?? "onboarding@resend.dev";
+const DESTINO_CONTACTO = process.env.CONTACT_FORM_TO_EMAIL ?? "";
+const CONTACTO_FROM_EMAIL = process.env.CONTACT_FORM_FROM_EMAIL ?? "";
 const RESEND_API_URL = "https://api.resend.com/emails";
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const CONTACT_MIN_FILL_TIME_MS = 2500;
+const CONTACT_WINDOW_MS = 15 * 60 * 1000;
+const CONTACT_MAX_REQUESTS_PER_IP = 5;
+
+const ipRequestLog = new Map<string, number[]>();
+
+function getClientIp(request: Request): string {
+  const realIp = request.headers.get("x-real-ip")?.trim();
+  if (realIp) return realIp;
+
+  const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  if (forwardedFor) return forwardedFor;
+
+  return "unknown";
+}
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const previous = ipRequestLog.get(ip) ?? [];
+  const recent = previous.filter((time) => now - time < CONTACT_WINDOW_MS);
+  recent.push(now);
+  ipRequestLog.set(ip, recent);
+  return recent.length > CONTACT_MAX_REQUESTS_PER_IP;
+}
+
+function truncate(value: string, max = 6000): string {
+  if (value.length <= max) return value;
+  return value.slice(0, max);
+}
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { error: "Recibimos muchas solicitudes desde esta red. Intenta nuevamente en unos minutos." },
+        { status: 429 },
+      );
+    }
+
     const body = (await request.json()) as ContactoPayload;
-    const nombre = body.nombre?.trim() ?? "";
-    const email = body.email?.trim() ?? "";
+    const nombre = truncate(body.nombre?.trim() ?? "", 180);
+    const email = truncate(body.email?.trim() ?? "", 180);
     const asunto = (body.asunto?.trim() || "Consulta institucional").replace(/\s+/g, " ");
-    const mensaje = body.mensaje?.trim() ?? "";
+    const mensaje = truncate(body.mensaje?.trim() ?? "", 4000);
+    const website = body.website?.trim() ?? "";
+    const formStartedAt = typeof body.formStartedAt === "number" ? body.formStartedAt : 0;
+
+    if (website) {
+      return NextResponse.json({ ok: true });
+    }
+
+    if (formStartedAt > 0 && Date.now() - formStartedAt < CONTACT_MIN_FILL_TIME_MS) {
+      return NextResponse.json({ error: "Solicitud invalida. Intenta nuevamente." }, { status: 400 });
+    }
 
     if (!nombre || !email || !mensaje) {
       return NextResponse.json({ error: "Completa nombre, email y mensaje." }, { status: 400 });
@@ -29,7 +78,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "El email no es valido." }, { status: 400 });
     }
 
-    if (!RESEND_API_KEY) {
+    if (!RESEND_API_KEY || !DESTINO_CONTACTO || !CONTACTO_FROM_EMAIL) {
       return NextResponse.json(
         { error: "El servicio de contacto no esta configurado. Intenta nuevamente en unos minutos." },
         { status: 503 },
@@ -55,6 +104,7 @@ export async function POST(request: Request) {
       "",
       "---",
       `Origen: ${source}`,
+      `IP: ${ip}`,
       `Fecha: ${fechaLocal}`,
     ].join("\n");
 

@@ -24,6 +24,8 @@ export function ContactoForm() {
   const [tocado, setTocado] = useState(false);
   const [enviando, setEnviando] = useState(false);
   const [envioExitoso, setEnvioExitoso] = useState(false);
+  const [formStartedAt] = useState(() => Date.now());
+  const [website, setWebsite] = useState("");
 
   const errores = useMemo(() => {
     const next: Partial<Record<keyof ContactoData, string>> = {};
@@ -41,21 +43,6 @@ export function ContactoForm() {
 
   const valido = Object.keys(errores).length === 0;
 
-  const enviarFormulario = async () => {
-    const response = await fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
-
-    const result = (await response.json()) as { error?: string };
-    if (!response.ok) {
-      throw new Error(result.error ?? "No se pudo enviar tu mensaje.");
-    }
-  };
-
   return (
     <article className="surface-hover h-full rounded-2xl border border-brand-dark/10 bg-white/70 p-5">
       <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Formulario directo</p>
@@ -71,10 +58,27 @@ export function ContactoForm() {
           setTocado(true);
           if (!valido) return;
           setEnviando(true);
-          void enviarFormulario()
+          void fetch("/api/contact", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...form,
+              website,
+              formStartedAt,
+            }),
+          })
+            .then(async (response) => {
+              const result = (await response.json()) as { error?: string };
+              if (!response.ok) {
+                throw new Error(result.error ?? "No se pudo enviar tu mensaje.");
+              }
+            })
             .then(() => {
               toast.success("Mensaje enviado. Te responderemos a la brevedad.");
               setForm(inicial);
+              setWebsite("");
               setTocado(false);
               setEnvioExitoso(true);
             })
@@ -87,6 +91,16 @@ export function ContactoForm() {
             });
         }}
       >
+        <input
+          name="website"
+          type="text"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          className="hidden"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+        />
         <div className="grid gap-3 sm:grid-cols-2">
           <Campo label="Nombre" error={tocado ? errores.nombre : undefined}>
             <input
