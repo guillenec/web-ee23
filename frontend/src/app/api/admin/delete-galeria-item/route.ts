@@ -1,8 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 
 import { assertAdminRequest } from "@/lib/server/admin-request";
 import { collectCloudinaryPublicIds, deleteCloudinaryAssets } from "@/lib/server/cloudinary-admin";
 import { getAdminDb } from "@/lib/server/firebase-admin";
+import { invalidateGaleriaPublicCache } from "@/lib/server/galeria-public";
 
 export const runtime = "nodejs";
 
@@ -33,6 +35,9 @@ export async function POST(request: NextRequest) {
 
     await deleteCloudinaryAssets(ids);
     await ref.delete();
+    invalidateGaleriaPublicCache();
+    revalidatePath("/");
+    revalidatePath("/galeria");
 
     return NextResponse.json({ ok: true, deletedCloudinaryAssets: ids.length });
   } catch (error) {

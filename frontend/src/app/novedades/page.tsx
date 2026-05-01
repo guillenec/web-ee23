@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 import { NovedadesPreview } from "@/components/novedades-preview";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   title: "Novedades",
   description: "Novedades institucionales y actividades de la Escuela Especial N 23.",

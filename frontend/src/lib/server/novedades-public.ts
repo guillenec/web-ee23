@@ -25,6 +25,10 @@ const NOVEDADES_CACHE_TTL_MS = 60_000;
 
 let novedadesCache: { value: Novedad[]; loadedAt: number } | null = null;
 
+export function invalidateNovedadesPublicCache(): void {
+  novedadesCache = null;
+}
+
 function toIsoDate(value: Timestamp | string | undefined): string {
   if (!value) return "";
   if (typeof value === "string") return value;

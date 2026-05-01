@@ -1,14 +1,17 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 
 import { assertAdminRequest } from "@/lib/server/admin-request";
 import { collectCloudinaryPublicIds, deleteCloudinaryAssets } from "@/lib/server/cloudinary-admin";
 import { getAdminDb } from "@/lib/server/firebase-admin";
+import { invalidateNovedadesPublicCache } from "@/lib/server/novedades-public";
 import { deleteYouTubeVideo } from "@/lib/server/youtube-admin";
 import { extractYouTubeVideoId } from "@/lib/youtube";
 
 export const runtime = "nodejs";
 
 type NovedadDoc = {
+  slug?: string;
   imagenPrincipal?: string;
   imagenPrincipalPublicId?: string;
   galeria?: string[];
@@ -34,6 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = (snap.data() ?? {}) as NovedadDoc;
+    const slug = (data.slug ?? "").trim();
     const youtubeVideoId = data.youtubeVideoId?.trim() || extractYouTubeVideoId(data.videoUrl ?? "") || "";
     const ids = collectCloudinaryPublicIds([
       data.imagenPrincipalPublicId,
@@ -57,6 +61,12 @@ export async function POST(request: NextRequest) {
 
     await deleteCloudinaryAssets(ids);
     await ref.delete();
+    invalidateNovedadesPublicCache();
+    revalidatePath("/");
+    revalidatePath("/novedades");
+    if (slug) {
+      revalidatePath(`/novedades/${encodeURIComponent(slug)}`);
+    }
 
     return NextResponse.json({
       ok: true,

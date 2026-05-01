@@ -1,8 +1,10 @@
 import { Timestamp } from "firebase-admin/firestore";
+import { revalidatePath } from "next/cache";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { assertAdminRequest } from "@/lib/server/admin-request";
 import { getAdminDb } from "@/lib/server/firebase-admin";
+import { invalidateNovedadesPublicCache } from "@/lib/server/novedades-public";
 
 export const runtime = "nodejs";
 
@@ -34,6 +36,10 @@ export async function POST(request: NextRequest) {
       },
       { merge: true },
     );
+
+    invalidateNovedadesPublicCache();
+    revalidatePath("/");
+    revalidatePath("/novedades");
 
     return NextResponse.json({ ok: true });
   } catch (error) {

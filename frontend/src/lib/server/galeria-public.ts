@@ -19,6 +19,10 @@ const GALERIA_CACHE_TTL_MS = 60_000;
 
 let galeriaCache: { value: FotoGaleria[]; loadedAt: number } | null = null;
 
+export function invalidateGaleriaPublicCache(): void {
+  galeriaCache = null;
+}
+
 function toIsoDate(value: Timestamp | string | undefined): string {
   if (!value) return "";
   if (typeof value === "string") return value;

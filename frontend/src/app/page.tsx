@@ -6,6 +6,8 @@ import { NovedadesPreview } from "@/components/novedades-preview";
 import { TransitionLink } from "@/components/transition-link";
 import { contactoInstitucional } from "@/lib/contacto";
 
+export const revalidate = 60;
+
 export const metadata: Metadata = {
   alternates: {
     canonical: "/",

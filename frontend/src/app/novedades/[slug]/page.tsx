@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { NovedadDetalleClient } from "@/components/novedad-detalle-client";
 import { getNovedadPublicadaPorSlugServer } from "@/lib/server/novedades-public";
 
+export const revalidate = 60;
+
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
