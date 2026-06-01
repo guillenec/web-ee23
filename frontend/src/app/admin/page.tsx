@@ -1,4 +1,4 @@
-import { ArrowRight, Images, Newspaper } from "lucide-react";
+import { ArrowRight, Images, Newspaper, Video } from "lucide-react";
 
 import { TransitionLink } from "@/components/transition-link";
 
@@ -27,6 +27,16 @@ const cards = [
     accesos: [
       { href: "/admin/galeria", label: "Abrir galeria" },
     ],
+  },
+  {
+    href: "/admin/canal",
+    titulo: "Gestionar canal YouTube",
+    descripcion: "Subir videos, completar metadatos y controlar estado publicado o pendiente.",
+    cta: "Abrir canal",
+    etiqueta: "Audiovisuales",
+    color: "from-red-500/25 via-brand-soft/5 to-transparent",
+    icon: Video,
+    accesos: [{ href: "/admin/canal", label: "Panel canal" }],
   },
 ];
 
@@ -62,7 +72,7 @@ export default function AdminDashboardPage() {
           </div>
         </section>
 
-        <section className="grid gap-4 md:grid-cols-2">
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {cards.map((card) => (
             <article
               key={card.href}

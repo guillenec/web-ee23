@@ -9,8 +9,9 @@ import { TransitionLink } from "@/components/transition-link";
 const enlaces = [
   { href: "/novedades", label: "Novedades" },
   { href: "/galeria", label: "Galería" },
+  { href: "/canal", label: "Canal" },
   { href: "/sobre-nosotros", label: "Sobre nosotros" },
-  { href: "/admin", label: "Admin" },
+  { href: "/admin", label: "Login" },
 ];
 
 export function SiteHeader() {
@@ -40,11 +41,27 @@ export function SiteHeader() {
         <button
           type="button"
           onClick={() => setMenuAbierto((prev) => !prev)}
-          className="chip-hover rounded-full border border-brand-dark/20 px-3 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white md:hidden"
+          className="chip-hover inline-flex h-10 w-10 items-center justify-center rounded-full border border-brand-dark/20 text-brand-dark transition hover:bg-brand-dark hover:text-white md:hidden"
           aria-expanded={menuAbierto}
-          aria-label="Abrir menú principal"
+          aria-label={menuAbierto ? "Cerrar menu principal" : "Abrir menu principal"}
         >
-          Menú
+          <span className="relative block h-4 w-5">
+            <span
+              className={`absolute left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-300 ${
+                menuAbierto ? "top-1.5 rotate-45" : "top-0"
+              }`}
+            />
+            <span
+              className={`absolute top-1.5 left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-200 ${
+                menuAbierto ? "opacity-0" : "opacity-100"
+              }`}
+            />
+            <span
+              className={`absolute left-0 h-0.5 w-5 rounded-full bg-current transition-all duration-300 ${
+                menuAbierto ? "top-1.5 -rotate-45" : "top-3"
+              }`}
+            />
+          </span>
         </button>
 
         <nav className="hidden items-center gap-2 md:flex">

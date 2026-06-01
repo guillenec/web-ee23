@@ -68,6 +68,15 @@ export function ContactoSection({
             </a>
           </div>
 
+          <a
+            href={contactoInstitucional.youtubeUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="chip-hover inline-flex rounded-xl border border-red-500/55 bg-red-500/10 px-3 py-2 text-center text-sm font-semibold text-red-600 transition hover:bg-red-600 hover:text-white"
+          >
+            Ver canal de YouTube
+          </a>
+
           <div className="rounded-xl border border-brand-dark/10 bg-white/80 p-3">
             <p className="text-xs font-bold tracking-[0.11em] text-brand-main uppercase">Horario</p>
             <p className="mt-2 text-sm text-brand-dark/85">Lunes a viernes: 08:00-12:30 y 13:00-17:30</p>

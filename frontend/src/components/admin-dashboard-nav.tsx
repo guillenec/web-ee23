@@ -8,6 +8,7 @@ const enlaces = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/novedades", label: "Novedades" },
   { href: "/admin/galeria", label: "Galeria" },
+  { href: "/admin/canal", label: "Canal" },
 ];
 
 export function AdminDashboardNav() {

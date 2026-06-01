@@ -29,51 +29,125 @@ export default function Home() {
   return (
     <main className="page-enter bg-app">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 px-5 py-8 sm:px-8 sm:py-12">
-        <section
-          id="banner"
+        <div
           data-reveal
-          className="relative h-130 overflow-hidden rounded-3xl bg-brand-dark text-white shadow-[0_24px_50px_rgba(78,56,49,0.28)] md:h-137.5"
+          className="relative rounded-3xl bg-brand-dark text-white shadow-[0_24px_50px_rgba(78,56,49,0.28)]"
         >
-          <Image
-            src="/assets/images/hero-frente.jpg"
-            alt="Frente de la Escuela Especial N 23"
-            width={1600}
-            height={900}
-            className="hero-pan  w-full h-full object-cover opacity-90"
-            priority
-          />
-          <div className="absolute inset-0 bg-linear-to-r from-brand-dark via-brand-dark/80 to-brand-main/55" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_22%,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0)_58%)]" />
-          <div className="float-shape absolute -top-16 -right-10 h-44 w-44 rounded-full bg-brand-soft/55 blur-2xl" />
-          <div className="float-shape absolute -bottom-16 left-8 h-40 w-40 rounded-full bg-sky/30 blur-2xl" />
-          <div className="caja1 absolute inset-0  p-2 sm:p-10 lg:p-12 w-auto h-auto flex justify-start items-center">
-            <div className="caja2 w-full max-w-4xl rounded-2xl border border-white/20 bg-[rgba(0,0,0,0.18)] p-5 backdrop-blur-[1.5px] sm:p-7">
-              <p className="fade-up inline-block rounded-full border border-white/35 px-3 py-1 text-xs tracking-widest uppercase">
-                Web institucional en construcción
-              </p>
-              <h1 className="fade-up delay-1 mt-4 max-w-3xl text-3xl leading-tight font-black md:text-5xl">
-                Inclusión, acompañamiento y trabajo territorial en toda la Región Sur.
-              </h1>
-              <p className="fade-up delay-2 mt-5 max-w-2xl text-base text-white/90 md:text-lg">
-                Este sitio va a acercar información clara para familias, docentes e instituciones,
-                visibilizando propuestas de la Escuela Especial N 23 desde primera infancia hasta nivel
-                secundario.
-              </p>
-              <div className="fade-up delay-3 mt-7 flex flex-wrap gap-3">
-                <a
-                  href="#alcance"
-                  className="cta-pop rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft"
-                >
-                  Ver alcance territorial
-                </a>
-                <a
-                  href="#proximamente"
-                  className="rounded-full border border-white/50 bg-white/8 px-5 py-2 text-sm font-semibold transition hover:bg-white hover:text-brand-dark"
-                >
-                  Próximas secciones
-                </a>
+          <section
+            id="banner"
+            className="relative overflow-hidden rounded-3xl bg-brand-dark text-white shadow-[0_24px_50px_rgba(78,56,49,0.28)]"
+          >
+            <Image
+              src="/assets/images/hero-frente.jpg"
+              alt="Frente de la Escuela Especial N 23"
+              width={1600}
+              height={900}
+              className="hero-pan absolute inset-0 h-full w-full object-cover opacity-95"
+              priority
+            />
+            <div className="absolute inset-0 bg-linear-to-r from-black/80 via-brand-dark/65 to-transparent" />
+            <div className="relative flex min-h-135 items-center p-5 sm:p-10 lg:p-12">
+              <div className="w-full max-w-xl rounded-2xl border border-white/18 bg-black/25 p-6 backdrop-blur-[1.5px] sm:p-7">
+                <p className="fade-up text-lg font-bold tracking-wide text-white/90 uppercase">Bienvenidos al</p>
+                <h1 className="fade-up delay-1 mt-1 text-5xl leading-[0.95] font-black sm:text-6xl">CEE N 23</h1>
+                <p className="fade-up delay-2 mt-5 text-xl font-semibold text-white/95">
+                  Brindamos educación especial de calidad, promoviendo inclusión, desarrollo y autonomía.
+                </p>
+                <div className="fade-up delay-3 mt-7 flex flex-wrap gap-3">
+                  <TransitionLink
+                    href="/sobre-nosotros"
+                    className="cta-pop rounded-full bg-brand-main px-5 py-2.5 text-sm font-bold text-white transition hover:bg-brand-soft"
+                  >
+                    Conocé la institución
+                  </TransitionLink>
+                  <a
+                    href={contactoInstitucional.youtubeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-full border border-white/55 bg-white/10 px-5 py-2.5 text-sm font-semibold transition hover:bg-white hover:text-brand-dark"
+                  >
+                    Ir al canal de YouTube
+                  </a>
+                </div>
               </div>
             </div>
+          </section>
+          <div className="cardsBanner hidden md:absolute md:inset-x-0 md:-bottom-26 md:z-10 md:block md:px-6 md:pb-6">
+            <div className="grid gap-3 rounded-2xl border border-brand-dark/10 bg-surface p-4 text-brand-dark shadow-[0_14px_30px_rgba(75,56,49,0.12)] sm:grid-cols-2 lg:grid-cols-4 sm:p-6">
+              {[
+                {
+                  titulo: "Inclusión y respeto",
+                  texto: "Promovemos un ambiente de respeto y valoración de la diversidad.",
+                },
+                {
+                  titulo: "Educación personalizada",
+                  texto: "Propuestas adaptadas a las necesidades de cada estudiante.",
+                },
+                {
+                  titulo: "Compromiso y acompañamiento",
+                  texto: "Acompañamos cada trayectoria educativa y personal.",
+                },
+                {
+                  titulo: "Autonomía y desarrollo",
+                  texto: "Fortalecemos habilidades para la vida cotidiana y comunitaria.",
+                },
+              ].map((item) => (
+                <article key={item.titulo} className="rounded-xl border border-brand-dark/10 bg-white/80 p-4">
+                  <h3 className="text-base font-extrabold">{item.titulo}</h3>
+                  <p className="mt-2 text-sm text-brand-dark/80">{item.texto}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <section data-reveal className="audiovisualesYoutube surface-hover rounded-3xl border border-brand-dark/10 bg-surface/95 p-6 shadow-[0_12px_28px_rgba(75,56,49,0.08)] sm:p-8 md:mt-30">
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+            <div className="space-y-4">
+              <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Canal EE23</p>
+              <h2 className="text-2xl font-black text-brand-dark sm:text-3xl">
+                Producciones audiovisuales de estudiantes y docentes
+              </h2>
+              <p className="text-sm leading-relaxed text-brand-dark/80 sm:text-base">
+                Este espacio reúne videos creados en proyectos pedagógicos y experiencias institucionales.
+                Es una propuesta propia del canal de YouTube de la escuela, complementaria a novedades y
+                galería.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={contactoInstitucional.youtubeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="chip-hover rounded-full border border-red-500/55 bg-red-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-600"
+                >
+                  Ver canal @escuela.especial23
+                </a>
+                <TransitionLink
+                  href="/canal"
+                  className="chip-hover rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                >
+                  Abrir seccion Canal
+                </TransitionLink>
+                <TransitionLink
+                  href="/novedades"
+                  className="chip-hover rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                >
+                  Ver novedades institucionales
+                </TransitionLink>
+              </div>
+            </div>
+
+            <article className="overflow-hidden rounded-2xl border border-brand-dark/10 bg-brand-dark p-3 shadow-[0_8px_20px_rgba(75,56,49,0.10)]">
+              <iframe
+                title="Canal de YouTube Escuela Especial N 23"
+                src="https://www.youtube.com/embed/videoseries?list=UUpwpsXvwzzjAYT7bDAJj7Q"
+                className="h-64 w-full rounded-xl sm:h-72"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            </article>
           </div>
         </section>
 
@@ -187,6 +261,14 @@ export default function Home() {
                   className="chip-hover rounded-full border border-brand-main/35 bg-brand-main/8 px-4 py-2 text-sm font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
                 >
                   WhatsApp
+                </a>
+                <a
+                  href={contactoInstitucional.youtubeUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="chip-hover rounded-full border border-red-500/55 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-600 hover:text-white"
+                >
+                  YouTube
                 </a>
                 <a
                   href={`mailto:${contactoInstitucional.email}`}

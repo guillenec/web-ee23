@@ -37,6 +37,12 @@ export function SiteFooter() {
               {contactoInstitucional.email}
             </a>
           </p>
+          <p>
+            YouTube:{" "}
+            <a className="link-sweep" href={contactoInstitucional.youtubeUrl} target="_blank" rel="noreferrer">
+              @escuela.especial23
+            </a>
+          </p>
           <p>Comunidad educativa 2026</p>
         </div>
       </div>

@@ -5,16 +5,11 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function emailLower() {
-      return signedIn() && request.auth.token.email is string
-        ? lower(request.auth.token.email)
-        : "";
-    }
-
     function isAdmin() {
-      return emailLower() in [
+      return signedIn() && request.auth.token.email in [
         "guillermoneculqueo@gmail.com",
-        "escuelaespecial023@gmail.com"
+        "escuelaespecial023@gmail.com",
+        "web.escuelaespecial23@gmail.com"
       ];
     }
 
@@ -33,6 +28,11 @@ service cloud.firestore {
 
     match /galeria/{docId} {
       allow read: if isVisible() || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /canalVideos/{docId} {
+      allow read: if resource.data.estado == "publicado" || isAdmin();
       allow create, update, delete: if isAdmin();
     }
 
