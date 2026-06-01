@@ -31,6 +31,11 @@ Para subida de video a YouTube configurar:
 - `YOUTUBE_REDIRECT_URI`
 - `YOUTUBE_REFRESH_TOKEN`
 
+Para IA con OpenRouter, opcionalmente se puede definir fallback de modelos:
+
+- `OPENROUTER_MODEL` (principal)
+- `OPENROUTER_MODELS` (lista separada por coma; se usa cuando el principal no tiene capacidad)
+
 Nota operativa: en Vercel la carga de video se hace en dos pasos (inicio resumable + envio en bloques via API admin) para evitar `413 Content Too Large` y errores CORS del navegador.
 
 Para el formulario de contacto configurar:

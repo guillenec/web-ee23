@@ -24,6 +24,7 @@ En Vercel y local, definir:
 - `FIREBASE_ADMIN_PRIVATE_KEY` (solo server; mantener saltos de linea como `\n`)
 - `OPENROUTER_API_KEY` (solo server)
 - `OPENROUTER_MODEL` (solo server)
+- `OPENROUTER_MODELS` (opcional; lista separada por coma para fallback automatico)
 - `OPENROUTER_BASE_URL` (opcional; por defecto `https://openrouter.ai/api/v1`)
 - `YOUTUBE_CLIENT_ID` (solo server)
 - `YOUTUBE_CLIENT_SECRET` (solo server)

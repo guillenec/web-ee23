@@ -16,13 +16,20 @@ type Payload = {
 function getOpenRouterConfig() {
   const apiKey = process.env.OPENROUTER_API_KEY;
   const model = process.env.OPENROUTER_MODEL;
+  const modelsRaw = process.env.OPENROUTER_MODELS ?? "";
   const baseUrl = process.env.OPENROUTER_BASE_URL ?? "https://openrouter.ai/api/v1";
 
   if (!apiKey || !model) {
     throw new Error("Faltan variables OPENROUTER_API_KEY u OPENROUTER_MODEL");
   }
 
-  return { apiKey, model, baseUrl };
+  const fallbackModels = modelsRaw
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .filter((item) => item !== model);
+
+  return { apiKey, model, baseUrl, fallbackModels };
 }
 
 function extractJsonObject(text: string): string {
@@ -47,7 +54,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Accion IA no valida" }, { status: 400 });
     }
 
-    const { apiKey, model, baseUrl } = getOpenRouterConfig();
+    const { apiKey, model, baseUrl, fallbackModels } = getOpenRouterConfig();
 
     const system = action === "improve_title"
       ? [
@@ -90,30 +97,58 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Debes escribir contenido antes de mejorarlo con IA" }, { status: 400 });
     }
 
-    const response = await fetch(`${baseUrl.replace(/\/$/, "")}/chat/completions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model,
-        temperature: 0.4,
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: user },
-        ],
-      }),
-    });
+    const modelsToTry = [model, ...fallbackModels];
+    let data: { choices?: Array<{ message?: { content?: string } }> } | null = null;
+    let lastError = "";
 
-    if (!response.ok) {
+    for (const candidateModel of modelsToTry) {
+      const response = await fetch(`${baseUrl.replace(/\/$/, "")}/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: candidateModel,
+          temperature: 0.4,
+          messages: [
+            { role: "system", content: system },
+            { role: "user", content: user },
+          ],
+        }),
+      });
+
+      if (response.ok) {
+        data = (await response.json()) as { choices?: Array<{ message?: { content?: string } }> };
+        break;
+      }
+
       const text = await response.text();
-      throw new Error(`OpenRouter rechazo la solicitud: ${text.slice(0, 300)}`);
+      if (response.status === 401) {
+        throw new Error("OpenRouter devolvio 401. Revisa OPENROUTER_API_KEY y la cuenta/proyecto asociado.");
+      }
+
+      const normalized = text.toLowerCase();
+      const retriable =
+        response.status === 429 ||
+        response.status === 500 ||
+        response.status === 502 ||
+        response.status === 503 ||
+        normalized.includes("capacity_error") ||
+        normalized.includes("no backends available") ||
+        normalized.includes("provider returned error");
+
+      lastError = `Modelo ${candidateModel}: ${text.slice(0, 200)}`;
+      if (!retriable) {
+        throw new Error(`OpenRouter rechazo la solicitud: ${text.slice(0, 300)}`);
+      }
     }
 
-    const data = (await response.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
-    };
+    if (!data) {
+      throw new Error(
+        `No hubo capacidad disponible en OpenRouter para los modelos configurados. ${lastError}`,
+      );
+    }
 
     const content = data.choices?.[0]?.message?.content?.trim();
     if (!content) {
