@@ -59,6 +59,7 @@ Admins incluidos en el archivo de reglas:
 
 - `guillermoneculqueo@gmail.com`
 - `escuelaespecial023@gmail.com`
+- `web.escuelaespecial23@gmail.com`
 
 Aplicacion manual en Firebase Console:
 
@@ -68,13 +69,14 @@ Aplicacion manual en Firebase Console:
 
 ## 4) Estado actual del panel
 
-- Ruta: `/admin/novedades`
+- Rutas: `/admin/novedades`, `/admin/galeria`, `/admin/canal`
 - Login: Google popup
 - Acceso: solo correos incluidos en `NEXT_PUBLIC_ADMIN_EMAILS`
 - Si el correo no esta en whitelist: se bloquea acceso
 - Carga de novedades: formulario guiado con validacion + guardado directo en Firestore
 - Carga de imagenes: URL manual o subida local a Cloudinary (principal y galeria)
 - Carga de video: URL manual de YouTube o subida desde equipo a canal YouTube conectado (OAuth)
+- Modulo canal: alta/edicion/publicacion/eliminacion de videos institucionales en `canalVideos`
 - Persistencia de borrador: `localStorage` para evitar perdida al recargar
 
 ### Troubleshooting rapido: no se listan pendientes/publicadas
@@ -98,6 +100,11 @@ Rutas:
 - `GET /api/admin/youtube/oauth/start`
 - `GET /api/admin/youtube/oauth/callback`
 - `POST /api/admin/youtube/upload`
+- `GET /api/admin/canal/list`
+- `POST /api/admin/canal/save`
+- `POST /api/admin/canal/status`
+- `POST /api/admin/canal/update`
+- `POST /api/admin/canal/delete`
 
 Notas:
 

@@ -11,6 +11,8 @@ Repositorio del sitio institucional de la Escuela Especial N 23 (Ingeniero Jacob
 - Landing, secciones institucionales, novedades y galeria publica.
 - Panel admin con login Google (whitelist por correo).
 - CRUD de novedades y galeria.
+- Seccion publica `/canal` con videos institucionales curados y paginacion.
+- CRUD admin de canal (`/admin/canal`) con subida a YouTube + metadatos editoriales.
 - Subida de imagenes a Cloudinary.
 - Carga de videos a YouTube desde admin (OAuth) y embebido en detalle de novedades.
 - Borrado seguro server-side (Firestore + Cloudinary) para evitar assets huerfanos.
@@ -48,3 +50,9 @@ Abrir `http://localhost:3000`.
 ## Notas de repositorio
 
 - Los archivos operativos de planificacion (`bitacora`, `plan`, `pr-log`) se mantienen locales y no se versionan en Git.
+
+## Bitacora tecnica reciente
+
+- Se migro el canal institucional de YouTube y se consolidaron admins habilitados.
+- Se agrego fallback de modelos OpenRouter mediante `OPENROUTER_MODELS` para mayor resiliencia.
+- Se incorporo modulo Canal completo (publico + admin + APIs server-side + reglas Firestore).
