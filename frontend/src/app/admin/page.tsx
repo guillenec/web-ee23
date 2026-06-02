@@ -42,32 +42,40 @@ const cards = [
 
 export default function AdminDashboardPage() {
   return (
-    <main className="page-enter bg-app px-5 py-10 sm:px-8">
+    <main className="admin-shell page-enter px-5 py-8 sm:px-8 sm:py-10">
       <div className="mx-auto max-w-6xl space-y-6">
         <section
           data-reveal
-          className="relative overflow-hidden rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_12px_34px_rgba(75,56,49,0.12)] sm:p-8"
+          className="admin-hero rounded-3xl p-6 sm:p-8"
         >
-          <div className="pointer-events-none absolute -top-12 -right-10 h-44 w-44 rounded-full bg-brand-main/15 blur-2xl" />
-          <div className="pointer-events-none absolute -bottom-12 -left-10 h-44 w-44 rounded-full bg-sky/40 blur-2xl" />
-          <p className="relative text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Panel administrador</p>
-          <h1 className="relative mt-2 text-3xl font-black text-brand-dark sm:text-4xl">Dashboard de contenidos</h1>
-          <p className="relative mt-3 max-w-3xl text-sm text-brand-dark/80 sm:text-base">
-            Gestiona novedades y galeria con un flujo simple para publicar rapido, revisar pendientes y mantener el sitio actualizado.
-          </p>
+          <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_330px] lg:items-end">
+            <div>
+              <p className="admin-kicker">Panel administrador</p>
+              <h1 className="mt-2 text-3xl leading-tight font-black text-brand-dark sm:text-5xl">Centro de control del sitio</h1>
+              <p className="mt-3 max-w-3xl text-sm leading-relaxed text-brand-dark/80 sm:text-base">
+                Publica novedades, organiza la galeria y administra videos desde un flujo simple, seguro y pensado para trabajo diario.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-brand-dark/10 bg-white/72 p-4">
+              <p className="text-sm font-black text-brand-dark">Prioridad operativa</p>
+              <p className="mt-1 text-xs leading-relaxed text-brand-dark/72">
+                Primero crea o sube contenido, luego revisa estados antes de publicarlo. Todo queda separado por modulo.
+              </p>
+            </div>
+          </div>
 
           <div className="relative mt-5 grid gap-3 sm:grid-cols-3">
-            <article className="rounded-2xl border border-brand-dark/10 bg-white/70 p-3">
-              <p className="text-xs font-bold tracking-[0.12em] text-brand-main uppercase">Estado</p>
-              <p className="mt-1 text-sm font-semibold text-brand-dark">Operacion normal</p>
+            <article className="rounded-2xl border border-brand-dark/10 bg-white/72 p-4">
+              <p className="admin-kicker">Estado</p>
+              <p className="mt-1 text-base font-black text-brand-dark">Operacion normal</p>
             </article>
-            <article className="rounded-2xl border border-brand-dark/10 bg-white/70 p-3">
-              <p className="text-xs font-bold tracking-[0.12em] text-brand-main uppercase">Flujo</p>
-              <p className="mt-1 text-sm font-semibold text-brand-dark">Crear / Ver / Publicar</p>
+            <article className="rounded-2xl border border-brand-dark/10 bg-white/72 p-4">
+              <p className="admin-kicker">Flujo</p>
+              <p className="mt-1 text-base font-black text-brand-dark">Crear / Revisar / Publicar</p>
             </article>
-            <article className="rounded-2xl border border-brand-dark/10 bg-white/70 p-3">
-              <p className="text-xs font-bold tracking-[0.12em] text-brand-main uppercase">Acceso</p>
-              <p className="mt-1 text-sm font-semibold text-brand-dark">Solo cuentas admin</p>
+            <article className="rounded-2xl border border-brand-dark/10 bg-white/72 p-4">
+              <p className="admin-kicker">Acceso</p>
+              <p className="mt-1 text-base font-black text-brand-dark">Solo cuentas admin</p>
             </article>
           </div>
         </section>
@@ -77,16 +85,18 @@ export default function AdminDashboardPage() {
             <article
               key={card.href}
               data-reveal
-              className="relative overflow-hidden rounded-2xl border border-brand-dark/10 bg-surface p-5 shadow-[0_8px_20px_rgba(75,56,49,0.08)]"
+              className="admin-card relative overflow-hidden rounded-3xl p-5"
             >
-              <card.icon className="absolute top-4 right-4 h-5 w-5 text-brand-main/70" />
+              <div className="absolute top-4 right-4 rounded-2xl border border-brand-main/15 bg-brand-main/8 p-2 text-brand-main">
+                <card.icon className="h-5 w-5" />
+              </div>
               <div className={`pointer-events-none absolute inset-0 bg-linear-to-br ${card.color}`} />
-              <p className="relative text-[11px] font-bold tracking-[0.13em] text-brand-main uppercase">{card.etiqueta}</p>
-              <h2 className="relative text-xl font-black text-brand-dark">{card.titulo}</h2>
-              <p className="relative mt-2 text-sm text-brand-dark/80">{card.descripcion}</p>
+              <p className="admin-kicker relative pr-12">{card.etiqueta}</p>
+              <h2 className="relative mt-2 pr-12 text-2xl font-black text-brand-dark">{card.titulo}</h2>
+              <p className="relative mt-2 min-h-12 text-sm leading-relaxed text-brand-dark/78">{card.descripcion}</p>
               <TransitionLink
                 href={card.href}
-                className="relative mt-4 inline-flex rounded-full bg-brand-main px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-soft"
+                className="admin-primary-btn relative mt-4 px-4 py-2 text-sm"
               >
                 {card.cta}
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -96,7 +106,7 @@ export default function AdminDashboardPage() {
                   <TransitionLink
                     key={atajo.href}
                     href={atajo.href}
-                    className="inline-flex rounded-full border border-brand-dark/20 bg-white px-3 py-1.5 text-xs font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                    className="admin-secondary-btn px-3 py-1.5 text-xs"
                   >
                     {atajo.label}
                   </TransitionLink>

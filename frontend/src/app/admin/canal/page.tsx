@@ -332,36 +332,39 @@ export default function AdminCanalPage() {
   };
 
   return (
-    <main className="page-enter bg-app px-5 py-10 sm:px-8">
+    <main className="admin-shell page-enter px-5 py-8 sm:px-8 sm:py-10">
       <div className="mx-auto max-w-6xl space-y-6">
-        <section className="rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)] sm:p-8">
-          <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Modulo Canal</p>
-          <h1 className="mt-2 text-3xl font-black text-brand-dark">Subir video a YouTube y publicar en la web</h1>
+        <section className="admin-panel rounded-3xl p-6 sm:p-8">
+          <p className="admin-kicker">Modulo Canal</p>
+          <h1 className="mt-2 text-3xl leading-tight font-black text-brand-dark sm:text-4xl">Subir video a YouTube y publicar en la web</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-brand-dark/78">
+            Carga el archivo, completa los metadatos y decide si queda pendiente o publicado en la seccion Canal.
+          </p>
 
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             <label className="space-y-1">
               <span className="text-xs font-bold tracking-[0.08em] text-brand-dark/70 uppercase">Titulo</span>
-              <input value={titulo} onChange={(e) => setTitulo(e.target.value)} className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" />
+              <input value={titulo} onChange={(e) => setTitulo(e.target.value)} className="admin-field" />
             </label>
             <label className="space-y-1">
               <span className="text-xs font-bold tracking-[0.08em] text-brand-dark/70 uppercase">Subtitulo</span>
-              <input value={subtitulo} onChange={(e) => setSubtitulo(e.target.value)} className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" />
+              <input value={subtitulo} onChange={(e) => setSubtitulo(e.target.value)} className="admin-field" />
             </label>
           </div>
 
           <label className="mt-4 block space-y-1">
             <span className="text-xs font-bold tracking-[0.08em] text-brand-dark/70 uppercase">Descripcion</span>
-            <textarea value={descripcion} onChange={(e) => setDescripcion(e.target.value)} rows={4} className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" />
+            <textarea value={descripcion} onChange={(e) => setDescripcion(e.target.value)} rows={4} className="admin-field" />
           </label>
 
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <label className="space-y-1">
               <span className="text-xs font-bold tracking-[0.08em] text-brand-dark/70 uppercase">Hashtags (separados por coma)</span>
-              <input value={hashtags} onChange={(e) => setHashtags(e.target.value)} placeholder="#inclusion, #escuelaespecial" className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm" />
+              <input value={hashtags} onChange={(e) => setHashtags(e.target.value)} placeholder="#inclusion, #escuelaespecial" className="admin-field" />
             </label>
             <label className="space-y-1">
               <span className="text-xs font-bold tracking-[0.08em] text-brand-dark/70 uppercase">Estado en web</span>
-              <select value={estado} onChange={(e) => setEstado((e.target.value as EstadoVideo) || "pendiente")} className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm">
+              <select value={estado} onChange={(e) => setEstado((e.target.value as EstadoVideo) || "pendiente")} className="admin-field">
                 <option value="pendiente">Pendiente</option>
                 <option value="publicado">Publicado</option>
               </select>
@@ -388,14 +391,14 @@ export default function AdminCanalPage() {
                   type="button"
                   onClick={() => void actualizar()}
                   disabled={guardando}
-                  className="rounded-full bg-brand-main px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-soft disabled:opacity-65"
+                  className="admin-primary-btn px-4 py-2 text-sm disabled:opacity-65"
                 >
                   {guardando ? "Actualizando..." : "Guardar cambios"}
                 </button>
                 <button
                   type="button"
                   onClick={cancelarEdicion}
-                  className="rounded-full border border-brand-dark/20 px-4 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                  className="admin-secondary-btn px-4 py-2 text-sm"
                 >
                   Cancelar edicion
                 </button>
@@ -405,7 +408,7 @@ export default function AdminCanalPage() {
                 type="button"
                 onClick={() => void guardar()}
                 disabled={guardando}
-                className="rounded-full bg-brand-main px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-soft disabled:opacity-65"
+                className="admin-primary-btn px-4 py-2 text-sm disabled:opacity-65"
               >
                 {guardando ? "Guardando..." : "Guardar en seccion Canal"}
               </button>
@@ -417,13 +420,13 @@ export default function AdminCanalPage() {
           {ok ? <p className="mt-3 text-sm text-emerald-700">{ok}</p> : null}
         </section>
 
-        <section className="rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)] sm:p-8">
+        <section className="admin-panel rounded-3xl p-6 sm:p-8">
           <h2 className="text-2xl font-black text-brand-dark">Videos cargados</h2>
           <p className="mt-1 text-sm text-brand-dark/75">Paginado interno para evitar listados largos.</p>
 
           <div className="mt-4 space-y-3">
             {pageItems.map((video) => (
-              <article key={video.id} className="rounded-2xl border border-brand-dark/10 bg-white/80 p-4">
+              <article key={video.id} className="admin-card rounded-2xl p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <h3 className="text-base font-extrabold text-brand-dark">{video.titulo}</h3>
@@ -437,25 +440,25 @@ export default function AdminCanalPage() {
                     <button
                       type="button"
                       onClick={() => void cambiarEstado(video.id, video.estado === "publicado" ? "pendiente" : "publicado")}
-                      className="rounded-full border border-brand-dark/20 px-3 py-1 text-xs font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                      className="admin-secondary-btn px-3 py-1 text-xs"
                     >
                       {video.estado === "publicado" ? "Pasar a pendiente" : "Publicar"}
                     </button>
                     <button
                       type="button"
                       onClick={() => iniciarEdicion(video)}
-                      className="rounded-full border border-brand-main/35 bg-brand-main/8 px-3 py-1 text-xs font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
+                      className="admin-secondary-btn px-3 py-1 text-xs"
                     >
                       Editar
                     </button>
                     <button
                       type="button"
                       onClick={() => void eliminar(video)}
-                      className="rounded-full border border-red-500/45 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-600 transition hover:bg-red-600 hover:text-white"
+                      className="admin-danger-btn px-3 py-1 text-xs"
                     >
                       Eliminar
                     </button>
-                    <a href={video.youtubeUrl} target="_blank" rel="noreferrer" className="rounded-full border border-red-500/45 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-600 transition hover:bg-red-600 hover:text-white">
+                    <a href={video.youtubeUrl} target="_blank" rel="noreferrer" className="admin-danger-btn px-3 py-1 text-xs">
                       YouTube
                     </a>
                   </div>
@@ -471,7 +474,7 @@ export default function AdminCanalPage() {
               type="button"
               onClick={() => setPage((prev) => Math.max(1, prev - 1))}
               disabled={page <= 1}
-              className="rounded-full border border-brand-dark/20 px-4 py-1.5 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+              className="admin-secondary-btn px-4 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-35"
             >
               Anterior
             </button>
@@ -482,7 +485,7 @@ export default function AdminCanalPage() {
               type="button"
               onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
               disabled={page >= totalPages}
-              className="rounded-full border border-brand-dark/20 px-4 py-1.5 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+              className="admin-secondary-btn px-4 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-35"
             >
               Siguiente
             </button>

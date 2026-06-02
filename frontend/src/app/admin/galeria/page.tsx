@@ -44,6 +44,8 @@ const inicial: FormData = {
 
 type TonoIa = "formal" | "moderado" | "energetico";
 
+const PAGE_SIZE = 8;
+
 export default function AdminGaleriaPage() {
   const [form, setForm] = useState<FormData>(inicial);
   const [editandoId, setEditandoId] = useState<string | null>(null);
@@ -57,6 +59,7 @@ export default function AdminGaleriaPage() {
   const [generandoIa, setGenerandoIa] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ok, setOk] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   const errores = useMemo(() => {
     const next: Record<string, string> = {};
@@ -79,6 +82,12 @@ export default function AdminGaleriaPage() {
       publicId: form.publicId || extractCloudinaryPublicId(form.src) || "",
     };
   }, [form]);
+
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(fotos.length / PAGE_SIZE)), [fotos.length]);
+  const pageItems = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return fotos.slice(start, start + PAGE_SIZE);
+  }, [fotos, page]);
 
   const cargarGaleria = async () => {
     try {
@@ -129,6 +138,12 @@ export default function AdminGaleriaPage() {
   useEffect(() => {
     void cargarGaleria();
   }, []);
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
 
   const limpiar = () => {
     setForm(inicial);
@@ -183,6 +198,7 @@ export default function AdminGaleriaPage() {
       toast.success(editandoId ? "Imagen actualizada" : "Imagen cargada con exito");
       limpiar();
       await cargarGaleria();
+      setPage(1);
     } catch {
       setError("No se pudo guardar la imagen en Firebase.");
       toast.error("No se pudo guardar en Firebase");
@@ -318,14 +334,14 @@ export default function AdminGaleriaPage() {
   };
 
   return (
-    <main className="page-enter bg-app px-5 py-10 sm:px-8">
+    <main className="admin-shell page-enter px-5 py-8 sm:px-8 sm:py-10">
       <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
-        <section className="rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
-          <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Modulo de galeria</p>
-          <h1 className="mt-2 text-3xl font-black text-brand-dark">Cargar y editar imagenes</h1>
+        <section className="admin-panel rounded-3xl p-6">
+          <p className="admin-kicker">Modulo de galeria</p>
+          <h1 className="mt-2 text-3xl leading-tight font-black text-brand-dark sm:text-4xl">Cargar y editar imagenes</h1>
 
-          <div className="mt-4 rounded-xl border border-brand-main/20 bg-brand-main/5 p-4">
-            <p className="text-xs font-bold tracking-[0.08em] text-brand-main uppercase">Asistente IA</p>
+          <div className="mt-4 rounded-2xl border border-brand-main/20 bg-brand-main/5 p-4">
+            <p className="admin-kicker">Asistente IA</p>
             <p className="mt-1 text-sm text-brand-dark/75">
               Escribe una idea breve y la IA sugiere titulo, descripcion y categoria para la imagen.
             </p>
@@ -333,13 +349,13 @@ export default function AdminGaleriaPage() {
               <input
                 value={ideaIa}
                 onChange={(e) => setIdeaIa(e.target.value)}
-                className="min-w-0 rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                className="admin-field min-w-0"
                 placeholder="Ej: Taller de cocina con familias"
               />
               <select
                 value={tonoIa}
                 onChange={(e) => setTonoIa((e.target.value as TonoIa) || "moderado")}
-                className="rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                className="admin-field"
               >
                 <option value="formal">Formal</option>
                 <option value="moderado">Moderado</option>
@@ -349,7 +365,7 @@ export default function AdminGaleriaPage() {
                 type="button"
                 onClick={() => void sugerirConIa()}
                 disabled={generandoIa}
-                className="rounded-full border border-brand-main/35 bg-brand-main px-4 py-2 text-xs font-bold text-white transition hover:bg-brand-soft disabled:opacity-65"
+                className="admin-primary-btn px-4 py-2 text-xs disabled:opacity-65"
               >
                 {generandoIa ? "Generando..." : "Sugerir con IA"}
               </button>
@@ -362,7 +378,7 @@ export default function AdminGaleriaPage() {
               <input
                 value={form.titulo}
                 onChange={(e) => setForm((prev) => ({ ...prev, titulo: e.target.value }))}
-                className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                className="admin-field"
               />
               {errores.titulo ? <span className="text-xs text-brand-main">{errores.titulo}</span> : null}
             </label>
@@ -373,7 +389,7 @@ export default function AdminGaleriaPage() {
                 <select
                   value={form.categoria}
                   onChange={(e) => setForm((prev) => ({ ...prev, categoria: toCategoria(e.target.value) }))}
-                  className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                  className="admin-field"
                 >
                   {categoriasGaleria.map((categoria) => (
                     <option key={categoria} value={categoria}>
@@ -389,7 +405,7 @@ export default function AdminGaleriaPage() {
                   type="date"
                   value={form.fecha}
                   onChange={(e) => setForm((prev) => ({ ...prev, fecha: e.target.value }))}
-                  className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                  className="admin-field"
                 />
                 {errores.fecha ? <span className="text-xs text-brand-main">{errores.fecha}</span> : null}
               </label>
@@ -400,11 +416,11 @@ export default function AdminGaleriaPage() {
               <textarea
                 value={form.descripcion}
                 onChange={(e) => setForm((prev) => ({ ...prev, descripcion: e.target.value }))}
-                className="min-h-24 w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                className="admin-field min-h-24"
               />
             </label>
 
-            <label className="block space-y-1">
+            <div className="block space-y-1">
               <span className="text-xs font-bold tracking-[0.06em] text-brand-dark/75 uppercase">Imagen (URL)</span>
               <input
                 value={form.src}
@@ -416,7 +432,7 @@ export default function AdminGaleriaPage() {
                     publicId: extractCloudinaryPublicId(e.target.value) ?? prev.publicId,
                   }))
                 }
-                className="w-full rounded-xl border border-brand-dark/15 bg-white px-3 py-2 text-sm"
+                className="admin-field"
                 placeholder="https://res.cloudinary.com/..."
               />
               {errores.src ? <span className="text-xs text-brand-main">{errores.src}</span> : null}
@@ -433,7 +449,7 @@ export default function AdminGaleriaPage() {
                   }}
                 />
               </label>
-            </label>
+            </div>
 
             <label className="flex items-center gap-2 text-sm text-brand-dark/85">
               <input
@@ -448,7 +464,7 @@ export default function AdminGaleriaPage() {
               <button
                 type="button"
                 onClick={() => setTocado(true)}
-                className="rounded-full border border-brand-dark/20 px-5 py-2 text-sm font-bold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                className="admin-secondary-btn px-5 py-2 text-sm"
               >
                 Validar
               </button>
@@ -456,14 +472,14 @@ export default function AdminGaleriaPage() {
                 type="button"
                 onClick={guardar}
                 disabled={guardando}
-                className="rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft disabled:opacity-65"
+                className="admin-primary-btn px-5 py-2 text-sm disabled:opacity-65"
               >
                 {guardando ? "Guardando..." : editandoId ? "Actualizar imagen" : "Guardar imagen"}
               </button>
               <button
                 type="button"
                 onClick={limpiar}
-                className="rounded-full border border-brand-dark/20 px-5 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                className="admin-secondary-btn px-5 py-2 text-sm"
               >
                 Limpiar
               </button>
@@ -475,7 +491,7 @@ export default function AdminGaleriaPage() {
         </section>
 
         <section className="min-w-0 space-y-4">
-          <article className="rounded-3xl border border-brand-dark/10 bg-surface p-5 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
+          <article className="admin-panel rounded-3xl p-5">
             <h2 className="text-xl font-black text-brand-dark">Estado de validacion</h2>
             <p className={`mt-2 text-sm ${valido ? "text-emerald-700" : "text-brand-main"}`}>
               {valido ? "Formulario listo para guardar." : "Completa los campos obligatorios."}
@@ -498,16 +514,28 @@ export default function AdminGaleriaPage() {
             </pre>
           </article>
 
-          <article className="rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
-            <h2 className="text-2xl font-black text-brand-dark">Imagenes cargadas</h2>
+          <article className="admin-panel rounded-3xl p-6">
+            <div className="flex flex-wrap items-end justify-between gap-2">
+              <div>
+                <h2 className="text-2xl font-black text-brand-dark">Imagenes cargadas</h2>
+                <p className="mt-1 text-xs font-semibold text-brand-dark/65">
+                  {fotos.length} imagenes en total. Mostrando hasta {PAGE_SIZE} por pagina.
+                </p>
+              </div>
+              {fotos.length > PAGE_SIZE ? (
+                <span className="rounded-full border border-brand-dark/10 bg-white/70 px-3 py-1 text-xs font-bold text-brand-dark/75">
+                  Pagina {page} de {totalPages}
+                </span>
+              ) : null}
+            </div>
             {cargandoLista ? <p className="mt-3 text-sm text-brand-dark/75">Cargando galeria...</p> : null}
             {!cargandoLista && !fotos.length ? (
               <p className="mt-3 text-sm text-brand-dark/75">No hay imagenes en Firebase.</p>
             ) : null}
 
             <div className="mt-4 space-y-3">
-              {fotos.map((foto) => (
-                <article key={foto.id} className="rounded-2xl border border-brand-dark/10 bg-white p-3">
+              {pageItems.map((foto) => (
+                <article key={foto.id} className="admin-card rounded-2xl p-3">
                   <div className="flex gap-3">
                     <div className="relative h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-brand-dark/10">
                       {foto.src ? (
@@ -529,21 +557,21 @@ export default function AdminGaleriaPage() {
                     <button
                       type="button"
                       onClick={() => editar(foto)}
-                      className="rounded-full border border-brand-dark/20 px-3 py-1 text-xs font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                      className="admin-secondary-btn px-3 py-1 text-xs"
                     >
                       Editar
                     </button>
                     <button
                       type="button"
                       onClick={() => void toggleVisible(foto)}
-                      className="rounded-full border border-brand-main/35 px-3 py-1 text-xs font-semibold text-brand-main transition hover:bg-brand-main hover:text-white"
+                      className="admin-secondary-btn px-3 py-1 text-xs"
                     >
                       {foto.visible ? "Ocultar" : "Publicar"}
                     </button>
                     <button
                       type="button"
                       onClick={() => void eliminar(foto.id)}
-                      className="rounded-full border border-red-400/60 px-3 py-1 text-xs font-semibold text-red-700 transition hover:bg-red-600 hover:text-white"
+                      className="admin-danger-btn px-3 py-1 text-xs"
                     >
                       Eliminar
                     </button>
@@ -551,6 +579,30 @@ export default function AdminGaleriaPage() {
                 </article>
               ))}
             </div>
+
+            {fotos.length > PAGE_SIZE ? (
+              <div className="mt-5 flex items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                  disabled={page <= 1}
+                  className="admin-secondary-btn px-4 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-35"
+                >
+                  Anterior
+                </button>
+                <p className="text-sm font-semibold text-brand-dark/80">
+                  Pagina {page} de {totalPages}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+                  disabled={page >= totalPages}
+                  className="admin-secondary-btn px-4 py-1.5 text-sm disabled:cursor-not-allowed disabled:opacity-35"
+                >
+                  Siguiente
+                </button>
+              </div>
+            ) : null}
           </article>
         </section>
       </div>

@@ -468,17 +468,17 @@ export default function AdminNovedadesCrearPage() {
   };
 
   return (
-    <main className="page-enter bg-app px-5 py-10 sm:px-8">
+    <main className="admin-shell page-enter px-5 py-8 sm:px-8 sm:py-10">
       <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-        <section className="min-w-0 rounded-3xl border border-brand-dark/10 bg-surface p-6 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
-          <p className="text-xs font-bold tracking-[0.13em] text-brand-main uppercase">Modulo de novedades</p>
-          <h1 className="mt-2 text-3xl font-black text-brand-dark">Crear nueva publicacion</h1>
-          <p className="mt-2 text-sm text-brand-dark/80">
+        <section className="admin-panel min-w-0 rounded-3xl p-6">
+          <p className="admin-kicker">Modulo de novedades</p>
+          <h1 className="mt-2 text-3xl leading-tight font-black text-brand-dark sm:text-4xl">Crear nueva publicacion</h1>
+          <p className="mt-2 text-sm leading-relaxed text-brand-dark/80">
             Este formulario queda solo para carga de novedades. El listado ahora esta en /admin/novedades/ver.
           </p>
 
-          <div className="mt-4 rounded-xl border border-brand-main/20 bg-brand-main/5 p-4">
-            <p className="text-xs font-bold tracking-[0.08em] text-brand-main uppercase">Asistente IA por campo</p>
+          <div className="mt-4 rounded-2xl border border-brand-main/20 bg-brand-main/5 p-4">
+            <p className="admin-kicker">Asistente IA por campo</p>
             <p className="mt-1 text-sm text-brand-dark/75">
               Mejora titulo o contenido sin inventar datos. El resumen se actualiza automaticamente al mejorar el contenido.
             </p>
@@ -525,7 +525,7 @@ export default function AdminNovedadesCrearPage() {
                   type="button"
                   onClick={() => void mejorarTituloConIa()}
                   disabled={mejorandoTituloIa}
-                  className="rounded-full border border-brand-main/35 bg-brand-main/8 px-3 py-1 text-[11px] font-bold text-brand-main transition hover:bg-brand-main hover:text-white disabled:opacity-65"
+                  className="admin-secondary-btn px-3 py-1 text-[11px] disabled:opacity-65"
                 >
                   {mejorandoTituloIa ? "Mejorando..." : "Mejorar con IA"}
                 </button>
@@ -557,14 +557,14 @@ export default function AdminNovedadesCrearPage() {
                         }));
                         setSugerenciaTituloIa(null);
                       }}
-                      className="rounded-full border border-brand-main/35 bg-brand-main px-3 py-1 text-[11px] font-bold text-white transition hover:bg-brand-soft"
+                      className="admin-primary-btn px-3 py-1 text-[11px]"
                     >
                       Aplicar sugerencia
                     </button>
                     <button
                       type="button"
                       onClick={() => setSugerenciaTituloIa(null)}
-                      className="rounded-full border border-brand-dark/20 px-3 py-1 text-[11px] font-bold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                      className="admin-secondary-btn px-3 py-1 text-[11px]"
                     >
                       Descartar
                     </button>
@@ -751,7 +751,7 @@ export default function AdminNovedadesCrearPage() {
                   type="button"
                   onClick={() => void mejorarContenidoConIa()}
                   disabled={mejorandoContenidoIa}
-                  className="rounded-full border border-brand-main/35 bg-brand-main/8 px-3 py-1 text-[11px] font-bold text-brand-main transition hover:bg-brand-main hover:text-white disabled:opacity-65"
+                  className="admin-secondary-btn px-3 py-1 text-[11px] disabled:opacity-65"
                 >
                   {mejorandoContenidoIa ? "Mejorando..." : "Mejorar con IA"}
                 </button>
@@ -789,7 +789,7 @@ export default function AdminNovedadesCrearPage() {
                         setSugerenciaContenidoIa(null);
                         setSugerenciaResumenIa(null);
                       }}
-                      className="rounded-full border border-brand-main/35 bg-brand-main px-3 py-1 text-[11px] font-bold text-white transition hover:bg-brand-soft"
+                      className="admin-primary-btn px-3 py-1 text-[11px]"
                     >
                       Aplicar sugerencia
                     </button>
@@ -799,7 +799,7 @@ export default function AdminNovedadesCrearPage() {
                         setSugerenciaContenidoIa(null);
                         setSugerenciaResumenIa(null);
                       }}
-                      className="rounded-full border border-brand-dark/20 px-3 py-1 text-[11px] font-bold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                      className="admin-secondary-btn px-3 py-1 text-[11px]"
                     >
                       Descartar
                     </button>
@@ -838,7 +838,7 @@ export default function AdminNovedadesCrearPage() {
             <div className="flex flex-wrap items-center gap-2">
               <button
                 type="submit"
-                className="rounded-full border border-brand-dark/20 px-5 py-2 text-sm font-bold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                className="admin-secondary-btn px-5 py-2 text-sm"
               >
                 Validar
               </button>
@@ -846,14 +846,14 @@ export default function AdminNovedadesCrearPage() {
                 type="button"
                 onClick={guardarEnFirebase}
                 disabled={guardando}
-                className="rounded-full bg-brand-main px-5 py-2 text-sm font-bold text-white transition hover:bg-brand-soft disabled:cursor-not-allowed disabled:opacity-65"
+                className="admin-primary-btn px-5 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-65"
               >
                 {guardando ? "Guardando..." : "Guardar en Firebase"}
               </button>
               <button
                 type="button"
                 onClick={limpiarFormulario}
-                className="rounded-full border border-brand-dark/20 px-5 py-2 text-sm font-semibold text-brand-dark transition hover:bg-brand-dark hover:text-white"
+                className="admin-secondary-btn px-5 py-2 text-sm"
               >
                 Nuevo
               </button>
@@ -862,7 +862,7 @@ export default function AdminNovedadesCrearPage() {
         </section>
 
         <section className="min-w-0 space-y-4">
-          <article className="rounded-3xl border border-brand-dark/10 bg-surface p-5 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
+          <article className="admin-panel rounded-3xl p-5">
             <h2 className="text-xl font-black text-brand-dark">Estado de validacion</h2>
             <p className={`mt-2 text-sm ${valido ? "text-emerald-700" : "text-brand-main"}`}>
               {valido ? "Formulario listo para guardar." : "Completa los campos obligatorios."}
@@ -878,7 +878,7 @@ export default function AdminNovedadesCrearPage() {
             {guardadoError ? <p className="mt-3 text-sm text-brand-main">{guardadoError}</p> : null}
           </article>
 
-          <article className="rounded-3xl border border-brand-dark/10 bg-surface p-5 shadow-[0_10px_24px_rgba(75,56,49,0.08)]">
+          <article className="admin-panel rounded-3xl p-5">
             <h2 className="text-xl font-black text-brand-dark">Siguiente paso</h2>
             <p className="mt-2 text-sm text-brand-dark/80">
               Luego de guardar, revisa el resultado en /admin/novedades/ver para publicarla o pasarla a pendiente.

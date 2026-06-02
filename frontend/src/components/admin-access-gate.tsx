@@ -98,15 +98,15 @@ export function AdminAccessGate({ children }: Props) {
 
   return (
     <div>
-      <div className="border-b border-brand-dark/10 bg-brand-dark/95 px-5 py-2 text-xs text-white sm:px-8">
+      <div className="border-b border-white/10 bg-brand-dark px-5 py-2 text-xs text-white shadow-[0_8px_22px_rgba(0,0,0,0.16)] sm:px-8">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
-          <p>
-            Admin activo: <span className="font-semibold">{user?.email}</span>
+          <p className="font-medium text-white/82">
+            Sesion admin activa: <span className="font-bold text-white">{user?.email}</span>
           </p>
           <button
             type="button"
             onClick={cerrarSesion}
-            className="rounded-full border border-white/30 px-3 py-1 font-semibold transition hover:bg-white hover:text-brand-dark"
+            className="rounded-full border border-white/25 bg-white/8 px-3 py-1 font-bold transition hover:bg-white hover:text-brand-dark"
           >
             Cerrar sesion
           </button>
