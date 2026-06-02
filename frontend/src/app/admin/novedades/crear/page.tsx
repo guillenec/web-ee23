@@ -920,13 +920,13 @@ function Campo({
   children: React.ReactNode;
 }) {
   return (
-    <label className="block space-y-1">
+    <div className="block space-y-1">
       <span className="flex items-center justify-between gap-2">
         <span className="text-xs font-bold tracking-[0.06em] text-brand-dark/75 uppercase">{label}</span>
         {actions ? <span>{actions}</span> : null}
       </span>
       {children}
       {error ? <span className="text-xs text-brand-main">{error}</span> : null}
-    </label>
+    </div>
   );
 }
